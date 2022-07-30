@@ -9,12 +9,17 @@ import android.view.View;
 import android.util.Log;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.*;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class MainActivity extends AppCompatActivity {
     DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
@@ -51,12 +56,20 @@ public class MainActivity extends AppCompatActivity {
         editText = (EditText) findViewById(R.id.editTextTextPassword);
         String password = editText.getText().toString();
 
-        ref.child("users").child(username).child("username").setValue(username);
-        ref.child("users").child(username).child("password").setValue(password);
-        ref.child("users").child(username).child("adminFlag").setValue(false);
+        Pattern pattern = Pattern.compile("\\w+");
+        Matcher matcher_user = pattern.matcher(username);
+        Matcher matcher_pass = pattern.matcher(password);
 
-        Intent intent = new Intent(this, UserHomeActivity.class);
-        startActivity(intent);
+        if(!(matcher_user.matches()) || !(matcher_pass.matches())){
+            Toast.makeText(MainActivity.this, "Invalid: username & password must be 1 or more word characters only", Toast.LENGTH_LONG).show();
+        }else{
+            ref.child("users").child(username).child("username").setValue(username);
+            ref.child("users").child(username).child("password").setValue(password);
+            ref.child("users").child(username).child("adminFlag").setValue(false);
+
+            Intent intent = new Intent(this, UserHomeActivity.class);
+            startActivity(intent);
+        }
     }
 
     public void loginAdminActivity(View view) {
@@ -65,6 +78,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void loginUserActivity(View view) {
+        Intent intent = new Intent(this, UserHomeActivity.class);
+        startActivity(intent);
+    }
+
+    public void loginActivity(View view) {
+        EditText editText = (EditText) findViewById(R.id.editTextTextPersonName);
+        String username = editText.getText().toString();
+
+        editText = (EditText) findViewById(R.id.editTextTextPassword);
+        String password = editText.getText().toString();
+
         Intent intent = new Intent(this, UserHomeActivity.class);
         startActivity(intent);
     }
