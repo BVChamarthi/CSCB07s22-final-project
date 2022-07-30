@@ -51,7 +51,7 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/switch1"
             app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName2"
-            app:layout_constraintVertical_bias="0.356"
+            app:layout_constraintVertical_bias="0.458"
             tools:ignore="DuplicateSpeakableTextCheck" />
 
         <Switch

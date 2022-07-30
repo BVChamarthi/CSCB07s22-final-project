@@ -41,8 +41,18 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public void nextActivity(View view) {
+    public void signUpActivity(View view) {
         Intent intent = new Intent(this, SignUpActivity.class);
+        startActivity(intent);
+    }
+
+    public void loginAdminActivity(View view) {
+        Intent intent = new Intent(this, AdminHomeActivity.class);
+        startActivity(intent);
+    }
+
+    public void loginUserActivity(View view) {
+        Intent intent = new Intent(this, UserHomeActivity.class);
         startActivity(intent);
     }
 }
