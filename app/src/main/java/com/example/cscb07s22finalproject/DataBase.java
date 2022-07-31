@@ -19,6 +19,7 @@ public final class DataBase {
 
     public static final int INCORRECT_FORMAT = -1;
     public static final int DOES_NOT_EXIST = -2;
+    public static final int ALREADY_EXISTS = -4;
     public static final int INCORRECT_PASSWORD = -3;
     public static final int CAN_LOGIN = 0;
 
@@ -53,21 +54,17 @@ public final class DataBase {
         Pattern pattern = Pattern.compile("\\w+");
         Matcher matcher_user = pattern.matcher(username);
         Matcher matcher_pass = pattern.matcher(password);
-
+        final int[] num = new int[1];
         if(!(matcher_user.matches()) || !(matcher_pass.matches()))
             return INCORRECT_FORMAT;   // incorrect format
 
         //TODO: other checks
-        ref.child("users").orderByChild("username").addListenerForSingleValueEvent(new ValueEventListener() {
+        ref.child("users").child("username").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot snapshot) {
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists())
                 {
-
-                }
-                else
-                {
-
+                    num[0] = 0;
                 }
             }
 
@@ -77,7 +74,15 @@ public final class DataBase {
             }
         });
 
-        return DOES_NOT_EXIST;
+        if (num[0]==0)
+        {
+            return ALREADY_EXISTS;
+        }
+        else
+        {
+            return DOES_NOT_EXIST;
+        }
+
     }
 
     public void createUser(String username, String password) {
