@@ -23,5 +23,4 @@
     <string name="title">TITLE</string>
     <string name="sign_up">Sign Up</string>
     <string name="username">Username</string>
-    <string name="get_error">Enter a username and password.</string>
 </resources>
