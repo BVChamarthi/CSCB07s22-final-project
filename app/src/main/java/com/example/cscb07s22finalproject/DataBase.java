@@ -15,6 +15,7 @@ public final class DataBase {
     public static final int INCORRECT_FORMAT = -1;
     public static final int DOES_NOT_EXIST = -2;
     public static final int INCORRECT_PASSWORD = -3;
+    public static final int CAN_LOGIN = 0;
 
     private DataBase() {
         ref = FirebaseDatabase.getInstance().getReference();
@@ -48,11 +49,12 @@ public final class DataBase {
         Matcher matcher_user = pattern.matcher(username);
         Matcher matcher_pass = pattern.matcher(password);
 
-        if(!(matcher_user.matches()) || !(matcher_pass.matches())) return -1;   // incorrect format
+        if(!(matcher_user.matches()) || !(matcher_pass.matches()))
+            return INCORRECT_FORMAT;   // incorrect format
 
         //TODO: other checks
 
-        return -2;
+        return DOES_NOT_EXIST;
     }
 
     public void createUser(String username, String password) {
