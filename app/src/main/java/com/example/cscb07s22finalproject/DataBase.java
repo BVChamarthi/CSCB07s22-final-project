@@ -26,6 +26,10 @@ public final class DataBase {
     }
     public DatabaseReference getRef() {return ref;}             // getter for ref
     public User getUser() {return user;}                        // getter for user
+    private void setUser(String username, String password, boolean isAdmin) {
+        if (isAdmin) user = new Admin(username, password);
+        else user = new Customer(username, password);
+    }
 
     /*
         TODO: public int checkUser(String username, String password)
@@ -57,7 +61,7 @@ public final class DataBase {
         ref.child("users").child(username).child("password").setValue(password);
         ref.child("users").child(username).child("adminFlag").setValue(false);
 
-        user = new Customer(username, password);   // initialise the user
+        setUser(username, password, false);
     }
 
 }
