@@ -10,7 +10,7 @@ public class Customer extends User
 
     public Customer(String username, String password)
     {
-        super(username, password);
+        super(username, password, false);
 
         // Instantiating lists
         joinedEvents = new ArrayList<Integer>();
