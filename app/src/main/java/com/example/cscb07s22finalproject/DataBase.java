@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
 
 public final class DataBase {
 
-    static DataBase db;
+    private static DataBase db;
     private final DatabaseReference ref;
     private User user;
 
