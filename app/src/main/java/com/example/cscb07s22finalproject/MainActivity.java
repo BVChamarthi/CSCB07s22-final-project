@@ -43,11 +43,7 @@ public class MainActivity extends AppCompatActivity {
 
         if(db.checkUser(username, password) == DataBase.INCORRECT_FORMAT){
             Toast.makeText(MainActivity.this, "Invalid: username & password must be 1 or more word characters only", Toast.LENGTH_LONG).show();
-        }
-        else if(db.checkUser(username, password) == DataBase.ALREADY_EXISTS){
-            Toast.makeText(MainActivity.this, "User already exists in database", Toast.LENGTH_LONG).show();
-        }
-        else if (db.checkUser(username, password) == DataBase.DOES_NOT_EXIST){
+        }else{
             db.createUser(username, password);
             Intent intent = new Intent(this, UserHomeActivity.class);
             startActivity(intent);
