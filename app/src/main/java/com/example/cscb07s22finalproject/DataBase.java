@@ -38,6 +38,7 @@ public final class DataBase {
         else user = new Customer(username, password);
     }
 
+
     /*
         TODO: public int checkUser(String username, String password)
         check if username & password are the right format: return -1 if not
@@ -54,34 +55,13 @@ public final class DataBase {
         Pattern pattern = Pattern.compile("\\w+");
         Matcher matcher_user = pattern.matcher(username);
         Matcher matcher_pass = pattern.matcher(password);
-        final int[] num = new int[1];
         if(!(matcher_user.matches()) || !(matcher_pass.matches()))
             return INCORRECT_FORMAT;   // incorrect format
 
+
         //TODO: other checks
-        ref.child("users").child("username").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists())
-                {
-                    num[0] = 0;
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-
-        if (num[0]==0)
-        {
-            return ALREADY_EXISTS;
-        }
-        else
-        {
-            return DOES_NOT_EXIST;
-        }
+//
+        return INCORRECT_PASSWORD;
 
     }
 
