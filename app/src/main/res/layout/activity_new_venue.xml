@@ -19,14 +19,14 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/editTextTextPersonName3"
+        android:id="@+id/venueName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="76dp"
         android:layout_marginEnd="96dp"
         android:layout_marginRight="96dp"
         android:ems="10"
-        android:hint="Venue"
+        android:hint="Venue name"
         android:inputType="textPersonName"
         android:minHeight="48dp"
         android:textColorHint="#757575"
@@ -35,31 +35,27 @@
         app:layout_constraintStart_toStartOf="@+id/textView3"
         app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
-    <EditText
-        android:id="@+id/editTextTextPersonName4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="60dp"
-        android:layout_marginEnd="96dp"
-        android:layout_marginRight="96dp"
-        android:ems="10"
-        android:hint="Sport(Need to be changed)"
-        android:inputType="textPersonName"
-        android:minHeight="48dp"
-        android:textColorHint="#757575"
-        app:layout_constraintEnd_toEndOf="@+id/editTextTextPersonName3"
-        app:layout_constraintHorizontal_bias="0.031"
-        app:layout_constraintStart_toStartOf="@+id/editTextTextPersonName3"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName3" />
-
     <Button
         android:id="@+id/button7"
         android:layout_width="214dp"
         android:layout_height="57dp"
         android:layout_marginTop="60dp"
+        android:onClick="createVenue"
         android:text="Create Venue"
-        app:layout_constraintEnd_toEndOf="@+id/editTextTextPersonName4"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/editTextTextPersonName4"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName4" />
+        app:layout_constraintEnd_toEndOf="@+id/activities"
+        app:layout_constraintStart_toStartOf="@+id/activities"
+        app:layout_constraintTop_toBottomOf="@+id/activities" />
+
+    <EditText
+        android:id="@+id/activities"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="60dp"
+        android:ems="10"
+        android:gravity="start|top"
+        android:hint="Enter Activities: 1 per line"
+        android:inputType="textMultiLine"
+        app:layout_constraintEnd_toEndOf="@+id/venueName"
+        app:layout_constraintStart_toStartOf="@+id/venueName"
+        app:layout_constraintTop_toBottomOf="@+id/venueName" />
 </androidx.constraintlayout.widget.ConstraintLayout>
