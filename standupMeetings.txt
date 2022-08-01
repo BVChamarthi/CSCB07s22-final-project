@@ -17,3 +17,4 @@ July 31st:
 
 August 1st:
 - Laksh: Programmed Create Venue functionality with input validation. Merged people's work from yesterday into devloper branch.
+- Aidan created the Venue and Event class containers and merged the changes into the developer branch.
