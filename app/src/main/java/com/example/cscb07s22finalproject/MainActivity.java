@@ -74,9 +74,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
     public void login ()
     {
+
         Intent intent = new Intent(this, UserHomeActivity.class);
         startActivity(intent);
     }
@@ -113,6 +113,8 @@ public class MainActivity extends AppCompatActivity {
                 }
                 else
                 {
+                    //TO-DO: IMPLEMENT IF PASSWORD IS INCORRECT
+                    db.createUser(username, password);
                     login();
                 }
             }
