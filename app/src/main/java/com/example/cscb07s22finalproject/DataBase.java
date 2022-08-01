@@ -67,8 +67,7 @@ public final class DataBase {
             incorrectFormat.onCallBack();                           // call incorrectFormat
             return;                                                 // and return
         }
-
-        // if formatting is good, set up async. listener to check if user exists
+/*        // if formatting is good, set up async. listener to check if user exists
         ref.child("users").child(username).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -98,6 +97,27 @@ public final class DataBase {
 
 
 
+
+ */
+        // if formatting is good, set up async. listener to check if user exists
+        ref.child("users").child(username).get().addOnCompleteListener(userFetch -> {
+            if (!userFetch.getResult().exists()) {           // if user doesn't exist
+                userDoesNotExist.onCallBack();  // call userDoesNotExist
+                return;                         // and return
+            }
+
+            // if user exists, set up async. listener to check password
+            ref.child("users").child(username).child("password").get().addOnCompleteListener(passwordFetch -> {
+                if(!passwordFetch.isSuccessful()) return;    // password fetch failed
+                // TODO: display some error message in the future
+
+                // password fetch successful
+                String actualPassword = passwordFetch.getResult().getValue().toString();
+                if(!password.equals(actualPassword)) {
+                    userExists_WrongPassword.onCallBack();
+                } else userExists_RightPassword.onCallBack();
+            });
+        });
     }
 
     public void createUser(String username, String password) {
