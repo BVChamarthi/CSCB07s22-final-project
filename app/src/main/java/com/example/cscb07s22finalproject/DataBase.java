@@ -100,6 +100,47 @@ public final class DataBase {
 
     }
 
+    public void venueActions(String venueName, String[] activities,
+                            callBack incorrectFormat,
+                            callBack venueDoesNotExist,
+                            callBack venueExists
+    ) {
+
+        Pattern pattern = Pattern.compile("(\\w+\\s?)+");
+        Matcher matcher_venueName = pattern.matcher(venueName);
+
+        // check formatting,
+        if(!matcher_venueName.matches()){
+            incorrectFormat.onCallBack();
+            return;
+        }
+
+        for (int i = 0; i < activities.length; i++) {
+            Matcher matcher_activity = pattern.matcher(activities[i]);
+            if (!matcher_activity.matches()) {
+                incorrectFormat.onCallBack();
+                return;
+            }
+        }
+
+        // if formatting is good, set up async. listener to check if venue exists
+        ref.child("Venues").child(venueName).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (!snapshot.exists()) {           // if venue doesn't exist
+                    venueDoesNotExist.onCallBack();  // call venueDoesNotExist
+                }else{
+                    venueExists.onCallBack();
+                }
+                return;
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
     public void createUser(String username, String password) {
 
         ref.child("users").child(username).child("username").setValue(username);

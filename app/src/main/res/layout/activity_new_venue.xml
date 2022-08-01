@@ -53,7 +53,7 @@
         android:layout_marginTop="60dp"
         android:ems="10"
         android:gravity="start|top"
-        android:hint="Enter Activities: 1 per line"
+        android:hint="1 Activity per line"
         android:inputType="textMultiLine"
         app:layout_constraintEnd_toEndOf="@+id/venueName"
         app:layout_constraintStart_toStartOf="@+id/venueName"
