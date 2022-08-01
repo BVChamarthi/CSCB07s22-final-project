@@ -1,7 +1,14 @@
 package com.example.cscb07s22finalproject;
 
+import android.util.Log;
+
+import androidx.annotation.NonNull;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -42,7 +49,6 @@ public final class DataBase
         return user;
     }
 
-    // Creating a user
     private void setUser(String username, String password, boolean isAdmin)
     {
         if (isAdmin) user = new Admin(username, password);
@@ -70,14 +76,82 @@ public final class DataBase
         return (matcher_user.matches() && matcher_pass.matches());
     }
 
+    // Verifying usernames
+    public void readUsername(String username, usernameExistsCallback userCallback)
+    {
+        DatabaseReference userDB = FirebaseDatabase.getInstance().getReference().child("users");
+        ValueEventListener eventListener = new ValueEventListener()
+        {
+            boolean userExists = false;
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot)
+            {
+                for(DataSnapshot data : snapshot.getChildren())
+                {
+                    String databaseUsername = data.getKey().toString();
+
+                    if(databaseUsername.equals(username))
+                    {
+                        userExists = true;
+                    }
+                }
+
+                userCallback.onCallback(userExists);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        };
+
+        userDB.addListenerForSingleValueEvent(eventListener);
+    }
+
+    public interface usernameExistsCallback
+    {
+        public void onCallback(boolean userExists);
+    }
+
+    // Verifying password
+    public void readPassword(String username, String password, passwordMatchesCallback passCallback)
+    {
+        DatabaseReference userDB = FirebaseDatabase.getInstance().getReference().child("users").child(username);
+        ValueEventListener eventListener = new ValueEventListener()
+        {
+            boolean passwordMatches = false;
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot)
+            {
+                if(snapshot.child("password").getValue().toString().equals(password))
+                {
+                    passwordMatches = true;
+                }
+
+                passCallback.onCallback(passwordMatches);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        };
+
+        userDB.addListenerForSingleValueEvent(eventListener);
+    }
+
+    public interface passwordMatchesCallback
+    {
+        public void onCallback(boolean passwordMatches);
+    }
+
     public void createUser(String username, String password, boolean isAdmin)
     {
         User newUser = new User(username, password, isAdmin);
 
         // Adding a new user to database, with a unique identifier
-        ref.child("users").push().setValue(newUser);
+        ref.child("users").child("username").setValue(newUser);
 
         setUser(username, password, false);
     }
-
 }

@@ -2,26 +2,25 @@ package com.example.cscb07s22finalproject;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-
-import android.os.Bundle;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.EditText;
 
-
-public class SignUpActivity extends AppCompatActivity {
+public class UserHomeActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sign_up);
+        setContentView(R.layout.activity_user_home);
     }
 
-    public void createAccount(View view) {
+    public void logout(View view) {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
 
+    public void newEventActivity(View view) {
+        Intent intent = new Intent(this, NewEventActivity.class);
+        startActivity(intent);
+    }
 }

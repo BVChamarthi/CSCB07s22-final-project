@@ -1,3 +1,11 @@
 July 29th:
 - Setup accounts
+<<<<<<< HEAD
 - Started Figma design
+=======
+- Started and finished Figma design
+July 30th:
+- Billy created xml files with layout designed on Figma
+- Ashtian started implementing the Customer and Admin classes
+- Laksh, Keerthiha, Bharath, and Aidan worked on the login and signup pages
+>>>>>>> developer

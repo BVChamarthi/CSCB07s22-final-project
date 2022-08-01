@@ -9,13 +9,12 @@ public class Admin extends User
     public Admin(String username, String password)
     {
         super(username, password, true);
-
         addedVenues = new ArrayList<Integer>();
     }
 
     // Suggestion: If the admin wants to add a venue, take in the following parameters:
 
-    //             String venue, String activities, int capacity
+    //             String venue, ArrayList<String> activities, int capacity
 
     //             Then, we generate an venueCode using how many venues are currently in the database
 
@@ -27,9 +26,7 @@ public class Admin extends User
     }
 
     // Suggestion: If the admin wants to edit a venue, take in the following parameters:
-
-    //             int venueCode, String activities, int capacity
-
+    //             int venueCode, ArrayList<String> activities, int capacity
     //             Using the venueCode, search through the venues in the database,
     //             and replace the fields
     public void editVenue()
