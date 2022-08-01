@@ -1,20 +1,27 @@
 package com.example.cscb07s22finalproject;
 
+import androidx.annotation.NonNull;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public final class DataBase {
 
-    static DataBase db;
+    private static DataBase db;
     private final DatabaseReference ref;
     private User user;
 
     public static final int INCORRECT_FORMAT = -1;
     public static final int DOES_NOT_EXIST = -2;
+    public static final int ALREADY_EXISTS = -4;
     public static final int INCORRECT_PASSWORD = -3;
+    public static final int CAN_LOGIN = 0;
 
     private DataBase() {
         ref = FirebaseDatabase.getInstance().getReference();
@@ -31,6 +38,7 @@ public final class DataBase {
         else user = new Customer(username, password);
     }
 
+
     /*
         TODO: public int checkUser(String username, String password)
         check if username & password are the right format: return -1 if not
@@ -44,15 +52,31 @@ public final class DataBase {
         if user exists and password is right: return 0
      */
     public int checkUser(String username, String password) {
+
+        // check formatting
         Pattern pattern = Pattern.compile("\\w+");
         Matcher matcher_user = pattern.matcher(username);
         Matcher matcher_pass = pattern.matcher(password);
+        if(!(matcher_user.matches()) || !(matcher_pass.matches()))
+            return INCORRECT_FORMAT;   // incorrect format
 
-        if(!(matcher_user.matches()) || !(matcher_pass.matches())) return -1;   // incorrect format
+        // formatting is correct, check if user exists
+        final boolean[] userExists = {false};
+        ref.child("users").child(username).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                userExists[0] = snapshot.exists();
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {}
+        });
+        if(userExists[0] == false) return DOES_NOT_EXIST;   // user does not exist
 
-        //TODO: other checks
+        // user exists, check if password is correct
+        String expectedPassword;
 
-        return -2;
+        return INCORRECT_PASSWORD;
+
     }
 
     public void createUser(String username, String password) {
