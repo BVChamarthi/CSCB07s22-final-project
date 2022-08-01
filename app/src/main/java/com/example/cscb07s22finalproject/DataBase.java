@@ -1,12 +1,7 @@
 package com.example.cscb07s22finalproject;
 
-import androidx.annotation.NonNull;
-
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -19,7 +14,6 @@ public final class DataBase {
 
     public static final int INCORRECT_FORMAT = -1;
     public static final int DOES_NOT_EXIST = -2;
-    public static final int ALREADY_EXISTS = -4;
     public static final int INCORRECT_PASSWORD = -3;
     public static final int CAN_LOGIN = 0;
 
@@ -38,7 +32,6 @@ public final class DataBase {
         else user = new Customer(username, password);
     }
 
-
     /*
         TODO: public int checkUser(String username, String password)
         check if username & password are the right format: return -1 if not
@@ -55,14 +48,13 @@ public final class DataBase {
         Pattern pattern = Pattern.compile("\\w+");
         Matcher matcher_user = pattern.matcher(username);
         Matcher matcher_pass = pattern.matcher(password);
+
         if(!(matcher_user.matches()) || !(matcher_pass.matches()))
             return INCORRECT_FORMAT;   // incorrect format
 
-
         //TODO: other checks
-//
-        return INCORRECT_PASSWORD;
 
+        return DOES_NOT_EXIST;
     }
 
     public void createUser(String username, String password) {
