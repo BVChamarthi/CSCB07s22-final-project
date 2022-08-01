@@ -55,18 +55,6 @@ public final class DataBase
         else user = new Customer(username, password);
     }
 
-    /*
-        TODO: public int checkUser(String username, String password)
-        check if username & password are the right format: return -1 if not
-
-        check if user exists: return -2 if user doesn't exist
-                prompt signup
-
-        if user exists: check if password is right: return -3 if password is incorrect
-                prompt incorrect Password
-
-        if user exists and password is right: return 0
-     */
     public boolean correctUserFormat(String username, String password)
     {
         Pattern pattern = Pattern.compile("\\w+");
@@ -145,12 +133,13 @@ public final class DataBase
         public void onCallback(boolean passwordMatches);
     }
 
-    public void createUser(String username, String password, boolean isAdmin)
+    public void createUser(String username, String password)
     {
-        User newUser = new User(username, password, isAdmin);
+        User newUser = new User(username, password);
 
         // Adding a new user to database, with a unique identifier
         ref.child("users").child("username").setValue(newUser);
+        ref.child("users").child("username").setValue(false);
 
         setUser(username, password, false);
     }

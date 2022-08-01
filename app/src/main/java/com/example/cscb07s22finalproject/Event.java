@@ -4,13 +4,15 @@ public class Event
 {
     private String eventName;
     private String activity;
+    private String date;
     private String startTime;
     private String endTime;
 
-    public Event(String eventName, String activity, String startTime, String endTime)
+    public Event(String eventName, String activity, String date, String startTime, String endTime)
     {
         this.eventName = eventName;
         this.activity = activity;
+        this.date = date;
         this.startTime = startTime;
         this.endTime = endTime;
     }
@@ -54,5 +56,13 @@ public class Event
     public void setEndTime(String endTime)
     {
         this.endTime = endTime;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 }

@@ -5,13 +5,11 @@ public class User
     // Note: Made variables private to ensure safety. Getters and Setters are implemented
     private String username;
     private String password;
-    private boolean isAdmin;
 
-    public User(String username, String password, boolean isAdmin)
+    public User(String username, String password)
     {
         this.username = username;
         this.password = password;
-        this.isAdmin = isAdmin;
     }
 
     public void setUsername(String username)
@@ -32,13 +30,5 @@ public class User
     public String getPassword()
     {
         return this.password;
-    }
-
-    public boolean isAdmin() {
-        return isAdmin;
-    }
-
-    public void setAdmin(boolean admin) {
-        isAdmin = admin;
     }
 }

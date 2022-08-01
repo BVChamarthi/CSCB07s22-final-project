@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
             {
                 if(!userExists)
                 {
-                    db.createUser(username, password, false);
+                    db.createUser(username, password);
                     login();
                 }
                 else
