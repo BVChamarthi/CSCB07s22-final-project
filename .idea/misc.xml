@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+
         <entry key="..\:/Users/a1435/Documents/GitHub/CSCB07s22-final-project/app/src/main/res/layout-w1240dp/activity_login.xml" value="0.16331994645247658" />
         <entry key="..\:/Users/a1435/Documents/GitHub/CSCB07s22-final-project/app/src/main/res/layout-w936dp/activity_login.xml" value="0.1721311475409836" />
         <entry key="..\:/Users/a1435/Documents/GitHub/CSCB07s22-final-project/app/src/main/res/layout/activity_admin_home.xml" value="0.20364583333333333" />
@@ -15,6 +16,13 @@
         <entry key="..\:/Users/a1435/Documents/GitHub/CSCB07s22-final-project/app/src/main/res/layout/content_sign_up.xml" value="0.22826086956521738" />
         <entry key="..\:/Users/a1435/Documents/GitHub/CSCB07s22-final-project/app/src/main/res/layout/fragment_first.xml" value="0.22826086956521738" />
         <entry key="..\:/Users/a1435/Documents/GitHub/CSCB07s22-final-project/app/src/main/res/layout/fragment_second.xml" value="0.22826086956521738" />
+        <entry key="..\:/Users/bhara/AndroidStudioProjects/CSCB07s22-final-project/app/src/main/res/layout/activity_admin_home.xml" value="0.264" />
+        <entry key="..\:/Users/bhara/AndroidStudioProjects/CSCB07s22-final-project/app/src/main/res/layout/activity_main.xml" value="0.264" />
+        <entry key="..\:/Users/bhara/AndroidStudioProjects/CSCB07s22-final-project/app/src/main/res/layout/activity_new_event.xml" value="0.264" />
+        <entry key="..\:/Users/bhara/AndroidStudioProjects/CSCB07s22-final-project/app/src/main/res/layout/activity_sign_up.xml" value="0.264" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.375" />
+        <entry key="app/src/main/res/layout/activity_sign_up.xml" value="0.5" />
+
       </map>
     </option>
   </component>

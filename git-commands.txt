@@ -1,0 +1,35 @@
+clone remote repo to local directory: git clone https://github.com/BVChamarthi/CSCB07s22-final-project
+
+if you already have a local repo and wnna be up to date, you need to pull the REMOTE repo to your LOCAL repo (do this before you start doing anything for the day):
+git pull
+
+moving to your own branch: git checkout <your branch>
+      example: git checkout Bharath
+
+getting stuff from another branch (after you've moved to your own branch): git checkout <other branch> <file names>(put a * or . if you need all the files)
+      example: git checkout developer *
+
+adding all the changes you've made to the LOCAL git repo: git add .
+
+commiting all the changes to the LOCAL git repo: git commit -m "short descriptive message"
+
+pushing all the changes from the LOCAL repo to YOUR branch in the REMOTE repo: git push -u origin <your branch>
+
+What a day of work will look like:
+
+pull from remote repo
+move to YOUR branch
+get all the files from the developer branch to your branch
+do whatever
+add, commit, and push to YOUR branch
+tell me all the stuff you did, so I can compile them to the developer branch
+
+
+IF GIT CHECKOUT IS NOT WORKING:
+      in specific, if you're getting a pathspec error when you try to do 'git checkout developer *', then try: git fetch
+      this should fix the paths in your local repo by syncing it to the remote repo, then you can do 'git checkout developer *' and it'll work.
+      
+please report any git errors you face and any solutions that work for you. 
+This is most likely the first time we're all using git (I know it is for me, I just learned how to use it this semester) so it'll be majorly helpful for all of us. 
+You can also directly edit this file by adding the error (and solution if you have one) above this message, and sending a message on discord
+

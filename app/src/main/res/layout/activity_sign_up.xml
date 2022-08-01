@@ -45,6 +45,18 @@
             android:id="@+id/button2"
             android:layout_width="212dp"
             android:layout_height="57dp"
+
+            android:layout_marginBottom="124dp"
+            android:text="Sign Up"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName2"
+            app:layout_constraintVertical_bias="0.19999999"
+            tools:ignore="DuplicateSpeakableTextCheck" />
+
+
+            android:onClick="createAccount"
             android:text="Sign Up"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/editTextTextPersonName2"
@@ -54,14 +66,6 @@
             app:layout_constraintVertical_bias="0.458"
             tools:ignore="DuplicateSpeakableTextCheck" />
 
-        <Switch
-            android:id="@+id/switch1"
-            android:layout_width="122dp"
-            android:layout_height="48dp"
-            android:layout_marginTop="16dp"
-            android:text="Admin"
-            app:layout_constraintStart_toStartOf="@+id/editTextTextPersonName2"
-            app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName2" />
 
         <TextView
             android:id="@+id/textView2"
