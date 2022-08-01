@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(MainActivity.this, "Invalid: username & password must be 1 or more word characters only", Toast.LENGTH_LONG).show();
         }
         //Checks if user already is signed up - if not it signs them up and if they exist then it doesn't
-        Query query = FirebaseDatabase.getInstance().getReference().child("users").orderByChild("username").equalTo(username);
+        Query query = db.getRef().child("users").orderByChild("username").equalTo(username);
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -63,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
                 else
                 {
                     db.createUser(username, password);
+                    login();
 
                 }
             }
@@ -72,15 +73,14 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+    }
 
-
-
-
-
+    public void login ()
+    {
         Intent intent = new Intent(this, UserHomeActivity.class);
         startActivity(intent);
-
     }
+
 
     public void loginAdminActivity(View view) {
         Intent intent = new Intent(this, UserHomeActivity.class);
@@ -101,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(MainActivity.this, "Invalid: username & password must be 1 or more word characters only", Toast.LENGTH_LONG).show();
         }
         //Checks if user already is signed up - if not it signs them up and if they exist then it doesn't
-        Query query = FirebaseDatabase.getInstance().getReference().child("users").orderByChild("username").equalTo(username);
+        Query query = db.getRef().child("users").orderByChild("username").equalTo(username);
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -111,6 +111,10 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(MainActivity.this, "Username does not exist - please sign up", Toast.LENGTH_LONG).show();
 
                 }
+                else
+                {
+                    login();
+                }
             }
 
             @Override
@@ -118,8 +122,6 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-        Intent intent = new Intent(this, UserHomeActivity.class);
-        startActivity(intent);
     }
 
 }
