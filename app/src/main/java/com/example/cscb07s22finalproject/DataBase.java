@@ -17,11 +17,11 @@ public final class DataBase {
     private final DatabaseReference ref;
     private User user;
 
-    public static final int INCORRECT_FORMAT = -1;
+/*    public static final int INCORRECT_FORMAT = -1;
     public static final int DOES_NOT_EXIST = -2;
     public static final int ALREADY_EXISTS = -4;
     public static final int INCORRECT_PASSWORD = -3;
-    public static final int CAN_LOGIN = 0;
+    public static final int CAN_LOGIN = 0;*/
 
     private DataBase() {
         ref = FirebaseDatabase.getInstance().getReference();
@@ -33,15 +33,15 @@ public final class DataBase {
     }
     public DatabaseReference getRef() {return ref;}             // getter for ref
     public User getUser() {return user;}                        // getter for user
-    private void setUser(String username, String password, boolean isAdmin) {
+    public void setUser(String username, String password, boolean isAdmin) {
         if (isAdmin) user = new Admin(username, password);
         else user = new Customer(username, password);
     }
 
 
     /*
-        TODO: public int checkUser(String username, String password)
-        check if username & password are the right format: return -1 if not
+        TODO: public int userActions(String username, String password)
+        check if username & password are the right format: do incorrectPassword
 
         check if user exists: return -2 if user doesn't exist
                 prompt signup
@@ -51,31 +51,56 @@ public final class DataBase {
 
         if user exists and password is right: return 0
      */
-    public int checkUser(String username, String password) {
+    public interface callBack {
+        public void onCallBack();
+    }
 
-        // check formatting
+    public void userActions(String username, String password,
+                            callBack incorrectFormat,
+                            callBack userDoesNotExist,
+                            callBack userExists_WrongPassword,
+                            callBack userExists_RightPassword
+                           ) {
+
         Pattern pattern = Pattern.compile("\\w+");
         Matcher matcher_user = pattern.matcher(username);
         Matcher matcher_pass = pattern.matcher(password);
-        if(!(matcher_user.matches()) || !(matcher_pass.matches()))
-            return INCORRECT_FORMAT;   // incorrect format
 
-        // formatting is correct, check if user exists
-        final boolean[] userExists = {false};
+        // check formatting, call incorrectFormat and return
+        if(!(matcher_user.matches() && matcher_pass.matches())) {
+            incorrectFormat.onCallBack();
+            return;
+        }
+
+        // if formatting is good, set up async. listener to check if user exists
         ref.child("users").child(username).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                userExists[0] = snapshot.exists();
+                if (!snapshot.exists()) {           // if user doesn't exist
+                    userDoesNotExist.onCallBack();  // call userDoesNotExist
+                    return;                         // and return
+                }
+
+                // if user exists, set up async. listener to check password
+                ref.child("users").child(username).child("password").get().addOnCompleteListener(task -> {
+                    if(!task.isSuccessful()) return;    // password fetch failed
+                    // display some error message in the future
+
+                    // password fetch successful
+                    String actualPassword = task.getResult().getValue().toString();
+                    if(!password.equals(actualPassword)) {
+                        userExists_WrongPassword.onCallBack();
+                    } else userExists_RightPassword.onCallBack();
+                });
+
             }
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {}
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
         });
-        if(userExists[0] == false) return DOES_NOT_EXIST;   // user does not exist
 
-        // user exists, check if password is correct
-        String expectedPassword;
 
-        return INCORRECT_PASSWORD;
 
     }
 
