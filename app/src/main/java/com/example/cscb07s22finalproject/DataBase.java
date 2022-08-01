@@ -24,37 +24,33 @@ public final class DataBase {
     public static final int CAN_LOGIN = 0;*/
 
     private DataBase() {
-        ref = FirebaseDatabase.getInstance().getReference();
-        user = null;                                            // main user of the app
+        ref = FirebaseDatabase.getInstance().getReference();    // initialise ref to root of database
+        user = null;                                            // main user of the app (initially empty)
     }
-    public static DataBase getInstance() {
+    public static DataBase getInstance() {      // singleton getInstance()
         if(db == null) db = new DataBase();
         return db;
     }
     public DatabaseReference getRef() {return ref;}             // getter for ref
     public User getUser() {return user;}                        // getter for user
-    public void setUser(String username, String password, boolean isAdmin) {
+    public void setUser(String username, String password, boolean isAdmin) {    // setter for user (unsafe code)
         if (isAdmin) user = new Admin(username, password);
         else user = new Customer(username, password);
     }
 
-
     /*
-        TODO: public int userActions(String username, String password)
-        check if username & password are the right format: do incorrectPassword
+        userActions(), takes in username, password and 4 lambda functions to execute under 4
+        different scenarios:
+        1) either username or password has incorrect format
+        2) username and password are correctly formatted, but user doesn't exist
+        3) user exists, but the password is wrong
+        4) user exists and the password is right
 
-        check if user exists: return -2 if user doesn't exist
-                prompt signup
-
-        if user exists: check if password is right: return -3 if password is incorrect
-                prompt incorrect Password
-
-        if user exists and password is right: return 0
+        format for lambda functions: () -> {...your code here...}
      */
-    public interface callBack {
+    public interface callBack {         // interface to define lambda functions for userActions
         public void onCallBack();
     }
-
     public void userActions(String username, String password,
                             callBack incorrectFormat,
                             callBack userDoesNotExist,
@@ -66,10 +62,10 @@ public final class DataBase {
         Matcher matcher_user = pattern.matcher(username);
         Matcher matcher_pass = pattern.matcher(password);
 
-        // check formatting, call incorrectFormat and return
-        if(!(matcher_user.matches() && matcher_pass.matches())) {
-            incorrectFormat.onCallBack();
-            return;
+        // check formatting,
+        if(!(matcher_user.matches() && matcher_pass.matches())) {   // if pattern doesn't match
+            incorrectFormat.onCallBack();                           // call incorrectFormat
+            return;                                                 // and return
         }
 
         // if formatting is good, set up async. listener to check if user exists
@@ -84,7 +80,7 @@ public final class DataBase {
                 // if user exists, set up async. listener to check password
                 ref.child("users").child(username).child("password").get().addOnCompleteListener(task -> {
                     if(!task.isSuccessful()) return;    // password fetch failed
-                    // display some error message in the future
+                    // TODO: display some error message in the future
 
                     // password fetch successful
                     String actualPassword = task.getResult().getValue().toString();
