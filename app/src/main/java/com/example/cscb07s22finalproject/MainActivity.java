@@ -67,19 +67,29 @@ public class MainActivity extends AppCompatActivity {
         editText = findViewById(R.id.editTextTextPassword);
         String password = editText.getText().toString();
 
-        // Going through all checks
+        // Check if format is correct
         if(!db.correctUserFormat(username, password))
         {
-            Toast.makeText(MainActivity.this, "Invalid: username & password must be 1 or more word characters only", Toast.LENGTH_LONG).show();
+            printLoginError("Invalid: Username and/or password in incorrect format");
         }
-        else
-        {
-            db.createUser(username, password, false);
 
-            // Brings user to the home page
-            Intent intent = new Intent(this, UserHomeActivity.class);
-            startActivity(intent);
-        }
+        // Check if user exists
+        db.readUsername(username, new DataBase.usernameExistsCallback()
+        {
+            @Override
+            public void onCallback(boolean userExists)
+            {
+                if(!userExists)
+                {
+                    db.createUser(username, password, false);
+                    login();
+                }
+                else
+                {
+                    printLoginError("Invalid: Username already taken");
+                }
+            }
+        });
     }
 
     public void loginAdminActivity(View view)
