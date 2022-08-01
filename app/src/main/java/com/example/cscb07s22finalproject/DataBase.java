@@ -138,7 +138,7 @@ public final class DataBase
         User newUser = new User(username, password);
 
         // Adding a new user to database, with a unique identifier
-        ref.child("users").child("username").setValue(newUser);
+        ref.child("users").child(username).setValue(newUser);
         ref.child("users").child(username).child("isAdmin").setValue(false);
 
         setUser(username, password, false);
