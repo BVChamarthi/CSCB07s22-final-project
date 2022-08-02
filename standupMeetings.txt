@@ -5,3 +5,8 @@ July 30th:
 - Billy created xml files with layout designed on Figma
 - Ashtian started implementing the Customer and Admin classes
 - Laksh, Keerthiha, Bharath, and Aidan worked on the login and signup pages
+July 31st:
+- Ashtian and Keerthiha finished up login and signup - pushed to their respective branches - not yet committed to developer
+- Laksh and Aidan set up Git accounts and tried to work through some code for 'signup' by Keerthiha
+- Bharath set up the database class and refactored some of the code to it
+- Billy worked on the layout of the venues and events
