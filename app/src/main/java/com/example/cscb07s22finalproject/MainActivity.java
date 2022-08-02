@@ -8,9 +8,21 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.database.DatabaseReference;
+
 
 public class MainActivity extends AppCompatActivity {
     DataBase db = DataBase.getInstance();
@@ -40,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
         editText = findViewById(R.id.editTextTextPassword);
         String password = editText.getText().toString();
 
+
         db.userActions(username, password,
                 () -> {     // incorrect format
                     Toast.makeText(MainActivity.this, "Invalid: username & password must be 1 or more word characters only", Toast.LENGTH_LONG).show();
@@ -65,6 +78,7 @@ public class MainActivity extends AppCompatActivity {
 
         editText = findViewById(R.id.editTextTextPassword);
         String password = editText.getText().toString();
+
 
         db.userActions(username, password,
                 () -> {     // incorrect format
@@ -97,6 +111,7 @@ public class MainActivity extends AppCompatActivity {
                         startActivity(intent);
                     });
                 });
+
     }
 
 }
