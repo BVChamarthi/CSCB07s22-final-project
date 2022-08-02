@@ -141,7 +141,7 @@ public final class DataBase {
             }
         }
 
-        // if formatting is good, set up async. listener to check if venue exists
+/*        // if formatting is good, set up async. listener to check if venue exists
         ref.child("Venues").child(venueName).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -156,6 +156,15 @@ public final class DataBase {
             public void onCancelled(@NonNull DatabaseError error) {
 
             }
+        });*/
+        // if formatting is good, set up async. listener to check if venue exists
+        ref.child("Venues").child(venueName).get().addOnCompleteListener(venueFetch -> {
+            if (!venueFetch.getResult().exists()) {           // if venue doesn't exist
+                venueDoesNotExist.onCallBack();  // call venueDoesNotExist
+            }else{
+                venueExists.onCallBack();
+            }
+            return;
         });
     }
 
