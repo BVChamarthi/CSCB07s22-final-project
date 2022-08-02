@@ -14,6 +14,11 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class SingleAdapter extends RecyclerView.Adapter<SingleAdapter.SingleViewHolder> {
+    /*
+    Important methods:
+        line 59: Change which part of Event is shown is each box
+     */
+
     private Context context;
     private ArrayList<Event> events;
     private int checkedPosition = 0; //-1: no default selection, 0: 1st item selected
@@ -50,7 +55,7 @@ public class SingleAdapter extends RecyclerView.Adapter<SingleAdapter.SingleView
                     imageView.setVisibility(View.GONE);
                 }
             }
-            //Change what is show in each box
+            //Change which part of Event is shown is each box
             textView.setText(event.toString());
             itemView.setOnClickListener(new View.OnClickListener(){
                 @Override

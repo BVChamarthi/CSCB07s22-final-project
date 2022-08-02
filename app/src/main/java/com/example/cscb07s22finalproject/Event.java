@@ -3,6 +3,15 @@ package com.example.cscb07s22finalproject;
 import java.io.Serializable;
 
 public class Event implements Serializable {
+    /*
+    Important methods:
+        toString(): How info from Event is formatted
+
+    Q: Why Event has venueName field despite there being ArrayList<Event> where I can get venueName from?
+        A: Idk how make the scroll view work with a nested ArrayList
+     */
+
+    private String venueName;
     private String eventName;
     private String activity;
     private String startTime;
@@ -10,8 +19,9 @@ public class Event implements Serializable {
     private int curParticipants, maxParticipants;
     private boolean isChecked = false;
 
-    public Event(String eventName, String activity,String startTime,String endTime,int curParticipants, int maxParticipants)
+    public Event(String venueName,String eventName,String activity,String startTime,String endTime,int curParticipants, int maxParticipants)
     {
+        this.venueName = venueName;
         this.eventName = eventName;
         this.activity = activity;
         this.startTime = startTime;
@@ -85,9 +95,18 @@ public class Event implements Serializable {
         isChecked = checked;
     }
 
+    public String getVenueName() {
+        return venueName;
+    }
+
+    public void setVenueName(String venueName) {
+        this.venueName = venueName;
+    }
+
     @Override
     public String toString() {
-        return  eventName +
+        return  venueName+
+                "\n\t"+eventName +
                 "\n\t" + activity +
                 "\n\t" + startTime +
                 ": " + endTime +
@@ -95,89 +114,3 @@ public class Event implements Serializable {
                 "/" + maxParticipants;
     }
 }
-
-/*package com.example.cscb07s22finalproject;
-
-import java.io.Serializable;
-
-public class Event implements Serializable {
-    private boolean isChecked = false;
-    private String venue, sport, startTime, endTime;
-    private int curPlayer, maxPlayer;
-
-    public boolean isChecked(){
-        return isChecked;
-    }
-
-    public void setChecked(boolean checked){
-        isChecked = checked;
-    }
-
-    public String getVenue() {
-        return venue;
-    }
-
-    public String getSport() {
-        return sport;
-    }
-
-    public String getStartTime() {
-        return startTime;
-    }
-
-    public String getEndTime() {
-        return endTime;
-    }
-
-    public int getCurPlayer() {
-        return curPlayer;
-    }
-
-    public int getMaxPlayer() {
-        return maxPlayer;
-    }
-
-    public void setVenue(String venue) {
-        this.venue = venue;
-    }
-
-    public void setSport(String sport) {
-        this.sport = sport;
-    }
-
-    public void setStartTime(String startTime) {
-        this.startTime = startTime;
-    }
-
-    public void setEndTime(String endTime) {
-        this.endTime = endTime;
-    }
-
-    public void setCurPlayer(int curPlayer) {
-        this.curPlayer = curPlayer;
-    }
-
-    public void setMaxPlayer(int maxPlayer) {
-        this.maxPlayer = maxPlayer;
-    }
-
-    @Override
-    public String toString() {
-        return  venue +
-                "\n\t" + sport +
-                "\n\t" + startTime +
-                ": " + endTime +
-                "\n\tPlayers: " + curPlayer +
-                "/" + maxPlayer;
-    }
-
-    public void setAll(String venue, String sport,String startTime,String endTime,int curPlayer, int maxPlayer){
-        this.venue = venue;
-        this.sport=sport;
-        this.startTime=startTime;
-        this.endTime=endTime;
-        this.curPlayer=curPlayer;
-        this.maxPlayer = maxPlayer;
-    }
-}
-*/

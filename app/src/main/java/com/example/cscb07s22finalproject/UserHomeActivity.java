@@ -16,13 +16,14 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class UserHomeActivity extends AppCompatActivity{
     /*
     Important methods:
-        CreateList():  fill the list with Event items also decide format
-        line 49: returns the selected Event info, choose what to return
+        CreateList(): fill Event items with info
+        line 52: what happens after join button is clicked
      */
     private RecyclerView recyclerView;
     private Button btn;
@@ -58,16 +59,16 @@ public class UserHomeActivity extends AppCompatActivity{
     }
 
     private void CreateList(){
-        events = new ArrayList<>();
-        //Change the following lines for change what is displayed in each item
-        for(int i = 0; i<20; i++){
+        ArrayList<Event> events = new ArrayList<>();
+        for(int i=0; i<10; i++) {
             Event event = new Event(
-                    "Name "+(i+1)+" ",
-                    "Activity "+(i+1)+" ",
-                    "Start Time "+(i+1)+" ",
-                    "End Time "+(i+1)+" ",
-                    i+1,
-                    i+2
+                    "Venue " + (i + 1) + " ",
+                    "Name " + (i + 1) + " ",
+                    "Activity " + (i + 1) + " ",
+                    "Start Time " + (i + 1) + " ",
+                    "End Time " + (i + 1) + " ",
+                    i + 1,
+                    i + 2
             );
             events.add(event);
         }
