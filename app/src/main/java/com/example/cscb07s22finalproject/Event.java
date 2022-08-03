@@ -5,15 +5,17 @@ import java.io.Serializable;
 public class Event implements Serializable {
     private String eventName;
     private String activity;
+    private String date;
     private String startTime;
     private String endTime;
     private int curParticipants, maxParticipants;
     private boolean isChecked = false;
 
-    public Event(String eventName, String activity,String startTime,String endTime,int curParticipants, int maxParticipants)
+    public Event(String eventName, String activity, String date,String startTime,String endTime,int curParticipants, int maxParticipants)
     {
         this.eventName = eventName;
         this.activity = activity;
+        this.date = date;
         this.startTime = startTime;
         this.endTime = endTime;
         this.maxParticipants = maxParticipants;

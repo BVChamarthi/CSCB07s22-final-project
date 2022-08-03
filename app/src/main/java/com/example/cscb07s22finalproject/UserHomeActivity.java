@@ -64,6 +64,7 @@ public class UserHomeActivity extends AppCompatActivity{
             Event event = new Event(
                     "Name "+(i+1)+" ",
                     "Activity "+(i+1)+" ",
+                    "Date "+(i+1)+" ",
                     "Start Time "+(i+1)+" ",
                     "End Time "+(i+1)+" ",
                     i+1,
