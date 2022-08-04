@@ -74,14 +74,23 @@ public class UserHomeActivity extends AppCompatActivity{
             }
 
             @Override
-            public boolean onQueryTextChange(String s)
-            {
+            public boolean onQueryTextChange(String s) {
+                currentSearchText = s;
+                String name = "";
+
                 ArrayList<Event> filteredEvents = new ArrayList<Event>();
 
-                for(Event event: events) {
-                    if(event.getEventName().toLowerCase().contains(s.toLowerCase()) ||
-                            event.getVenueName().toLowerCase().contains(s.toLowerCase())) {
-                        filteredEvents.add(event);
+                for (Event event : events) {
+                    name = event.getEventName();
+                    if (selectedFilter == "Venue") {
+                        name = event.getVenueName();
+                    } else if (selectedFilter == "Event") {
+                        name = event.getEventName();
+                    } else if (selectedFilter == "Sport") {
+                        name = event.getActivity();
+                    }
+                    if (name.toLowerCase().contains(s.toLowerCase())) {
+                            filteredEvents.add(event);
                     }
                 }
                 adapter.SetEvents(filteredEvents);
@@ -106,6 +115,45 @@ public class UserHomeActivity extends AppCompatActivity{
         }
         this.events = events;
         adapter.SetEvents(events);
+    }
+
+    private void filterList(String status)
+    {
+        selectedFilter = status;
+        String name="";
+
+        ArrayList<Event> filteredEvents = new ArrayList<Event>();
+
+        for(Event event: events)
+        {
+            if(status == "Venue") {
+                name = event.getVenueName();
+            }else if(status == "Event"){
+                name = event.getEventName();
+            }else if(status == "Sport"){
+                name = event.getActivity();
+            }
+            if(name.toLowerCase().contains(currentSearchText.toLowerCase())) {
+                filteredEvents.add(event);
+            }
+        }
+        adapter.SetEvents(filteredEvents);
+    }
+
+    public void venueFilterTapped(View view){
+        filterList("Venue");
+    }
+
+    public void eventFilterTapped(View view){
+        filterList("Event");
+    }
+
+    public void sportFilterTapped(View view){
+        filterList("Sport");
+    }
+
+    public void joinedFilterTapped(View view){
+
     }
 
     private void ShowToast(String msg){
