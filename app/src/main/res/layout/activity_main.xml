@@ -7,12 +7,13 @@
     android:background="@drawable/bg"
     tools:context=".MainActivity">
 
+
     <TextView
         android:id="@+id/textView1"
         android:layout_width="302dp"
         android:layout_height="73dp"
         android:layout_marginTop="92dp"
-        android:background="@android:drawable/divider_horizontal_dim_dark"
+        android:background="@android:drawable/divider_horizontal_dark"
         android:fontFamily="@font/atomic_age"
         android:gravity="center"
         android:text="@string/title"
@@ -26,20 +27,16 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
 
-    <EditText
-        android:id="@+id/editTextTextPersonName5"
-        android:layout_width="222dp"
-        android:layout_height="325dp"
-        android:layout_marginTop="4dp"
-        android:background="@color/cardview_light_background"
-        android:ems="10"
-        android:inputType="textPersonName"
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="247dp"
+        android:layout_height="349dp"
+        android:layout_marginTop="8dp"
+        android:background="@color/white"
         app:layout_constraintBottom_toBottomOf="@+id/button2"
         app:layout_constraintEnd_toEndOf="@+id/button"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/button"
-        app:layout_constraintTop_toTopOf="@+id/editTextTextPersonName"
-        app:layout_constraintVertical_bias="0.206" />
+        app:layout_constraintTop_toTopOf="@+id/editTextTextPersonName" />
 
     <EditText
         android:id="@+id/editTextTextPersonName"
@@ -68,12 +65,11 @@
         android:hint="Password"
         android:inputType="textPassword"
         android:minHeight="48dp"
-        android:textColor="@color/black"
         android:textColorHint="#757575"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-
         app:layout_constraintHorizontal_bias="0.502"
+
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName" />
 
@@ -105,6 +101,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/button"
         app:layout_constraintVertical_bias="0.096" />
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
