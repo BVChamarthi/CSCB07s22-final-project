@@ -23,6 +23,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.database.DatabaseReference;
 
+import java.util.ArrayList;
+
 
 public class MainActivity extends AppCompatActivity {
     DataBase db = DataBase.getInstance();
@@ -31,6 +33,23 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+/*      // write array list to database
+        ArrayList<Integer> intArray = new ArrayList<Integer>();
+        intArray.add(1);
+        intArray.add(2);
+        intArray.add(4);
+        intArray.add(8);
+        db.getRef().child("intArray").setValue(intArray);
+*/
+/*      // read array list from database
+        db.getRef().child("intArray").get().addOnCompleteListener(arrayFetch -> {
+        if(arrayFetch.isSuccessful()){
+            ArrayList<Integer> intArray = (ArrayList<Integer>) arrayFetch.getResult().getValue();
+            Toast.makeText(MainActivity.this, "intArray :" + intArray.get(0), Toast.LENGTH_LONG).show();
+        }
+    });*/
+
     }
 
     public void signUpActivity(View view) {
