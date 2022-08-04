@@ -1,3 +1,8 @@
+/*
+You can prob combine this with SingleAdapter but since they not looking at code, there are important things to work on
+
+ */
+
 package com.example.cscb07s22finalproject;
 
 import android.content.Context;
@@ -13,24 +18,24 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
-public class SingleAdapter extends RecyclerView.Adapter<SingleAdapter.SingleViewHolder>{
+public class SingleVenueAdapter extends RecyclerView.Adapter<SingleVenueAdapter.SingleViewHolder>{
     /*
     Important methods:
         line 59: Change which part of Event is shown is each box
      */
 
     private Context context;
-    private ArrayList<Event> events;
+    private ArrayList<Venue> venues;
     private int checkedPosition = 0; //-1: no default selection, 0: 1st item selected
 
-    public SingleAdapter(Context context, ArrayList<Event> events) {
+    public SingleVenueAdapter(Context context, ArrayList<Venue> venues) {
         this.context = context;
-        this.events = events;
+        this.venues = venues;
     }
 
-    public void SetEvents(ArrayList<Event> events){
-        this.events = new ArrayList<>();
-        this.events = events;
+    public void SetEvents(ArrayList<Venue> venues){
+        this.venues = new ArrayList<>();
+        this.venues = venues;
         notifyDataSetChanged();
     }
 
@@ -45,7 +50,7 @@ public class SingleAdapter extends RecyclerView.Adapter<SingleAdapter.SingleView
             imageView = itemView.findViewById(R.id.imageview);
         }
 
-        void bind(final Event event){
+        void bind(final Venue venue){
             if(checkedPosition == -1){
                 imageView.setVisibility(View.GONE);
             }else{
@@ -55,9 +60,8 @@ public class SingleAdapter extends RecyclerView.Adapter<SingleAdapter.SingleView
                     imageView.setVisibility(View.GONE);
                 }
             }
-
             //Change which part of Event is shown is each box
-            textView.setText(event.toString());
+            textView.setText(venue.toString());
             itemView.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View v){
@@ -71,13 +75,12 @@ public class SingleAdapter extends RecyclerView.Adapter<SingleAdapter.SingleView
         }
     }
 
-    public Event getSelected(){
+    public Venue getSelected(){
         if(checkedPosition != -1){
-            return events.get(checkedPosition);
+            return venues.get(checkedPosition);
         }
         return null;
     }
-
 
     @NonNull
     @Override
@@ -88,11 +91,12 @@ public class SingleAdapter extends RecyclerView.Adapter<SingleAdapter.SingleView
 
     @Override
     public void onBindViewHolder(@NonNull SingleViewHolder holder, int position) {
-        holder.bind(events.get(position));
+        holder.bind(venues.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return events.size();
+        return venues.size();
     }
 }
+

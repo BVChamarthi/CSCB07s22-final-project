@@ -3,8 +3,16 @@ package com.example.cscb07s22finalproject;
 import java.io.Serializable;
 
 public class Event implements Serializable {
-    private String eventName;
+    /*
+    Important methods:
+        toString(): How info from Event is formatted
+
+    Q: Why Event has venueName field despite there being ArrayList<Event> where I can get venueName from?
+        A: Idk how make the scroll view work with a nested ArrayList
+     */
+
     private String venueName;
+    private String eventName;
     private String activity;
     private String date;
     private String startTime;
@@ -15,6 +23,7 @@ public class Event implements Serializable {
 
     public Event(String eventName, String venueName, String activity, String date,String startTime,String endTime,int curParticipants, int maxParticipants)
     {
+        this.venueName = venueName;
         this.eventName = eventName;
         this.venueName = venueName;
         this.activity = activity;
