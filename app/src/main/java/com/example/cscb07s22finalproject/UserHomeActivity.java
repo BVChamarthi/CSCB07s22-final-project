@@ -27,7 +27,7 @@ public class UserHomeActivity extends AppCompatActivity{
         CreateList():  fill the list with Event items also decide format
         line 49: returns the selected Event info, choose what to return
      */
-    private DatabaseReference db;
+    DataBase db = DataBase.getInstance();
     private RecyclerView recyclerView;
     private Button btn;
     private ArrayList<Event> events = new ArrayList<>();
@@ -46,9 +46,7 @@ public class UserHomeActivity extends AppCompatActivity{
         adapter = new SingleAdapter(this, events);
         recyclerView.setAdapter(adapter);
 
-        db = FirebaseDatabase.getInstance().getReference();
-
-        CreateList();
+        updateList();
 
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,7 +61,7 @@ public class UserHomeActivity extends AppCompatActivity{
         });
     }
 
-    private void CreateList(){
+    private void createList(){
         events = new ArrayList<>();
 
 //        //Change the following lines for change what is displayed in each item
@@ -85,9 +83,19 @@ public class UserHomeActivity extends AppCompatActivity{
         events.add(new Event("Event 2", "Pan Am", "Soccer", "2022-08-04", "13:00", "14:00", 1, 5));
         events.add(new Event("Event 3", "Pan Am", "Surfing", "2022-08-04", "14:00", "15:00", 8, 5));
 
-        db.child("Events").setValue(events);
-        adapter.SetEvents(events);
+        db.getRef().child("Events").setValue(events);
     }
+
+    private void updateList()
+    {
+        db.viewEventAction(
+                (ArrayList<Event> events) ->
+        {
+            adapter.SetEvents(events);
+        });
+    }
+
+
 
     private void ShowToast(String msg){
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
