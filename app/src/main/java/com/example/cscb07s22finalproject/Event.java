@@ -3,19 +3,27 @@ package com.example.cscb07s22finalproject;
 import java.io.Serializable;
 
 public class Event implements Serializable {
+    /*
+    Important methods:
+        toString(): How info from Event is formatted
+
+    Q: Why Event has venueName field despite there being ArrayList<Event> where I can get venueName from?
+        A: Idk how make the scroll view work with a nested ArrayList
+     */
+
+    private String venueName;
     private String eventName;
     private String activity;
-    private String date;
     private String startTime;
     private String endTime;
     private int curParticipants, maxParticipants;
     private boolean isChecked = false;
 
-    public Event(String eventName, String activity, String date,String startTime,String endTime,int curParticipants, int maxParticipants)
+    public Event(String venueName,String eventName,String activity,String startTime,String endTime,int curParticipants, int maxParticipants)
     {
+        this.venueName = venueName;
         this.eventName = eventName;
         this.activity = activity;
-        this.date = date;
         this.startTime = startTime;
         this.endTime = endTime;
         this.maxParticipants = maxParticipants;
@@ -87,9 +95,18 @@ public class Event implements Serializable {
         isChecked = checked;
     }
 
+    public String getVenueName() {
+        return venueName;
+    }
+
+    public void setVenueName(String venueName) {
+        this.venueName = venueName;
+    }
+
     @Override
     public String toString() {
-        return  eventName +
+        return  venueName+
+                "\n\t"+eventName +
                 "\n\t" + activity +
                 "\n\t" + startTime +
                 ": " + endTime +

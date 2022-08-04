@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".UserHomeActivity">
 
     <Button
@@ -18,36 +19,84 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <SearchView
+        android:id="@+id/eventsListSearchView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:iconifiedByDefault="false"
+        android:queryHint="Venue/Sport name"
+        app:layout_constraintTop_toBottomOf="@+id/button3"
+        tools:layout_editor_absoluteX="1dp" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/singleRV"
+        android:layout_width="413dp"
+        android:layout_height="246dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+
     <Button
         android:id="@+id/buttonGetSelect"
         android:layout_width="264dp"
         android:layout_height="61dp"
-        android:layout_marginTop="436dp"
+        android:layout_marginTop="16dp"
         android:text="Join Event"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.503"
+        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/singleRV" />
 
     <Button
         android:id="@+id/button6"
         android:layout_width="264dp"
         android:layout_height="61dp"
+        android:layout_marginTop="8dp"
         android:onClick="newEventActivity"
         android:text="New Event"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.503"
+        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonGetSelect"
-        app:layout_constraintVertical_bias="0.146" />
+        app:layout_constraintTop_toBottomOf="@+id/buttonGetSelect" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/singleRV"
-        android:layout_width="409dp"
-        android:layout_height="365dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button3" />
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@+id/eventsListSearchView">
+
+        <Button
+            android:id="@+id/venueFilter"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:onClick="venueFilterTapped"
+            android:text="Venue" />
+
+        <Button
+            android:id="@+id/eventFilter"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:onClick="eventFilterTapped"
+            android:text="Event" />
+
+        <Button
+            android:id="@+id/sportFilter"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:onClick="sportFilterTapped"
+            android:text="Sport" />
+
+        <Button
+            android:id="@+id/joinedFilter"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:onClick="joinedFilterTapped"
+            android:text="My Events" />
+
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
