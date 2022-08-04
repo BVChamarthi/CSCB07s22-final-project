@@ -14,16 +14,18 @@ public class Event implements Serializable {
     private String venueName;
     private String eventName;
     private String activity;
+    private String date;
     private String startTime;
     private String endTime;
     private int curParticipants, maxParticipants;
     private boolean isChecked = false;
 
-    public Event(String venueName,String eventName,String activity,String startTime,String endTime,int curParticipants, int maxParticipants)
+    public Event(String venueName,String eventName,String activity,String date,String startTime,String endTime,int curParticipants, int maxParticipants)
     {
         this.venueName = venueName;
         this.eventName = eventName;
         this.activity = activity;
+        this.date = date;
         this.startTime = startTime;
         this.endTime = endTime;
         this.maxParticipants = maxParticipants;
@@ -108,6 +110,7 @@ public class Event implements Serializable {
         return  venueName+
                 "\n\t"+eventName +
                 "\n\t" + activity +
+                "\n\t" + date +
                 "\n\t" + startTime +
                 ": " + endTime +
                 "\n\tPlayers: " + curParticipants +
