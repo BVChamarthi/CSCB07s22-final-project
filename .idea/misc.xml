@@ -3,6 +3,10 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+<<<<<<< HEAD
+=======
+        <entry key="..\:/Users/Ashtian/Documents/Sprint2_v1_repo/CSCB07s22-final-project/app/src/main/res/layout/activity_main.xml" value="0.1644021739130435" />
+>>>>>>> Billy
         <entry key="..\:/Users/Ashtian/Documents/Sprint2_v1_repo/CSCB07s22-final-project/app/src/main/res/layout/activity_new_venue.xml" value="0.1644021739130435" />
         <entry key="..\:/Users/Ashtian/Documents/Sprint2_v1_repo/CSCB07s22-final-project/app/src/main/res/layout/activity_user_home.xml" value="0.22" />
         <entry key="..\:/Users/a1435/Documents/GitHub/CSCB07s22-final-project/app/src/main/res/layout-w1240dp/activity_login.xml" value="0.16331994645247658" />
