@@ -3,8 +3,9 @@ package com.example.cscb07s22finalproject;
 public class User
 {
     // Note: Made variables private to ensure safety. Getters and Setters are implemented
-    private String username;
-    private String password;
+    public String username;
+    public String password;
+    public boolean adminFlag;
 
     public User(String username, String password)
     {
