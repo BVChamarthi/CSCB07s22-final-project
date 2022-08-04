@@ -1,26 +1,99 @@
 package com.example.cscb07s22finalproject;
 
-public class Event {
+import java.io.Serializable;
 
-    int eventCode;
-    String venueName;
-    String sport;
-    int maxPlayers;
-    int numPlayers;
-    String date; // YYYY-MM-DD format
-    int startTime; // Stored as 24 hour time
-    int endTime;
+public class Event implements Serializable {
+    private String eventName;
+    private String activity;
+    private String date;
+    private String startTime;
+    private String endTime;
+    private int curParticipants, maxParticipants;
+    private boolean isChecked = false;
 
-    public Event(int year, int month, int day, int maxPlayers, int numPlayers, int eventCode, String venueName, String sport, int startTime, int endTime){
-        this.eventCode = eventCode;
-        this.venueName = venueName;
-        this.sport = sport;
-        this.maxPlayers = maxPlayers;
-        this.numPlayers = numPlayers;
-        this.date = year + "-" + month + "-" + day;
+    public Event(String eventName, String activity, String date,String startTime,String endTime,int curParticipants, int maxParticipants)
+    {
+        this.eventName = eventName;
+        this.activity = activity;
+        this.date = date;
         this.startTime = startTime;
         this.endTime = endTime;
-
+        this.maxParticipants = maxParticipants;
+        this.curParticipants = curParticipants;
     }
 
+    // Getters and Setters
+    public String getEventName()
+    {
+        return eventName;
+    }
+
+    public void setEventName(String eventName)
+    {
+        this.eventName = eventName;
+    }
+
+    public String getActivity()
+    {
+        return activity;
+    }
+
+    public void setActivity(String activity)
+    {
+        this.activity = activity;
+    }
+
+    public String getStartTime()
+    {
+        return startTime;
+    }
+
+    public void setStartTime(String startTime)
+    {
+        this.startTime = startTime;
+    }
+
+    public String getEndTime()
+    {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime)
+    {
+        this.endTime = endTime;
+    }
+
+    public int getCurParticipants() {
+        return curParticipants;
+    }
+
+    public void setCurParticipants(int curParticipants) {
+        this.curParticipants = curParticipants;
+    }
+
+    public int getMaxParticipants() {
+        return maxParticipants;
+    }
+
+    public void setMaxParticipants(int maxParticipants) {
+        this.maxParticipants = maxParticipants;
+    }
+
+    public boolean isChecked() {
+        return isChecked;
+    }
+
+    public void setChecked(boolean checked) {
+        isChecked = checked;
+    }
+
+    @Override
+    public String toString() {
+        return  eventName +
+                "\n\t" + activity +
+                "\n\t" + startTime +
+                ": " + endTime +
+                "\n\tPlayers: " + curParticipants +
+                "/" + maxParticipants;
+    }
 }
