@@ -50,6 +50,7 @@ public class SingleAdapter extends RecyclerView.Adapter<SingleAdapter.SingleView
                     imageView.setVisibility(View.GONE);
                 }
             }
+
             //Change what is show in each box
             textView.setText(event.toString());
             itemView.setOnClickListener(new View.OnClickListener(){
@@ -71,7 +72,6 @@ public class SingleAdapter extends RecyclerView.Adapter<SingleAdapter.SingleView
         }
         return null;
     }
-
 
 
     @NonNull

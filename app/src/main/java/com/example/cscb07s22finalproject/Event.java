@@ -4,16 +4,21 @@ import java.io.Serializable;
 
 public class Event implements Serializable {
     private String eventName;
+    private String venueName;
     private String activity;
+    private String date;
     private String startTime;
     private String endTime;
+    private Venue parentVenue;
     private int curParticipants, maxParticipants;
     private boolean isChecked = false;
 
-    public Event(String eventName, String activity,String startTime,String endTime,int curParticipants, int maxParticipants)
+    public Event(String eventName, String venueName, String activity, String date,String startTime,String endTime,int curParticipants, int maxParticipants)
     {
         this.eventName = eventName;
+        this.venueName = venueName;
         this.activity = activity;
+        this.date = date;
         this.startTime = startTime;
         this.endTime = endTime;
         this.maxParticipants = maxParticipants;
@@ -29,6 +34,14 @@ public class Event implements Serializable {
     public void setEventName(String eventName)
     {
         this.eventName = eventName;
+    }
+
+    public String getVenueName() {
+        return venueName;
+    }
+
+    public void setVenueName(String venueName) {
+        this.venueName = venueName;
     }
 
     public String getActivity()
@@ -87,7 +100,8 @@ public class Event implements Serializable {
 
     @Override
     public String toString() {
-        return  eventName +
+        return  "\t" + eventName +
+                "\n\t" + venueName +
                 "\n\t" + activity +
                 "\n\t" + startTime +
                 ": " + endTime +

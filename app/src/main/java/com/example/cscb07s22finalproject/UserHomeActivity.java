@@ -16,6 +16,9 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.util.ArrayList;
 
 public class UserHomeActivity extends AppCompatActivity{
@@ -24,6 +27,7 @@ public class UserHomeActivity extends AppCompatActivity{
         CreateList():  fill the list with Event items also decide format
         line 49: returns the selected Event info, choose what to return
      */
+    private DatabaseReference db;
     private RecyclerView recyclerView;
     private Button btn;
     private ArrayList<Event> events = new ArrayList<>();
@@ -42,6 +46,8 @@ public class UserHomeActivity extends AppCompatActivity{
         adapter = new SingleAdapter(this, events);
         recyclerView.setAdapter(adapter);
 
+        db = FirebaseDatabase.getInstance().getReference();
+
         CreateList();
 
         btn.setOnClickListener(new View.OnClickListener() {
@@ -59,18 +65,27 @@ public class UserHomeActivity extends AppCompatActivity{
 
     private void CreateList(){
         events = new ArrayList<>();
-        //Change the following lines for change what is displayed in each item
-        for(int i = 0; i<20; i++){
-            Event event = new Event(
-                    "Name "+(i+1)+" ",
-                    "Activity "+(i+1)+" ",
-                    "Start Time "+(i+1)+" ",
-                    "End Time "+(i+1)+" ",
-                    i+1,
-                    i+2
-            );
-            events.add(event);
-        }
+
+//        //Change the following lines for change what is displayed in each item
+//        for(int i = 0; i<20; i++){
+//            Event event = new Event(
+//                    "Name "+(i+1)+" ",
+//                    "Venue Name: Pan Am",
+//                    "Activity "+(i+1)+" ",
+//                    "Date "+(i+1)+" ",
+//                    "Start Time "+(i+1)+" ",
+//                    "End Time "+(i+1)+" ",
+//                    i+1,
+//                    i+2
+//            );
+//            events.add(event);
+//        }
+
+        events.add(new Event("Event 1", "Pan Am", "Swimming", "2022-08-04", "12:00", "13:00", 2, 5));
+        events.add(new Event("Event 2", "Pan Am", "Soccer", "2022-08-04", "13:00", "14:00", 1, 5));
+        events.add(new Event("Event 3", "Pan Am", "Surfing", "2022-08-04", "14:00", "15:00", 8, 5));
+
+        db.child("Events").setValue(events);
         adapter.SetEvents(events);
     }
 

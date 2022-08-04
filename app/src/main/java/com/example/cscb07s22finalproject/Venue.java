@@ -5,14 +5,13 @@ import java.util.ArrayList;
 public class Venue {
 
     String name;
-    ArrayList<String> sports;
-    ArrayList<Integer> codes;
+    ArrayList<String> activities;
+    ArrayList<Event> events;
 
-    public Venue(String name, ArrayList<String> sports, ArrayList<Integer> codes){
-
+    public Venue(String name, ArrayList<String> activities, ArrayList<Event> events)
+    {
         this.name = name;
-        this.sports = sports;
-        this.codes = codes;
-
+        this.activities = activities;
+        this.events = events;
     }
 }
