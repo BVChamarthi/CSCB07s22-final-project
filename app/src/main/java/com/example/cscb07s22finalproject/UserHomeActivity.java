@@ -9,6 +9,7 @@ import android.view.View;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -30,6 +31,10 @@ public class UserHomeActivity extends AppCompatActivity{
     private ArrayList<Event> events = new ArrayList<>();
     private SingleAdapter adapter;
 
+    private String selectedFilter = "all";
+    private String currentSearchText = "";
+    private SearchView searchView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,6 +48,7 @@ public class UserHomeActivity extends AppCompatActivity{
         adapter = new SingleAdapter(this, events);
         recyclerView.setAdapter(adapter);
 
+        initSearchWidget();
         CreateList();
 
         btn.setOnClickListener(new View.OnClickListener() {
@@ -54,6 +60,32 @@ public class UserHomeActivity extends AppCompatActivity{
                 }else{
                     ShowToast("No Selection");
                 }
+            }
+        });
+    }
+
+    private void initSearchWidget(){
+        SearchView searchView = (SearchView) findViewById(R.id.eventsListSearchView);
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s)
+            {
+                ArrayList<Event> filteredEvents = new ArrayList<Event>();
+
+                for(Event event: events) {
+                    if(event.getEventName().toLowerCase().contains(s.toLowerCase()) ||
+                            event.getVenueName().toLowerCase().contains(s.toLowerCase())) {
+                        filteredEvents.add(event);
+                    }
+                }
+                adapter.SetEvents(filteredEvents);
+                return false;
             }
         });
     }
@@ -72,6 +104,7 @@ public class UserHomeActivity extends AppCompatActivity{
             );
             events.add(event);
         }
+        this.events = events;
         adapter.SetEvents(events);
     }
 
@@ -85,7 +118,7 @@ public class UserHomeActivity extends AppCompatActivity{
     }
 
     public void newEventActivity(View view) {
-        Intent intent = new Intent(this, NewEventActivity.class);
+        Intent intent = new Intent(this, ChooseVenueActivity.class);
         startActivity(intent);
     }
 }
