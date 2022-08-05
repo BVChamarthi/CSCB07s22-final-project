@@ -180,7 +180,7 @@ public final class DataBase {
         Matcher matcher_startTime = pattern.matcher(startTime);
         Matcher matcher_endTime = pattern.matcher(endTime);
 
-        Pattern pattern2 = Pattern.compile("");
+        Pattern pattern2 = Pattern.compile("(202[2-9]||20[3-9][0-9]||2[1-9][0-9][0-9])\\.(0[1-9]||1[0-2])\\.([0-2][0-9]||3[0-1])");
         Matcher matcher_date = pattern.matcher(date);
 
         // check formatting,
