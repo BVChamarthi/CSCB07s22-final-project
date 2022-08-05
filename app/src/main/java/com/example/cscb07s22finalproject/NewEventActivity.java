@@ -52,37 +52,34 @@ public class NewEventActivity extends AppCompatActivity implements AdapterView.O
         String endTime = editText.getText().toString();
 
 
-        db.eventCreateActions(players, date, startTime, endTime
-                () -> {     // incorrect format
-                    Toast.makeText(NewEventActivity.this, "Invalid: username & password must be 1 or more word characters only", Toast.LENGTH_LONG).show();
-                },
-                () -> {     // correct format, user doesn't exist, signup user
-                    Toast.makeText(NewEventActivity.this, "Username does not exist - please sign up", Toast.LENGTH_LONG).show();
-                },
-                () -> {     // user exists, wrong password
-                    Toast.makeText(NewEventActivity.this, "Incorrect Password", Toast.LENGTH_LONG).show();
-                },
-                () -> {     // user exists, right password
-                    // set up async. listener to get adminFlag
-                    db.getRef().child("users").child(username).child("adminFlag").get().addOnCompleteListener(task -> {
-                        if(!task.isSuccessful()) return;    // adminFlag fetch failed
-                        // TODO: display some error message in the future
-
-                        // adminFlag fetch successful
-                        Object bool = task.getResult().getValue();
-                        if(!(bool instanceof Boolean)) return;  // adminFlag is not boolean (failed)
-                        // TODO: display some error message in the future
-
-                        db.setUser(username, password, (Boolean) bool); // set user
-                        // create intent
-                        Intent intent;
-                        if((Boolean)bool)
-                            intent = new Intent(this, AdminHomeActivity.class);
-                        else
-                            intent = new Intent(this, UserHomeActivity.class);
-                        startActivity(intent);
-                    });
-                });
+//        db.eventCreateActions(players, date, startTime, endTime,
+//                () -> {     // incorrect time format
+//                    Toast.makeText(NewEventActivity.this, "Invalid: username & password must be 1 or more word characters only", Toast.LENGTH_LONG).show();
+//                },
+//                () -> {     // incorrect date format
+//                    Toast.makeText(NewEventActivity.this, "Username does not exist - please sign up", Toast.LENGTH_LONG).show();
+//                },
+//                () -> {     // Event passes all checks
+//                    // set up async. listener to get adminFlag
+//                    db.getRef().child("users").child(username).child("adminFlag").get().addOnCompleteListener(task -> {
+//                        if(!task.isSuccessful()) return;    // adminFlag fetch failed
+//                        // TODO: display some error message in the future
+//
+//                        // adminFlag fetch successful
+//                        Object bool = task.getResult().getValue();
+//                        if(!(bool instanceof Boolean)) return;  // adminFlag is not boolean (failed)
+//                        // TODO: display some error message in the future
+//
+//                        db.setUser(username, password, (Boolean) bool); // set user
+//                        // create intent
+//                        Intent intent;
+//                        if((Boolean)bool)
+//                            intent = new Intent(this, AdminHomeActivity.class);
+//                        else
+//                            intent = new Intent(this, UserHomeActivity.class);
+//                        startActivity(intent);
+//                    });
+//                });
 
     }
 
