@@ -84,7 +84,7 @@ public class ChooseVenueActivity extends AppCompatActivity implements Serializab
     }
 
     public void startChooseSport(Venue venue){
-        ArrayList<String> sports = venue.getAllowedActivities();
+        ArrayList<String> sports = venue.getActivities();
         Intent intent = new Intent(this, ChooseSportActivity.class);
         Bundle args = new Bundle();
         args.putSerializable("ARRAYLIST",(Serializable)sports);
