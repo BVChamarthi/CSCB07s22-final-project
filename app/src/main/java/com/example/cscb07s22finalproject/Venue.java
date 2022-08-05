@@ -43,4 +43,16 @@ public class Venue {
     public void setVenueName(String venueName) {
         this.venueName = venueName;
     }
+
+    public ArrayList<String> getAllowedActivities() {
+        return allowedActivities;
+    }
+
+    public void setAllowedActivities(ArrayList<String> allowedActivities) {
+        this.allowedActivities = allowedActivities;
+    }
+
+    public String toString(){
+        return venueName;
+    }
 }

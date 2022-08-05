@@ -16,10 +16,11 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
-public class ChooseVenueActivity extends AppCompatActivity {
+public class ChooseVenueActivity extends AppCompatActivity implements Serializable {
     private RecyclerView recyclerView;
     private Button btn;
     private ArrayList<Venue> venues = new ArrayList<>();
@@ -46,6 +47,7 @@ public class ChooseVenueActivity extends AppCompatActivity {
                 if(adapter.getSelected() != null){
                     //Change the following line to change what happens when join button is clicked
                     ShowToast(adapter.getSelected().getVenueName());
+                    startChooseSport(adapter.getSelected());
                 }else{
                     ShowToast("No Selection");
                     //Update list but with sports from venue selected
@@ -80,5 +82,14 @@ public class ChooseVenueActivity extends AppCompatActivity {
         }
 
         adapter.SetEvents(venues);
+    }
+
+    public void startChooseSport(Venue venue){
+        ArrayList<String> sports = venue.getAllowedActivities();
+        Intent intent = new Intent(this, ChooseSportActivity.class);
+        Bundle args = new Bundle();
+        args.putSerializable("ARRAYLIST",(Serializable)sports);
+        intent.putExtra("BUNDLE",args);
+        startActivity(intent);
     }
 }
