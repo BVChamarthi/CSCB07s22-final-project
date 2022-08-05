@@ -27,7 +27,8 @@ import java.lang.reflect.Array;
 
 import java.util.ArrayList;
 
-public class UserHomeActivity extends AppCompatActivity{
+public class UserHomeActivity extends AppCompatActivity
+{
     /*
     Important methods:
         CreateList(): fill Event items with info

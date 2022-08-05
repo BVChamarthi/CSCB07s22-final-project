@@ -32,10 +32,6 @@ public class NewEventActivity extends AppCompatActivity implements AdapterView.O
     }
 
     private void initSpinner() {
-
-        venueAdapter = new SingleVenueAdapter(this, venues);
-        updateVenuesList();
-
         Spinner spinner = findViewById(R.id.spinner);
         String values[] = {"Three", "Two", "Three", "Four", "Five"};
         ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(
@@ -46,7 +42,6 @@ public class NewEventActivity extends AppCompatActivity implements AdapterView.O
 
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(spinnerAdapter);
-        updateVenuesList();
         spinner.setOnItemSelectedListener(this);
 
         Spinner spinner2 = findViewById(R.id.spinner2);

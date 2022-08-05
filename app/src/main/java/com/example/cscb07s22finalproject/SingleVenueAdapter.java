@@ -35,14 +35,8 @@ public class SingleVenueAdapter extends RecyclerView.Adapter<SingleVenueAdapter.
 
     public void SetVenues(ArrayList<Venue> venues)
     {
-        ArrayList<Venue> updatedVenues = new ArrayList<Venue>();
-
-        for(Venue v : venues)
-        {
-            updatedVenues.add(new Venue(v.getVenueName(), v.activities));
-        }
-
-        this.venues = updatedVenues;
+        this.venues = venues;
+        System.out.println("venues address in Adapter" + this.venues);
         notifyDataSetChanged();
     }
 
