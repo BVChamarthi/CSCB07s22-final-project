@@ -26,7 +26,7 @@ import java.lang.reflect.Array;
 
 import java.util.ArrayList;
 
-public class UserHomeActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+public class UserHomeActivity extends AppCompatActivity{
     /*
     Important methods:
         CreateList(): fill Event items with info
@@ -47,37 +47,12 @@ public class UserHomeActivity extends AppCompatActivity implements AdapterView.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_home);
 
-        initSpinner();
         initSearchWidget();
         initRecyclerView();
 
         updateList();
     }
 
-    private void initSpinner() {
-        Spinner spinner = findViewById(R.id.spinner);
-        String values[] = {"Three", "Two", "Three", "Four", "Five"};
-        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(
-                this,
-                android.R.layout.simple_spinner_item,
-                values
-        );
-
-        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(spinnerAdapter);
-        spinner.setOnItemSelectedListener(this);
-    }
-
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        String text = parent.getItemAtPosition(position).toString();
-        Toast.makeText(parent.getContext(), text, Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-
-    }
 
     private void initRecyclerView(){
         recyclerView = findViewById(R.id.singleRV);
@@ -223,7 +198,12 @@ public class UserHomeActivity extends AppCompatActivity implements AdapterView.O
     }
 
     public void newEventActivity(View view) {
-        Intent intent = new Intent(this, ChooseVenueActivity.class);
+        Intent intent = new Intent(this, NewEventActivity.class);
+        startActivity(intent);
+    }
+
+    public void newMyEventActivtity(View view) {
+        Intent intent = new Intent(this, MyEventsActivity.class);
         startActivity(intent);
     }
 }
