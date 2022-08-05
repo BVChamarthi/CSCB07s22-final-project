@@ -237,13 +237,16 @@ public final class DataBase {
 
                 for(DataSnapshot dSnap : snapshot.getChildren())
                 {
-                   activities = new ArrayList<String>();
+                    // Getting fields
+                    venueName = dSnap.child("venueName").getValue().toString();
+                    activities = new ArrayList<String>();
 
-                   for(DataSnapshot dSnap2 : dSnap.getChildren())
-                   {
+                    for(DataSnapshot sportsDSnap : dSnap.child("sports").getChildren())
+                    {
+                        activities.add(dSnap.getValue().toString());
+                    }
 
-                   }
-
+                    allVenues.add(new Venue(venueName,activities));
                 }
 
                 // Using callback to store all events
