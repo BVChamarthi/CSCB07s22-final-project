@@ -8,6 +8,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -17,12 +18,8 @@ public final class DataBase {
     private final DatabaseReference ref;
     private User user;
 
-
-/*    public static final int INCORRECT_FORMAT = -1;
-    public static final int DOES_NOT_EXIST = -2;
-    public static final int ALREADY_EXISTS = -4;
-    public static final int INCORRECT_PASSWORD = -3;
-    public static final int CAN_LOGIN = 0;*/
+    ArrayList<Venue> venues;
+    ArrayList<Event> events;
 
     private DataBase() {
         ref = FirebaseDatabase.getInstance().getReference();    // initialise ref to root of database
@@ -69,33 +66,6 @@ public final class DataBase {
             return;                                                 // and return
         }
 
-/*        // if formatting is good, set up async. listener to check if user exists
-        ref.child("users").child(username).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (!snapshot.exists()) {           // if user doesn't exist
-                    userDoesNotExist.onCallBack();  // call userDoesNotExist
-                    return;                         // and return
-                }
-
-                // if user exists, set up async. listener to check password
-                ref.child("users").child(username).child("password").get().addOnCompleteListener(task -> {
-                    if(!task.isSuccessful()) return;    // password fetch failed
-                    // TODO: display some error message in the future
-
-                    // password fetch successful
-                    String actualPassword = task.getResult().getValue().toString();
-                    if(!password.equals(actualPassword)) {
-                        userExists_WrongPassword.onCallBack();
-                    } else userExists_RightPassword.onCallBack();
-                });
-
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });*/
         // if formatting is good, set up async. listener to check if user exists
         ref.child("users").child(username).get().addOnCompleteListener(userFetch -> {
             if (!userFetch.getResult().exists()) {           // if user doesn't exist
@@ -141,22 +111,6 @@ public final class DataBase {
             }
         }
 
-/*        // if formatting is good, set up async. listener to check if venue exists
-        ref.child("Venues").child(venueName).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (!snapshot.exists()) {           // if venue doesn't exist
-                    venueDoesNotExist.onCallBack();  // call venueDoesNotExist
-                }else{
-                    venueExists.onCallBack();
-                }
-                return;
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });*/
         // if formatting is good, set up async. listener to check if venue exists
         ref.child("Venues").child(venueName).get().addOnCompleteListener(venueFetch -> {
             if (!venueFetch.getResult().exists()) {           // if venue doesn't exist
@@ -177,12 +131,13 @@ public final class DataBase {
         setUser(username, password, false);
     }
 
-
     public void createVenue(String venueName, String[] activities){
-        ref.child(venueName);
-        for(int i = 0; i < activities.length; i++){
-            ref.child("Venues").child(venueName).child("sports").child("sport" + (i+1)).setValue(activities[i]);
-        }
+        ref.child("Venues").child(venueName).child("venueName").setValue(venueName);
+        ref.child("Venues").child(venueName).child("sports").setValue(activities);
+    }
+
+    public void getVenues(){
+
     }
 }
 
