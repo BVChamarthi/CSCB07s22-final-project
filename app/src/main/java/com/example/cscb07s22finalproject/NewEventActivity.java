@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -33,7 +34,59 @@ public class NewEventActivity extends AppCompatActivity implements AdapterView.O
         }
 
         initSpinner();
+
     }
+
+    public void createEvent(View view)
+    {
+        EditText editText = findViewById(R.id.editTextNumber5);
+        String players = editText.getText().toString();
+
+        editText = findViewById(R.id.editTextNumber);
+        String date = editText.getText().toString();
+
+        editText = findViewById(R.id.editTextNumber2);
+        String startTime = editText.getText().toString();
+
+        editText = findViewById(R.id.editTextNumber3);
+        String endTime = editText.getText().toString();
+
+
+        db.eventCreateActions(players, date, startTime, endTime
+                () -> {     // incorrect format
+                    Toast.makeText(NewEventActivity.this, "Invalid: username & password must be 1 or more word characters only", Toast.LENGTH_LONG).show();
+                },
+                () -> {     // correct format, user doesn't exist, signup user
+                    Toast.makeText(NewEventActivity.this, "Username does not exist - please sign up", Toast.LENGTH_LONG).show();
+                },
+                () -> {     // user exists, wrong password
+                    Toast.makeText(NewEventActivity.this, "Incorrect Password", Toast.LENGTH_LONG).show();
+                },
+                () -> {     // user exists, right password
+                    // set up async. listener to get adminFlag
+                    db.getRef().child("users").child(username).child("adminFlag").get().addOnCompleteListener(task -> {
+                        if(!task.isSuccessful()) return;    // adminFlag fetch failed
+                        // TODO: display some error message in the future
+
+                        // adminFlag fetch successful
+                        Object bool = task.getResult().getValue();
+                        if(!(bool instanceof Boolean)) return;  // adminFlag is not boolean (failed)
+                        // TODO: display some error message in the future
+
+                        db.setUser(username, password, (Boolean) bool); // set user
+                        // create intent
+                        Intent intent;
+                        if((Boolean)bool)
+                            intent = new Intent(this, AdminHomeActivity.class);
+                        else
+                            intent = new Intent(this, UserHomeActivity.class);
+                        startActivity(intent);
+                    });
+                });
+
+    }
+
+
 
     private void initSpinner() {
         Spinner spinner = findViewById(R.id.spinner);

@@ -170,6 +170,63 @@ public final class DataBase {
         });
     }
 
+    public void eventCreateActions(String players, String date, String startTime, String endTime,
+                             callBack incorrectFormat,
+                             callBack notSelected,
+                             callBack eventExists
+    ) {
+
+        Pattern pattern = Pattern.compile("(2[0-3]:[0-5][0-9]) || ([0-1][0-9]:[0-5][0-9])");
+        Matcher matcher_startTime = pattern.matcher(startTime);
+        Matcher matcher_endTime = pattern.matcher(endTime);
+
+        Pattern pattern2 = Pattern.compile("");
+        Matcher matcher_date = pattern.matcher(date);
+
+        // check formatting,
+        if(!matcher_startTime.matches()){
+            incorrectFormat.onCallBack();
+            return;
+        }
+
+        if(!matcher_endTime.matches()){
+            incorrectFormat.onCallBack();
+            return;
+        }
+
+        if(!matcher_date.matches()){
+            incorrectFormat.onCallBack();
+            return;
+        }
+
+
+/*        // if formatting is good, set up async. listener to check if venue exists
+        ref.child("Venues").child(venueName).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (!snapshot.exists()) {           // if venue doesn't exist
+                    venueDoesNotExist.onCallBack();  // call venueDoesNotExist
+                }else{
+                    venueExists.onCallBack();
+                }
+                return;
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });*/
+        // if formatting is good, set up async. listener to check if venue exists
+        ref.child("Events").child().get().addOnCompleteListener(venueFetch -> {
+            if (!venueFetch.getResult().exists()) {           // if venue doesn't exist
+                venueDoesNotExist.onCallBack();  // call venueDoesNotExist
+            }else{
+                venueExists.onCallBack();
+            }
+            return;
+        });
+    }
+
     public interface viewEventCallback
     {
         public void onCallBack(ArrayList<Event> events);
