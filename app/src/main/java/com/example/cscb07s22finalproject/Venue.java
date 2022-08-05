@@ -53,7 +53,16 @@ public class Venue {
         this.venueName = venueName;
     }
 
-    public String toString(){
-        return venueName;
+    @Override
+    public String toString()
+    {
+        String venueToString = "\t" + venueName + "\n\n";
+
+        for(String activity : activities)
+        {
+            venueToString += "\t" + activity + "\n";
+        }
+
+        return venueToString.trim();
     }
 }

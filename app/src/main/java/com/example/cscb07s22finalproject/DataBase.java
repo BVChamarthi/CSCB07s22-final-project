@@ -243,7 +243,7 @@ public final class DataBase {
 
                     for(DataSnapshot sportsDSnap : dSnap.child("sports").getChildren())
                     {
-                        activities.add(dSnap.getValue().toString());
+                        activities.add(sportsDSnap.getValue().toString());
                     }
 
                     allVenues.add(new Venue(venueName, activities));

@@ -24,11 +24,6 @@ public class NewEventActivity extends AppCompatActivity implements AdapterView.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_event);
 
-        initSpinner();
-
-        venueAdapter = new SingleVenueAdapter(this,venues);
-        updateVenuesList();
-        venueAdapter.printVenues();
     }
 
     private void initSpinner() {

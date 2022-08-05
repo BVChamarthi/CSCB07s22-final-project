@@ -21,6 +21,9 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class ChooseVenueActivity extends AppCompatActivity implements Serializable {
+
+    DataBase db = DataBase.getInstance();
+
     private RecyclerView recyclerView;
     private Button btn;
     private ArrayList<Venue> venues = new ArrayList<>();
@@ -39,7 +42,7 @@ public class ChooseVenueActivity extends AppCompatActivity implements Serializab
         adapter = new SingleVenueAdapter(this, venues);
         recyclerView.setAdapter(adapter);
 
-        CreateList();
+        updateVenuesList();
 
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,6 +84,16 @@ public class ChooseVenueActivity extends AppCompatActivity implements Serializab
         }
 
         adapter.SetVenues(venues);
+    }
+
+    private void updateVenuesList()
+    {
+        db.viewVenueAction(
+                (ArrayList<Venue> venues) ->
+                {
+                    adapter.SetVenues(venues);
+                }
+        );
     }
 
     public void startChooseSport(Venue venue){

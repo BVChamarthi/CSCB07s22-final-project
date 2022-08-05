@@ -204,11 +204,11 @@ public class UserHomeActivity extends AppCompatActivity
     }
 
     public void newEventActivity(View view) {
-        Intent intent = new Intent(this, NewEventActivity.class);
+        Intent intent = new Intent(this, ChooseVenueActivity.class);
         startActivity(intent);
     }
 
-    public void newMyEventActivtity(View view) {
+    public void newMyEventActivity(View view) {
         Intent intent = new Intent(this, MyEventsActivity.class);
         startActivity(intent);
     }
