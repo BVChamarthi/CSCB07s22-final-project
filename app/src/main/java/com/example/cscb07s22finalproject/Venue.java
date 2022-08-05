@@ -52,4 +52,8 @@ public class Venue {
     public void setVenueName(String venueName) {
         this.venueName = venueName;
     }
+
+    public String toString(){
+        return venueName;
+    }
 }
