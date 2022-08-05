@@ -219,6 +219,44 @@ public final class DataBase {
         });
     }
 
+    public interface viewVenueCallback
+    {
+        public void onCallBack(ArrayList<Venue> venues);
+    }
+
+    public void viewVenueAction(viewVenueCallback callback)
+    {
+        ref.child("Venues").addValueEventListener(new ValueEventListener()
+        {
+            ArrayList<Venue> allVenues = new ArrayList<Venue>();
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot)
+            {
+                ArrayList<String> activities;
+                String venueName;
+
+                for(DataSnapshot dSnap : snapshot.getChildren())
+                {
+                   activities = new ArrayList<String>();
+
+                   for(DataSnapshot dSnap2 : dSnap.getChildren())
+                   {
+
+                   }
+
+                }
+
+                // Using callback to store all events
+                callback.onCallBack(allVenues);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
     public void createUser(String username, String password) {
 
         ref.child("users").child(username).child("username").setValue(username);
@@ -231,6 +269,7 @@ public final class DataBase {
 
     public void createVenue(String venueName, String[] activities){
         ref.child(venueName);
+        ref.child("Venues").child(venueName).child(venueName).setValue(venueName);
         for(int i = 0; i < activities.length; i++){
             ref.child("Venues").child(venueName).child("sports").child("sport" + (i+1)).setValue(activities[i]);
         }

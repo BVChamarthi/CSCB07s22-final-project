@@ -73,8 +73,7 @@ public class ChooseVenueActivity extends AppCompatActivity {
         for(int i=0; i<10; i++) {
             Venue venue = new Venue(
                     "Venue " + (i + 1) + " ",
-                    sports,
-                    code
+                    sports
             );
             venues.add(venue);
         }

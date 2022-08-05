@@ -5,19 +5,20 @@ import java.util.ArrayList;
 public class Venue {
 
     String venueName;
-    ArrayList<String> allowedActivities;
+    ArrayList<String> activities;
     ArrayList<Event> events;
     ArrayList<Integer> codes;
 
-    public Venue(String venueName, ArrayList<String> allowedActivities, ArrayList<Integer> codes) {
+    public Venue(String venueName, ArrayList<String> activities) {
         this.venueName = venueName;
-        this.allowedActivities = allowedActivities;
-        this.codes = codes;
+        this.activities = activities;
+        this.events = new ArrayList<Event>();
+        this.codes = new ArrayList<Integer>();
     }
 
     public void addEvent(Event event) {
         //Not sure if .contains() properly compares two objs, might have to change 2nd predicate
-        if(allowedActivities.contains(event.getActivity()) && !(events.contains(event))){
+        if(activities.contains(event.getActivity()) && !(events.contains(event))){
             event.setVenueName(venueName);
             events.add(event);
         }
@@ -29,11 +30,11 @@ public class Venue {
     }
 
     public void addAllowedActivities(String activity){
-        allowedActivities.add(activity);
+        activities.add(activity);
     }
 
     public void removeAllowedActivities(String activity){
-        allowedActivities.remove(activity);
+        activities.remove(activity);
     }
 
     public String getVenueName() {

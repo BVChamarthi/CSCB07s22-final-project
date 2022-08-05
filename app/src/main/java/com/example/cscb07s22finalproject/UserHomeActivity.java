@@ -208,7 +208,8 @@ public class UserHomeActivity extends AppCompatActivity implements AdapterView.O
         filterList("Sport");
     }
 
-    public void joinedFilterTapped(View view){
+    public void joinedFilterTapped(View view)
+    {
 
     }
 
