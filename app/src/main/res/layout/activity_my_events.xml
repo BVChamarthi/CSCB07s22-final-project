@@ -7,18 +7,6 @@
     android:orientation="vertical"
     tools:context=".UserHomeActivity">
 
-    <Button
-        android:id="@+id/button3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="16dp"
-        android:onClick="logout"
-        android:text="Log Out"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <SearchView
         android:id="@+id/eventsListSearchView"
         android:layout_width="match_parent"
@@ -45,7 +33,7 @@
         android:layout_width="264dp"
         android:layout_height="61dp"
         android:layout_marginTop="16dp"
-        android:text="Join Event"
+        android:text="Joined Events"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
@@ -56,8 +44,7 @@
         android:layout_width="264dp"
         android:layout_height="61dp"
         android:layout_marginTop="8dp"
-        android:onClick="newEventActivity"
-        android:text="New Event"
+        android:text="Scheduled Events"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
@@ -68,51 +55,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@+id/eventsListSearchView">
+        app:layout_constraintTop_toBottomOf="@+id/eventsListSearchView"/>
 
-        <Button
-            android:id="@+id/venueFilter"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:onClick="venueFilterTapped"
-            android:text="Venue" />
-
-        <Button
-            android:id="@+id/eventFilter"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:onClick="eventFilterTapped"
-            android:text="Event" />
-
-        <Button
-            android:id="@+id/sportFilter"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:onClick="sportFilterTapped"
-            android:text="Sport" />
-
-    </LinearLayout>
-
-    <Button
-        android:id="@+id/button5"
-        android:layout_width="264dp"
-        android:layout_height="61dp"
-        android:layout_marginTop="8dp"
-        android:onClick="newMyEventActivtity"
-        android:text="My Events"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button6" />
-
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="TextView"
-        tools:layout_editor_absoluteX="97dp"
-        tools:layout_editor_absoluteY="631dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>

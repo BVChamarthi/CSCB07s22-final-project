@@ -31,18 +31,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        DatabaseReference ref = db.getRef();
-        ref.child("first").setValue(100);
-        ref.child("first").get().addOnCompleteListener(task -> {
-            if (!task.isSuccessful()) {
-                Log.e("demo", "Error getting data", task.getException());
-            }
-            else {
-                TextView tv = findViewById(R.id.textView1);
-                tv.setText(task.getResult().getValue().toString());
-            }
-        });
     }
 
     public void signUpActivity(View view) {

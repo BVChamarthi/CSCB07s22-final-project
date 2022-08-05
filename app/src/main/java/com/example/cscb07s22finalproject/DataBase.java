@@ -8,6 +8,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -15,7 +16,7 @@ public final class DataBase {
 
     private static DataBase db;
     private final DatabaseReference ref;
-    private User user;
+    private static User user;
 
 
 /*    public static final int INCORRECT_FORMAT = -1;
@@ -52,6 +53,7 @@ public final class DataBase {
     public interface callBack {         // interface to define lambda functions for userActions
         public void onCallBack();
     }
+
     public void userActions(String username, String password,
                             callBack incorrectFormat,
                             callBack userDoesNotExist,
@@ -168,6 +170,96 @@ public final class DataBase {
         });
     }
 
+    public interface viewEventCallback
+    {
+        public void onCallBack(ArrayList<Event> events);
+    }
+
+    public void viewEventAction(viewEventCallback callback)
+    {
+        ref.child("Events").addValueEventListener(new ValueEventListener()
+        {
+            ArrayList<Event> allEvents = new ArrayList<Event>();
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot)
+            {
+                String eventName;
+                String venueName;
+                String activity;
+                String date;
+                String startTime;
+                String endTime;
+                int curParticipants;
+                int maxParticipants;
+
+                for(DataSnapshot dSnap : snapshot.getChildren())
+                {
+                    // Getting all fields from a particular event
+                    eventName = dSnap.child("eventName").getValue().toString();
+                    venueName = dSnap.child("venueName").getValue().toString();
+                    activity = dSnap.child("activity").getValue().toString();
+                    date = dSnap.child("date").getValue().toString();
+                    startTime = dSnap.child("startTime").getValue().toString();
+                    endTime = dSnap.child("endTime").getValue().toString();
+                    curParticipants = Integer.parseInt(dSnap.child("curParticipants").getValue().toString());
+                    maxParticipants = Integer.parseInt(dSnap.child("maxParticipants").getValue().toString());
+
+                    // Inserting event into list
+                    allEvents.add(new Event(eventName, venueName, activity, date, startTime, endTime, curParticipants, maxParticipants));
+                }
+
+                // Using callback to store all events
+                callback.onCallBack(allEvents);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    public interface viewVenueCallback
+    {
+        public void onCallBack(ArrayList<Venue> venues);
+    }
+
+    public void viewVenueAction(viewVenueCallback callback)
+    {
+        ref.child("Venues").addValueEventListener(new ValueEventListener()
+        {
+            ArrayList<Venue> allVenues = new ArrayList<Venue>();
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot)
+            {
+                ArrayList<String> activities;
+                String venueName;
+
+                for(DataSnapshot dSnap : snapshot.getChildren())
+                {
+                    // Getting fields
+                    venueName = dSnap.child("venueName").getValue().toString();
+                    activities = new ArrayList<String>();
+
+                    for(DataSnapshot sportsDSnap : dSnap.child("sports").getChildren())
+                    {
+                        activities.add(dSnap.getValue().toString());
+                    }
+
+                    allVenues.add(new Venue(venueName, activities));
+                }
+
+                // Using callback to store all venues
+                callback.onCallBack(allVenues);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
     public void createUser(String username, String password) {
 
         ref.child("users").child(username).child("username").setValue(username);
@@ -177,9 +269,9 @@ public final class DataBase {
         setUser(username, password, false);
     }
 
-
     public void createVenue(String venueName, String[] activities){
         ref.child(venueName);
+        ref.child("Venues").child(venueName).child("venueName").setValue(venueName);
         for(int i = 0; i < activities.length; i++){
             ref.child("Venues").child(venueName).child("sports").child("sport" + (i+1)).setValue(activities[i]);
         }
