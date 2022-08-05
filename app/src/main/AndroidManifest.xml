@@ -35,6 +35,9 @@
             android:name=".ChooseSportActivity"
             android:exported="false" />
         <activity
+            android:name=".NewEventActivity"
+            android:exported="false" />
+        <activity
             android:name=".NewVenueActivity"
             android:parentActivityName=".AdminHomeActivity">
 

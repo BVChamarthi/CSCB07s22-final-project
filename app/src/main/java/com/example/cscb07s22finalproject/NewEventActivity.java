@@ -2,12 +2,12 @@ package com.example.cscb07s22finalproject;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -16,50 +16,37 @@ public class NewEventActivity extends AppCompatActivity implements AdapterView.O
 
     DataBase db = DataBase.getInstance();
 
-    private SingleVenueAdapter venueAdapter;
-    private ArrayList<Venue> venues;
+    Venue v;
+    ArrayList<String> sports;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_event);
 
+        Intent intent = getIntent();
+        Bundle args = intent.getBundleExtra("BUNDLE");
+        v = (Venue)args.getSerializable("VENUE");
+
+        for(String sport : v.getActivities()){
+            System.out.println(sport);
+        }
+
+        initSpinner();
     }
 
     private void initSpinner() {
         Spinner spinner = findViewById(R.id.spinner);
-        String values[] = {"Three", "Two", "Three", "Four", "Five"};
+
         ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(
                 this,
                 android.R.layout.simple_spinner_item,
-                values
+                v.getActivities()
         );
 
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(spinnerAdapter);
         spinner.setOnItemSelectedListener(this);
-
-        Spinner spinner2 = findViewById(R.id.spinner2);
-        String values2[] = {"Three", "Two", "Three", "Four", "Five"};
-        ArrayAdapter<String> spinnerAdapter2 = new ArrayAdapter<>(
-                this,
-                android.R.layout.simple_spinner_item,
-                values2
-        );
-
-        spinnerAdapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner2.setAdapter(spinnerAdapter2);
-        spinner2.setOnItemSelectedListener(this);
-    }
-
-    private void updateVenuesList()
-    {
-        db.viewVenueAction(
-                (ArrayList<Venue> venues) ->
-                {
-                    venueAdapter.SetVenues(venues);
-                }
-        );
     }
 
     @Override

@@ -1,8 +1,9 @@
 package com.example.cscb07s22finalproject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Venue {
+public class Venue implements Serializable {
 
     String venueName;
     ArrayList<String> activities;
