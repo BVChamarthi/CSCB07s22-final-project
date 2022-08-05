@@ -33,7 +33,7 @@ public class SingleVenueAdapter extends RecyclerView.Adapter<SingleVenueAdapter.
         this.venues = venues;
     }
 
-    public void SetEvents(ArrayList<Venue> venues){
+    public void SetVenues(ArrayList<Venue> venues){
         this.venues = new ArrayList<>();
         this.venues = venues;
         notifyDataSetChanged();
@@ -80,6 +80,11 @@ public class SingleVenueAdapter extends RecyclerView.Adapter<SingleVenueAdapter.
             return venues.get(checkedPosition);
         }
         return null;
+    }
+
+    public void printVenueNames()
+    {
+        System.out.println(venues);
     }
 
     @NonNull

@@ -13,6 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.SearchView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -35,8 +36,10 @@ public class UserHomeActivity extends AppCompatActivity{
     DataBase db = DataBase.getInstance();
     private RecyclerView recyclerView;
     private Button btn;
+
     private ArrayList<Event> events = new ArrayList<>();
-    private SingleAdapter adapter;
+
+    private SingleAdapter eventsAdapter;
 
     private String selectedFilter = "all";
     private String currentSearchText = "";
@@ -50,7 +53,10 @@ public class UserHomeActivity extends AppCompatActivity{
         initSearchWidget();
         initRecyclerView();
 
-        updateList();
+        TextView usernameText = findViewById(R.id.textView4);
+        usernameText.setText(db.getUser().toString());
+
+        updateEventsList();
     }
 
 
@@ -60,17 +66,17 @@ public class UserHomeActivity extends AppCompatActivity{
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
-        adapter = new SingleAdapter(this, events);
-        recyclerView.setAdapter(adapter);
+        eventsAdapter = new SingleAdapter(this, events);
+        recyclerView.setAdapter(eventsAdapter);
 
-        updateList();
+        updateEventsList();
 
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (adapter.getSelected() != null) {
+                if (eventsAdapter.getSelected() != null) {
                     //Change the following line to change what happens when join button is clicked
-                    ShowToast(adapter.getSelected().getActivity());
+                    ShowToast(eventsAdapter.getSelected().getActivity());
                 } else {
                     ShowToast("No Selection");
                 }
@@ -103,15 +109,14 @@ public class UserHomeActivity extends AppCompatActivity{
         db.getRef().child("Events").setValue(events);
     }
 
-    private void updateList()
+    private void updateEventsList()
     {
         db.viewEventAction(
                 (ArrayList<Event> events) ->
         {
-            adapter.SetEvents(events);
+            eventsAdapter.SetEvents(events);
         });
     }
-
 
     private void initSearchWidget(){
         SearchView searchView = (SearchView) findViewById(R.id.eventsListSearchView);
@@ -142,7 +147,7 @@ public class UserHomeActivity extends AppCompatActivity{
                             filteredEvents.add(event);
                     }
                 }
-                adapter.SetEvents(filteredEvents);
+                eventsAdapter.SetEvents(filteredEvents);
                 return false;
             }
         });
@@ -168,7 +173,7 @@ public class UserHomeActivity extends AppCompatActivity{
                 filteredEvents.add(event);
             }
         }
-        adapter.SetEvents(filteredEvents);
+        eventsAdapter.SetEvents(filteredEvents);
     }
 
     public void venueFilterTapped(View view){

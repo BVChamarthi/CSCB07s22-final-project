@@ -78,6 +78,6 @@ public class ChooseVenueActivity extends AppCompatActivity {
             venues.add(venue);
         }
 
-        adapter.SetEvents(venues);
+        adapter.SetVenues(venues);
     }
 }

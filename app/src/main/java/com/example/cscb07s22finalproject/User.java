@@ -31,4 +31,10 @@ public class User
     {
         return this.password;
     }
+
+    @Override
+    public String toString()
+    {
+        return username;
+    }
 }

@@ -9,7 +9,14 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 public class NewEventActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+
+    DataBase db = DataBase.getInstance();
+
+    private SingleVenueAdapter venueAdapter;
+    private ArrayList<Venue> venues;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,9 +24,13 @@ public class NewEventActivity extends AppCompatActivity implements AdapterView.O
         setContentView(R.layout.activity_new_event);
 
         initSpinner();
+
+        venueAdapter = new SingleVenueAdapter(this, venues);
+        updateVenuesList();
     }
 
     private void initSpinner() {
+
         Spinner spinner = findViewById(R.id.spinner);
         String values[] = {"Three", "Two", "Three", "Four", "Five"};
         ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(
@@ -37,12 +48,23 @@ public class NewEventActivity extends AppCompatActivity implements AdapterView.O
         ArrayAdapter<String> spinnerAdapter2 = new ArrayAdapter<>(
                 this,
                 android.R.layout.simple_spinner_item,
-                values
+                values2
         );
 
         spinnerAdapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner2.setAdapter(spinnerAdapter2);
         spinner2.setOnItemSelectedListener(this);
+    }
+
+    private void updateVenuesList()
+    {
+        db.viewVenueAction(
+                (ArrayList<Venue> venues) ->
+                {
+                    venueAdapter.SetVenues(venues);
+                    System.out.println(venues);
+                }
+        );
     }
 
     @Override

@@ -16,7 +16,7 @@ public final class DataBase {
 
     private static DataBase db;
     private final DatabaseReference ref;
-    private User user;
+    private static User user;
 
 
 /*    public static final int INCORRECT_FORMAT = -1;
@@ -246,10 +246,10 @@ public final class DataBase {
                         activities.add(dSnap.getValue().toString());
                     }
 
-                    allVenues.add(new Venue(venueName,activities));
+                    allVenues.add(new Venue(venueName, activities));
                 }
 
-                // Using callback to store all events
+                // Using callback to store all venues
                 callback.onCallBack(allVenues);
             }
 
@@ -269,10 +269,9 @@ public final class DataBase {
         setUser(username, password, false);
     }
 
-
     public void createVenue(String venueName, String[] activities){
         ref.child(venueName);
-        ref.child("Venues").child(venueName).child(venueName).setValue(venueName);
+        ref.child("Venues").child(venueName).child("venueName").setValue(venueName);
         for(int i = 0; i < activities.length; i++){
             ref.child("Venues").child(venueName).child("sports").child("sport" + (i+1)).setValue(activities[i]);
         }
