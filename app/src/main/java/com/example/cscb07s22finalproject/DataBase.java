@@ -18,7 +18,6 @@ public final class DataBase {
     private final DatabaseReference ref;
     private static User user;
 
-
 /*    public static final int INCORRECT_FORMAT = -1;
     public static final int DOES_NOT_EXIST = -2;
     public static final int ALREADY_EXISTS = -4;
@@ -33,6 +32,7 @@ public final class DataBase {
         if(db == null) db = new DataBase();
         return db;
     }
+
     public DatabaseReference getRef() {return ref;}             // getter for ref
     public User getUser() {return user;}                        // getter for user
     public void setUser(String username, String password, boolean isAdmin) {    // setter for user (unsafe code)
