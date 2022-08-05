@@ -41,6 +41,14 @@ public class Venue {
         return venueName;
     }
 
+    public ArrayList<String> getActivities() {
+        return activities;
+    }
+
+    public void setActivities(ArrayList<String> activities) {
+        this.activities = activities;
+    }
+
     public void setVenueName(String venueName) {
         this.venueName = venueName;
     }

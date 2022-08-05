@@ -33,9 +33,16 @@ public class SingleVenueAdapter extends RecyclerView.Adapter<SingleVenueAdapter.
         this.venues = venues;
     }
 
-    public void SetVenues(ArrayList<Venue> venues){
-        this.venues = new ArrayList<>();
-        this.venues = venues;
+    public void SetVenues(ArrayList<Venue> venues)
+    {
+        ArrayList<Venue> updatedVenues = new ArrayList<Venue>();
+
+        for(Venue v : venues)
+        {
+            updatedVenues.add(new Venue(v.getVenueName(), v.activities));
+        }
+
+        this.venues = updatedVenues;
         notifyDataSetChanged();
     }
 
@@ -82,7 +89,7 @@ public class SingleVenueAdapter extends RecyclerView.Adapter<SingleVenueAdapter.
         return null;
     }
 
-    public void printVenueNames()
+    public void printVenues()
     {
         System.out.println(venues);
     }

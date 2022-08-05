@@ -56,7 +56,7 @@ public class UserHomeActivity extends AppCompatActivity{
         TextView usernameText = findViewById(R.id.textView4);
         usernameText.setText(db.getUser().toString());
 
-        updateEventsList();
+        //eventsAdapter.printEvents();
     }
 
 
@@ -109,7 +109,7 @@ public class UserHomeActivity extends AppCompatActivity{
         db.getRef().child("Events").setValue(events);
     }
 
-    private void updateEventsList()
+    public void updateEventsList()
     {
         db.viewEventAction(
                 (ArrayList<Event> events) ->

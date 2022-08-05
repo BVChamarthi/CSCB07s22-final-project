@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -25,11 +26,15 @@ public class NewEventActivity extends AppCompatActivity implements AdapterView.O
 
         initSpinner();
 
-        venueAdapter = new SingleVenueAdapter(this, venues);
+        venueAdapter = new SingleVenueAdapter(this,venues);
         updateVenuesList();
+        venueAdapter.printVenues();
     }
 
     private void initSpinner() {
+
+        venueAdapter = new SingleVenueAdapter(this, venues);
+        updateVenuesList();
 
         Spinner spinner = findViewById(R.id.spinner);
         String values[] = {"Three", "Two", "Three", "Four", "Five"};
@@ -41,6 +46,7 @@ public class NewEventActivity extends AppCompatActivity implements AdapterView.O
 
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(spinnerAdapter);
+        updateVenuesList();
         spinner.setOnItemSelectedListener(this);
 
         Spinner spinner2 = findViewById(R.id.spinner2);
@@ -62,7 +68,6 @@ public class NewEventActivity extends AppCompatActivity implements AdapterView.O
                 (ArrayList<Venue> venues) ->
                 {
                     venueAdapter.SetVenues(venues);
-                    System.out.println(venues);
                 }
         );
     }
