@@ -8,6 +8,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -238,6 +239,7 @@ public final class DataBase {
 
     public void viewEventAction(viewEventCallback callback)
     {
+        numEvents = 0;
         ref.child("Events").addValueEventListener(new ValueEventListener()
         {
             ArrayList<Event> allEvents = new ArrayList<Event>();
@@ -257,9 +259,7 @@ public final class DataBase {
                 {
                     // Getting all fields from a particular event
                     eventName = dSnap.child("eventName").getValue().toString();
-                    System.out.println(dSnap.child("eventName").getValue().toString());
                     venueName = dSnap.child("venueName").getValue().toString();
-                    System.out.println(dSnap.child("venueName").getValue().toString());
                     activity = dSnap.child("activity").getValue().toString();
                     date = dSnap.child("date").getValue().toString();
                     startTime = dSnap.child("startTime").getValue().toString();
@@ -297,6 +297,7 @@ public final class DataBase {
             public void onDataChange(@NonNull DataSnapshot snapshot)
             {
                 ArrayList<String> activities;
+                ArrayList<Integer> eventCodes;
                 String venueName;
 
                 for(DataSnapshot dSnap : snapshot.getChildren())
@@ -304,13 +305,22 @@ public final class DataBase {
                     // Getting fields
                     venueName = dSnap.child("venueName").getValue().toString();
                     activities = new ArrayList<String>();
+                    eventCodes = new ArrayList<Integer>();
 
                     for(DataSnapshot sportsDSnap : dSnap.child("sports").getChildren())
                     {
                         activities.add(sportsDSnap.getValue().toString());
                     }
 
-                    allVenues.add(new Venue(venueName, activities));
+                    if(dSnap.hasChild("Events"))
+                    {
+                        for(DataSnapshot eventsDSnap : dSnap.child("Events").getChildren())
+                        {
+                            eventCodes.add(Integer.parseInt(eventsDSnap.getValue().toString()));
+                        }
+                    }
+
+                    allVenues.add(new Venue(venueName, activities, eventCodes));
                 }
 
                 // Using callback to store all venues
@@ -341,11 +351,19 @@ public final class DataBase {
         }
     }
 
-    public void createEvent(String venueName, String eventName, String activity, String date, String startTime, String endTime, String curParticipants, String maxParticipants){
+    public void createEvent(String venueName, String eventName, String activity, String date, String startTime, String endTime, String curParticipants, String maxParticipants, Venue venue){
 
             Event e = new Event(eventName, venueName, activity, date, startTime, endTime, Integer.parseInt(curParticipants), Integer.parseInt(maxParticipants));
             ref.child("Events").child(String.valueOf(numEvents)).setValue(e);
 
+            if(user instanceof Customer)
+            {
+                ((Customer)user).addScheduledEventToUser(numEvents);
+                ref.child("users").child(user.getUsername()).child("scheduledEvents").setValue(((Customer)user).getScheduledEvents());
+            }
+
+            venue.addEventCodeToVenue(numEvents);
+            ref.child("Venues").child(venueName).child("Events").setValue(venue.getCodes());
     }
 }
 

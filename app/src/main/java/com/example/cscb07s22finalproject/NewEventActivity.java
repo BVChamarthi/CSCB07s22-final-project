@@ -29,11 +29,6 @@ public class NewEventActivity extends AppCompatActivity implements AdapterView.O
         Intent intent = getIntent();
         Bundle args = intent.getBundleExtra("BUNDLE");
         v = (Venue)args.getSerializable("VENUE");
-
-        for(String sport : v.getActivities()){
-            System.out.println(sport);
-        }
-
         initSpinner();
 
     }
@@ -75,7 +70,7 @@ public class NewEventActivity extends AppCompatActivity implements AdapterView.O
                     Toast.makeText(NewEventActivity.this, "Invalid: max players must be a number greater than 0", Toast.LENGTH_LONG).show();
                 },
                 () -> {     // Event passes all checks
-                    db.createEvent(venueName, eventName, activity, date, startTime, endTime, "0", players);
+                    db.createEvent(venueName, eventName, activity, date, startTime, endTime, "0", players, v);
                     Intent intent = new Intent(this, UserHomeActivity.class);
                     startActivity(intent);
 
