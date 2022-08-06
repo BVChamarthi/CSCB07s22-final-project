@@ -54,6 +54,7 @@ public class UserHomeActivity extends AppCompatActivity
         initSearchWidget();
         initRecyclerView();
 
+
 //        TextView usernameText = findViewById(R.id.textView4);
 //        usernameText.setText(db.getUser().toString());
 

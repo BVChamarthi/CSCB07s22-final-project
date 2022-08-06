@@ -17,6 +17,7 @@ public final class DataBase {
     private static DataBase db;
     private final DatabaseReference ref;
     private static User user;
+    int numEvents;
 
 /*    public static final int INCORRECT_FORMAT = -1;
     public static final int DOES_NOT_EXIST = -2;
@@ -266,6 +267,7 @@ public final class DataBase {
                     curParticipants = Integer.parseInt(dSnap.child("curParticipants").getValue().toString());
                     maxParticipants = Integer.parseInt(dSnap.child("maxParticipants").getValue().toString());
 
+                    numEvents++;
                     // Inserting event into list
                     allEvents.add(new Event(eventName, venueName, activity, date, startTime, endTime, curParticipants, maxParticipants));
                 }
@@ -340,20 +342,9 @@ public final class DataBase {
     }
 
     public void createEvent(String venueName, String eventName, String activity, String date, String startTime, String endTime, String curParticipants, String maxParticipants){
-//        System.out.println("f" + eventName);
-//        ref.child(eventName);
-//        ref.child("Events").child(eventName).child("activity").setValue(activity);
-//        ref.child("Events").child(eventName).child("checked").setValue(false);
-//        ref.child("Events").child(eventName).child("curParticipants").setValue(Integer.parseInt(curParticipants));
-//        ref.child("Events").child(eventName).child("date").setValue(date);
-//        ref.child("Events").child(eventName).child("eventName").setValue(eventName);
-//        ref.child("Events").child(eventName).child("endTime").setValue(endTime);
-//        ref.child("Events").child(eventName).child("maxParticipants").setValue(Integer.parseInt(maxParticipants));
-//        ref.child("Events").child(eventName).child("startTime").setValue(startTime);
-//        ref.child("Events").child(eventName).child("venueName").setValue(venueName);
+
             Event e = new Event(eventName, venueName, activity, date, startTime, endTime, Integer.parseInt(curParticipants), Integer.parseInt(maxParticipants));
-            db.getRef().child("Events").child(eventName).setValue(e);
-//ref.child("Venues").child(venueName).child("events").setValue(eventName);
+            ref.child("Events").child(String.valueOf(numEvents)).setValue(e);
 
     }
 }
