@@ -183,6 +183,7 @@ public final class DataBase {
                                    callBack incorrectDateFormat,
                                    callBack incorrectNameFormat,
                                    callBack incorrectPlayersFormat,
+                                   callBack incorrectTimePeriod,
                                    callBack eventCreate
     ) {
 
@@ -193,11 +194,14 @@ public final class DataBase {
         Pattern pattern2 = Pattern.compile("(((202[2-9])||(20[3-9][0-9])||(2[1-9][0-9][0-9]))-((0[1-9])||(1[0-2]))-(([0-2][0-9])||(3[0-1])))");
         Matcher matcher_date = pattern2.matcher(date);
 
-        Pattern pattern3 = Pattern.compile("\\w+");
+        Pattern pattern3 = Pattern.compile(".+");
         Matcher matcher_eventName = pattern3.matcher(eventName);
 
         Pattern pattern4 = Pattern.compile("[1-9]([0-9]*)");
         Matcher matcher_Players = pattern4.matcher(players);
+        int start = Integer.parseInt(startTime.substring(0,2))*100 + Integer.parseInt(startTime.substring(3));
+
+        int end = Integer.parseInt(endTime.substring(0,2))*100 + Integer.parseInt(endTime.substring(3));
 
         // check formatting,
         if(!matcher_startTime.matches()){
@@ -222,6 +226,11 @@ public final class DataBase {
 
         if(!matcher_Players.matches()){
             incorrectPlayersFormat.onCallBack();
+            return;
+        }
+
+        if(end<start){
+            incorrectTimePeriod.onCallBack();
             return;
         }
 
@@ -333,6 +342,7 @@ public final class DataBase {
             }
         });
     }
+
 
     public void createUser(String username, String password) {
 

@@ -69,6 +69,9 @@ public class NewEventActivity extends AppCompatActivity implements AdapterView.O
                 () -> {     // incorrect max players name format
                     Toast.makeText(NewEventActivity.this, "Invalid: max players must be a number greater than 0", Toast.LENGTH_LONG).show();
                 },
+                () -> {     // incorrect time period - the end time is before the start time
+                    Toast.makeText(NewEventActivity.this, "Invalid: end time must be after the start time", Toast.LENGTH_LONG).show();
+                },
                 () -> {     // Event passes all checks
                     db.createEvent(venueName, eventName, activity, date, startTime, endTime, "0", players, v);
                     Intent intent = new Intent(this, UserHomeActivity.class);
