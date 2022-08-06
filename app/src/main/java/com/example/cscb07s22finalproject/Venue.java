@@ -1,29 +1,45 @@
 package com.example.cscb07s22finalproject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Venue {
+public class Venue implements Serializable {
 
-    String name;
-    ArrayList<String> activities;
-    ArrayList<Event> events;
-
-    public Venue(String venueName, ArrayList<String> activities) {
-        this.name = venueName;
-        this.activities = activities;
-        this.events = new ArrayList<Event>();
-    }
-
-    public int addEvent(Event event) {
-        //Not sure if .contains() properly compares two objs, might have to change 2nd predicate
-        if(activities.contains(event.getActivity()) && !(events.contains(event))){
-            event.setVenue(this);
-            events.add(event);
-            return 0;
-        } else return 1;
-    }
 
     public void addEventNoCheck(Event event) { events.add(event); }
+
+    String venueName;
+    ArrayList<String> activities;
+    ArrayList<Event> events;
+    ArrayList<Integer> codes;
+
+    public Venue(String venueName, ArrayList<String> activities) {
+        this.venueName = venueName;
+        this.activities = activities;
+        this.events = new ArrayList<Event>();
+        this.codes = new ArrayList<Integer>();
+    }
+
+    public Venue(String venueName, ArrayList<String> activities, ArrayList<Integer> codes) {
+        this.venueName = venueName;
+        this.activities = activities;
+        this.events = new ArrayList<Event>();
+        this.codes = codes;
+    }
+
+    public void addEventCodeToVenue(int eventCode)
+    {
+        codes.add(eventCode);
+    }
+
+    public void addEvent(Event event)
+    {
+        //Not sure if .contains() properly compares two objs, might have to change 2nd predicate
+        if(activities.contains(event.getActivity()) && !(events.contains(event))){
+            event.setVenueName(venueName);
+            events.add(event);
+        }
+    }
 
     public void removeEvent(Event event){
         events.remove(event);
@@ -38,15 +54,37 @@ public class Venue {
         activities.remove(activity);
     }
 
-    public String getName() {
-        return name;
+
+    public String getVenueName() {
+        return venueName;
     }
 
     public ArrayList<String> getActivities() {
         return activities;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setActivities(ArrayList<String> activities) {
+        this.activities = activities;
+    }
+
+    public void setVenueName(String venueName) {
+        this.venueName = venueName;
+    }
+
+    public ArrayList<Integer> getCodes() {
+        return codes;
+    }
+
+    @Override
+    public String toString()
+    {
+        String venueToString = "\t" + venueName + "\n\n";
+
+        for(String activity : activities)
+        {
+            venueToString += "\t" + activity + "\n";
+        }
+
+        return venueToString.trim();
     }
 }

@@ -16,9 +16,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         db.readVenuesAndEvents(()->{
             Toast.makeText(MainActivity.this, "success" , Toast.LENGTH_LONG).show();
         });
+
     }
 
     public void signUpActivity(View view) {

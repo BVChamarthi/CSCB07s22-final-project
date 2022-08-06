@@ -8,6 +8,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+
+import java.lang.reflect.Array;
+
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -17,20 +20,24 @@ public final class DataBase {
     private static DataBase db;
     private final DatabaseReference ref;
     private static User user;
+    private int numEvents;
 
     private ArrayList<Venue> venues;
     private ArrayList<Event> events;
+
 
     private DataBase() {
         ref = FirebaseDatabase.getInstance().getReference();    // initialise ref to root of database
         user = null;                                            // main user of the app (initially empty)
         venues = new ArrayList<>();
         events = new ArrayList<>();
+        numEvents = 0;
     }
     public static DataBase getInstance() {      // singleton getInstance()
         if(db == null) db = new DataBase();
         return db;
     }
+
     public DatabaseReference getRef() {return ref;}             // getter for ref
     public User getUser() {return user;}                        // getter for user
     public void setUser(String username, String password, boolean isAdmin) {    // setter for user (unsafe code)
@@ -199,6 +206,177 @@ public final class DataBase {
 
     }
 
+    public void eventCreateActions(String eventName,
+                                   String venueName,
+                                   String players,
+                                   String date,
+                                   String startTime,
+                                   String endTime,
+                                   callBack incorrectstartTimeFormat,
+                                   callBack incorrectendTimeFormat,
+                                   callBack incorrectDateFormat,
+                                   callBack incorrectNameFormat,
+                                   callBack incorrectPlayersFormat,
+                                   callBack incorrectTimePeriod,
+                                   callBack eventCreate
+    ) {
+
+        Pattern pattern = Pattern.compile("(((2[0-3])||([0-1][0-9])):([0-5][0-9]))");
+        Matcher matcher_startTime = pattern.matcher(startTime);
+        Matcher matcher_endTime = pattern.matcher(endTime);
+
+        Pattern pattern2 = Pattern.compile("(((202[2-9])||(20[3-9][0-9])||(2[1-9][0-9][0-9]))-((0[1-9])||(1[0-2]))-(([0-2][0-9])||(3[0-1])))");
+        Matcher matcher_date = pattern2.matcher(date);
+
+        Pattern pattern3 = Pattern.compile(".+");
+        Matcher matcher_eventName = pattern3.matcher(eventName);
+
+        Pattern pattern4 = Pattern.compile("[1-9]([0-9]*)");
+        Matcher matcher_Players = pattern4.matcher(players);
+        int start = Integer.parseInt(startTime.substring(0,2))*100 + Integer.parseInt(startTime.substring(3));
+
+        int end = Integer.parseInt(endTime.substring(0,2))*100 + Integer.parseInt(endTime.substring(3));
+
+        // check formatting,
+        if(!matcher_startTime.matches()){
+            incorrectstartTimeFormat.onCallBack();
+            return;
+        }
+
+        if(!matcher_endTime.matches()){
+            incorrectendTimeFormat.onCallBack();
+            return;
+        }
+
+        if(!matcher_date.matches()){
+            incorrectDateFormat.onCallBack();
+            return;
+        }
+
+        if(!matcher_eventName.matches()){
+            incorrectNameFormat.onCallBack();
+            return;
+        }
+
+        if(!matcher_Players.matches()){
+            incorrectPlayersFormat.onCallBack();
+            return;
+        }
+
+        if(end<start){
+            incorrectTimePeriod.onCallBack();
+            return;
+        }
+
+        eventCreate.onCallBack();
+        return;
+
+
+
+    }
+
+    public interface viewEventCallback
+    {
+        public void onCallBack(ArrayList<Event> events);
+    }
+
+    public void viewEventAction(viewEventCallback callback)
+    {
+        numEvents = 0;
+        ref.child("Events").addValueEventListener(new ValueEventListener()
+        {
+            ArrayList<Event> allEvents = new ArrayList<Event>();
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot)
+            {
+                String eventName;
+                String venueName;
+                String activity;
+                String date;
+                String startTime;
+                String endTime;
+                int curParticipants;
+                int maxParticipants;
+
+                for(DataSnapshot dSnap : snapshot.getChildren())
+                {
+                    // Getting all fields from a particular event
+                    eventName = dSnap.child("eventName").getValue().toString();
+                    venueName = dSnap.child("venueName").getValue().toString();
+                    activity = dSnap.child("activity").getValue().toString();
+                    date = dSnap.child("date").getValue().toString();
+                    startTime = dSnap.child("startTime").getValue().toString();
+                    endTime = dSnap.child("endTime").getValue().toString();
+                    curParticipants = Integer.parseInt(dSnap.child("curParticipants").getValue().toString());
+                    maxParticipants = Integer.parseInt(dSnap.child("maxParticipants").getValue().toString());
+
+                    numEvents++;
+                    // Inserting event into list
+                    allEvents.add(new Event(eventName, venueName, activity, date, startTime, endTime, curParticipants, maxParticipants));
+                }
+
+                // Using callback to store all events
+                callback.onCallBack(allEvents);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    public interface viewVenueCallback
+    {
+        public void onCallBack(ArrayList<Venue> venues);
+    }
+
+    public void viewVenueAction(viewVenueCallback callback)
+    {
+        ref.child("Venues").addValueEventListener(new ValueEventListener()
+        {
+            ArrayList<Venue> allVenues = new ArrayList<Venue>();
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot)
+            {
+                ArrayList<String> activities;
+                ArrayList<Integer> eventCodes;
+                String venueName;
+
+                for(DataSnapshot dSnap : snapshot.getChildren())
+                {
+                    // Getting fields
+                    venueName = dSnap.child("venueName").getValue().toString();
+                    activities = new ArrayList<String>();
+                    eventCodes = new ArrayList<Integer>();
+
+                    for(DataSnapshot sportsDSnap : dSnap.child("sports").getChildren())
+                    {
+                        activities.add(sportsDSnap.getValue().toString());
+                    }
+
+                    if(dSnap.hasChild("Events"))
+                    {
+                        for(DataSnapshot eventsDSnap : dSnap.child("Events").getChildren())
+                        {
+                            eventCodes.add(Integer.parseInt(eventsDSnap.getValue().toString()));
+                        }
+                    }
+
+                    allVenues.add(new Venue(venueName, activities, eventCodes));
+                }
+
+                // Using callback to store all venues
+                callback.onCallBack(allVenues);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
     public void createUser(String username, String password) {
 
         ref.child("users").child(username).child("username").setValue(username);
@@ -209,8 +387,24 @@ public final class DataBase {
     }
 
     public void createVenue(String venueName, String[] activities){
+
         ref.child("Venues").child(venueName).child("venueName").setValue(venueName);
         ref.child("Venues").child(venueName).child("sports").setValue(activities);
+    }
+
+    public void createEvent(String venueName, String eventName, String activity, String date, String startTime, String endTime, String curParticipants, String maxParticipants, Venue venue){
+
+            Event e = new Event(eventName, venueName, activity, date, startTime, endTime, Integer.parseInt(curParticipants), Integer.parseInt(maxParticipants));
+            ref.child("Events").child(String.valueOf(numEvents)).setValue(e);
+
+            if(user instanceof Customer)
+            {
+                ((Customer)user).addScheduledEventToUser(numEvents);
+                ref.child("users").child(user.getUsername()).child("scheduledEvents").setValue(((Customer)user).getScheduledEvents());
+            }
+
+            venue.addEventCodeToVenue(numEvents);
+            ref.child("Venues").child(venueName).child("Events").setValue(venue.getCodes());
     }
 }
 
