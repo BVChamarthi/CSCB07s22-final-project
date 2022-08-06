@@ -31,3 +31,7 @@ August 3rd:
 August 4th:
 - Billy added a search bar to filter events and venues by name - also worked on front-end layout for user story 2
 - Keerthiha and Ashtian began working on User Story 2 together, attempted to retrieve data from database
+
+August 5th:
+- Had tutorial - presented what we've done
+- Billy, Ashtian and Keerthiha worked together on user story 2 - not complete yet
