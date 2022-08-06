@@ -3,9 +3,8 @@ package com.example.cscb07s22finalproject;
 public class User
 {
     // Note: Made variables private to ensure safety. Getters and Setters are implemented
-    public String username;
-    public String password;
-    public boolean adminFlag;
+    private String username;
+    private String password;
 
     public User(String username, String password)
     {
@@ -31,5 +30,11 @@ public class User
     public String getPassword()
     {
         return this.password;
+    }
+
+    @Override
+    public String toString()
+    {
+        return username;
     }
 }

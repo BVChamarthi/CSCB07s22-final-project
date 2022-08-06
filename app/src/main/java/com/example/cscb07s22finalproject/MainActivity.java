@@ -23,8 +23,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.database.DatabaseReference;
 
-import java.util.ArrayList;
-
 
 public class MainActivity extends AppCompatActivity {
     DataBase db = DataBase.getInstance();
@@ -33,35 +31,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-/*      // write array list to firebase
-        ArrayList<Integer> intArray = new ArrayList<Integer>();
-        intArray.add(1);
-        intArray.add(2);
-        intArray.add(4);
-        intArray.add(8);
-        db.getRef().child("intArray").setValue(intArray);
-*/
-
-/*        // read array list from firebase
-        db.getRef().child("intArray").get().addOnCompleteListener(arrayFetch -> {
-            if(arrayFetch.isSuccessful()){
-                ArrayList<Integer> intArray = (ArrayList<Integer>) arrayFetch.getResult().getValue();
-                Toast.makeText(MainActivity.this, "intArray :" + intArray.get(0), Toast.LENGTH_LONG).show();
-            }
-        });*/
-
-/*        // read a user object from firebase: DOESN'T WORK (pleas fix this if you can)
-        db.getRef().child("users").child("bharath").get().addOnCompleteListener(userFetch-> {
-           if(userFetch.isSuccessful()) {
-               Toast.makeText(MainActivity.this, "test", Toast.LENGTH_LONG).show();
-               User user = userFetch.getResult().getValue(User.class);
-               Toast.makeText(MainActivity.this,
-                       "user: " + user.getUsername() +
-                       ", password: " + user.getPassword(), Toast.LENGTH_LONG).show();
-           }
-        });*/
-
+        db.readVenuesAndEvents(()->{
+            Toast.makeText(MainActivity.this, "Venues : " + db.getVenues().size() +
+                    ", Events : " + db.getEvents().size() , Toast.LENGTH_LONG).show();
+        });
     }
 
     public void signUpActivity(View view) {

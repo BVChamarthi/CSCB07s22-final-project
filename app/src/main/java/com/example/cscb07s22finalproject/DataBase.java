@@ -1,12 +1,8 @@
 package com.example.cscb07s22finalproject;
 
-import androidx.annotation.NonNull;
-
 import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.regex.Matcher;
@@ -16,14 +12,16 @@ public final class DataBase {
 
     private static DataBase db;
     private final DatabaseReference ref;
-    private User user;
+    private static User user;
 
-    ArrayList<Venue> venues;
-    ArrayList<Event> events;
+    private ArrayList<Venue> venues;
+    private ArrayList<Event> events;
 
     private DataBase() {
         ref = FirebaseDatabase.getInstance().getReference();    // initialise ref to root of database
         user = null;                                            // main user of the app (initially empty)
+        venues = new ArrayList<Venue>();
+        events = new ArrayList<Event>();
     }
     public static DataBase getInstance() {      // singleton getInstance()
         if(db == null) db = new DataBase();
@@ -35,6 +33,8 @@ public final class DataBase {
         if (isAdmin) user = new Admin(username, password);
         else user = new Customer(username, password);
     }
+    public ArrayList<Venue> getVenues() { return venues; }
+    public ArrayList<Event> getEvents() { return events; }
 
     /*
         userActions(), takes in username, password and 4 lambda functions to execute under 4
@@ -47,8 +47,9 @@ public final class DataBase {
         format for lambda functions: () -> {...your code here...}
      */
     public interface callBack {         // interface to define lambda functions for userActions
-        public void onCallBack();
+        void onCallBack();
     }
+
     public void userActions(String username, String password,
                             callBack incorrectFormat,
                             callBack userDoesNotExist,
@@ -79,7 +80,7 @@ public final class DataBase {
                 // TODO: display some error message in the future
 
                 // password fetch successful
-                String actualPassword = passwordFetch.getResult().getValue().toString();
+                String actualPassword = passwordFetch.getResult().getValue(String.class);
                 if(!password.equals(actualPassword)) {
                     userExists_WrongPassword.onCallBack();
                 } else userExists_RightPassword.onCallBack();
@@ -103,8 +104,8 @@ public final class DataBase {
             return;
         }
 
-        for (int i = 0; i < activities.length; i++) {
-            Matcher matcher_activity = pattern.matcher(activities[i]);
+        for (String activity : activities) {
+            Matcher matcher_activity = pattern.matcher(activity);
             if (!matcher_activity.matches()) {
                 incorrectFormat.onCallBack();
                 return;
@@ -118,8 +119,39 @@ public final class DataBase {
             }else{
                 venueExists.onCallBack();
             }
-            return;
         });
+    }
+
+    public void readVenuesAndEvents(callBack readSuccessful){
+
+        // get events
+        ref.child("Events").get().addOnCompleteListener(eventsFetch -> {
+            if(eventsFetch.isSuccessful()) {
+                for( DataSnapshot eventRef : eventsFetch.getResult().getChildren()) {
+                    String eventName = eventRef.child("eventName").getValue(String.class);
+                    String activity = eventRef.child("activity").getValue(String.class);
+                    String date = eventRef.child("date").getValue(String.class);
+                    String startTime = eventRef.child("startTime").getValue(String.class);
+                    String endTime = eventRef.child("endTime").getValue(String.class);
+                    int curParticipants = eventRef.child("curParticipants").getValue(Integer.class);
+                    int maxParticipants = eventRef.child("maxParticipants").getValue(Integer.class);
+                    events.add(new Event(eventName, null, activity, date, startTime,
+                            endTime, curParticipants, maxParticipants));
+                }
+                // get venues, attach events
+                ref.child("Venues").get().addOnCompleteListener(venuesFetch -> {
+                    if(venuesFetch.isSuccessful()) {
+                        for( DataSnapshot venueRef : venuesFetch.getResult().getChildren()) {
+                            String venueName = venueRef.child("venueName").getValue(String.class);
+                            ArrayList<String> activities = (ArrayList<String>) venueRef.child("activities").getValue();
+                            venues.add(new Venue(venueName, activities));
+                        }
+                        readSuccessful.onCallBack();
+                    }
+                });
+            }
+        });
+
     }
 
     public void createUser(String username, String password) {
@@ -134,10 +166,6 @@ public final class DataBase {
     public void createVenue(String venueName, String[] activities){
         ref.child("Venues").child(venueName).child("venueName").setValue(venueName);
         ref.child("Venues").child(venueName).child("sports").setValue(activities);
-    }
-
-    public void getVenues(){
-
     }
 }
 

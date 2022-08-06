@@ -13,9 +13,20 @@ July 31st:
 - Aidan tried to work through some code for 'signup' by Keerthiha
 - Laksh: Tested new code and found a bug, attempted fixing it. Helped a teammate understand code and with git errors.
 - Bharath set up the database class and refactored some of the code to it
-- Billy worked on the layout of the venues and events
 
 August 1st:
 - Laksh: Programmed Create Venue functionality with input validation. Merged people's work from yesterday into devloper branch.
 - Aidan created the Venue and Event class containers and merged the changes into the developer branch.
 - Keerthiha commited login/signup work to developer and worked on the design of the username/signup page
+- Billy worked on the layout of the venues and events
+
+August 2nd:
+- Committed all work to developer - preparing for next sprint
+
+August 3rd:
+- Had Scrum Meeting for 2nd Sprint in person
+- Discussed the first sprint and what we can do to make the second sprint more efficient
+- Sorted out upcoming roles
+
+August 4th:
+- Billy added a search bar to filter events and venues by name
