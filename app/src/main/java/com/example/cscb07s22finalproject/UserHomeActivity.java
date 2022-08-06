@@ -54,8 +54,8 @@ public class UserHomeActivity extends AppCompatActivity
         initSearchWidget();
         initRecyclerView();
 
-        TextView usernameText = findViewById(R.id.textView4);
-        usernameText.setText(db.getUser().toString());
+//        TextView usernameText = findViewById(R.id.textView4);
+//        usernameText.setText(db.getUser().toString());
 
         //eventsAdapter.printEvents();
     }
@@ -107,7 +107,7 @@ public class UserHomeActivity extends AppCompatActivity
         events.add(new Event("Event 2", "Pan Am", "Soccer", "2022-08-04", "13:00", "14:00", 1, 5));
         events.add(new Event("Event 3", "Pan Am", "Surfing", "2022-08-04", "14:00", "15:00", 8, 5));
 
-        db.getRef().child("Events").setValue(events);
+
     }
 
     public void updateEventsList()

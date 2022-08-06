@@ -170,37 +170,65 @@ public final class DataBase {
         });
     }
 
-//    public void eventCreateActions(String eventName,
-//                                   String venueName,
-//                                   String date,
-//                                   String startTime,
-//                                   String endTime,
-//                                   callBack incorrectDateFormat,
-//                                   callBack incorrectTimeFormat,
-//                                   callBack eventCreate
-//    ) {
-//
-//        Pattern pattern = Pattern.compile("(2[0-3]:[0-5][0-9]) || ([0-1][0-9]:[0-5][0-9])");
-//        Matcher matcher_startTime = pattern.matcher(startTime);
-//        Matcher matcher_endTime = pattern.matcher(endTime);
-//
-//        Pattern pattern2 = Pattern.compile("");
-//        Matcher matcher_date = pattern.matcher(date);
-//
-//        // check formatting,
-//        if(!matcher_startTime.matches() || !matcher_endTime.matches()){
-//            incorrectTimeFormat.onCallBack();
-//            return;
-//        }
-//
-//        if(!matcher_date.matches()){
-//            incorrectDateFormat.onCallBack();
-//            return;
-//        }
-//
-//        eventCreate.onCallBack();
-//        return;
-//    }
+    public void eventCreateActions(String eventName,
+                                   String venueName,
+                                   String players,
+                                   String date,
+                                   String startTime,
+                                   String endTime,
+                                   callBack incorrectstartTimeFormat,
+                                   callBack incorrectendTimeFormat,
+                                   callBack incorrectDateFormat,
+                                   callBack incorrectNameFormat,
+                                   callBack incorrectPlayersFormat,
+                                   callBack eventCreate
+    ) {
+
+        Pattern pattern = Pattern.compile("(((2[0-3])||([0-1][0-9])):([0-5][0-9]))");
+        Matcher matcher_startTime = pattern.matcher(startTime);
+        Matcher matcher_endTime = pattern.matcher(endTime);
+
+        Pattern pattern2 = Pattern.compile("(((202[2-9])||(20[3-9][0-9])||(2[1-9][0-9][0-9]))-((0[1-9])||(1[0-2]))-(([0-2][0-9])||(3[0-1])))");
+        Matcher matcher_date = pattern2.matcher(date);
+
+        Pattern pattern3 = Pattern.compile("\\w+");
+        Matcher matcher_eventName = pattern3.matcher(eventName);
+
+        Pattern pattern4 = Pattern.compile("[1-9]([0-9]*)");
+        Matcher matcher_Players = pattern4.matcher(players);
+
+        // check formatting,
+        if(!matcher_startTime.matches()){
+            incorrectstartTimeFormat.onCallBack();
+            return;
+        }
+
+        if(!matcher_endTime.matches()){
+            incorrectendTimeFormat.onCallBack();
+            return;
+        }
+
+        if(!matcher_date.matches()){
+            incorrectDateFormat.onCallBack();
+            return;
+        }
+
+        if(!matcher_eventName.matches()){
+            incorrectNameFormat.onCallBack();
+            return;
+        }
+
+        if(!matcher_Players.matches()){
+            incorrectPlayersFormat.onCallBack();
+            return;
+        }
+
+        eventCreate.onCallBack();
+        return;
+
+
+
+    }
 
     public interface viewEventCallback
     {
@@ -228,7 +256,9 @@ public final class DataBase {
                 {
                     // Getting all fields from a particular event
                     eventName = dSnap.child("eventName").getValue().toString();
+                    System.out.println(dSnap.child("eventName").getValue().toString());
                     venueName = dSnap.child("venueName").getValue().toString();
+                    System.out.println(dSnap.child("venueName").getValue().toString());
                     activity = dSnap.child("activity").getValue().toString();
                     date = dSnap.child("date").getValue().toString();
                     startTime = dSnap.child("startTime").getValue().toString();
@@ -307,6 +337,24 @@ public final class DataBase {
         for(int i = 0; i < activities.length; i++){
             ref.child("Venues").child(venueName).child("sports").child("sport" + (i+1)).setValue(activities[i]);
         }
+    }
+
+    public void createEvent(String venueName, String eventName, String activity, String date, String startTime, String endTime, String curParticipants, String maxParticipants){
+//        System.out.println("f" + eventName);
+//        ref.child(eventName);
+//        ref.child("Events").child(eventName).child("activity").setValue(activity);
+//        ref.child("Events").child(eventName).child("checked").setValue(false);
+//        ref.child("Events").child(eventName).child("curParticipants").setValue(Integer.parseInt(curParticipants));
+//        ref.child("Events").child(eventName).child("date").setValue(date);
+//        ref.child("Events").child(eventName).child("eventName").setValue(eventName);
+//        ref.child("Events").child(eventName).child("endTime").setValue(endTime);
+//        ref.child("Events").child(eventName).child("maxParticipants").setValue(Integer.parseInt(maxParticipants));
+//        ref.child("Events").child(eventName).child("startTime").setValue(startTime);
+//        ref.child("Events").child(eventName).child("venueName").setValue(venueName);
+            Event e = new Event(eventName, venueName, activity, date, startTime, endTime, Integer.parseInt(curParticipants), Integer.parseInt(maxParticipants));
+            db.getRef().child("Events").child(eventName).setValue(e);
+//ref.child("Venues").child(venueName).child("events").setValue(eventName);
+
     }
 }
 

@@ -19,6 +19,7 @@ public class NewEventActivity extends AppCompatActivity implements AdapterView.O
 
     Venue v;
     ArrayList<String> sports;
+    String activity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,9 +38,14 @@ public class NewEventActivity extends AppCompatActivity implements AdapterView.O
 
     }
 
-    public void createEvent(View view)
+    public void eventActivity(View view)
     {
-        EditText editText = findViewById(R.id.editTextNumber5);
+        EditText editText = findViewById(R.id.editTextTextPersonName3);
+        String eventName = editText.getText().toString();
+
+        String venueName = v.getVenueName();
+
+        editText = findViewById(R.id.editTextNumber5);
         String players = editText.getText().toString();
 
         editText = findViewById(R.id.editTextNumber);
@@ -52,34 +58,28 @@ public class NewEventActivity extends AppCompatActivity implements AdapterView.O
         String endTime = editText.getText().toString();
 
 
-//        db.eventCreateActions(players, date, startTime, endTime,
-//                () -> {     // incorrect time format
-//                    Toast.makeText(NewEventActivity.this, "Invalid: username & password must be 1 or more word characters only", Toast.LENGTH_LONG).show();
-//                },
-//                () -> {     // incorrect date format
-//                    Toast.makeText(NewEventActivity.this, "Username does not exist - please sign up", Toast.LENGTH_LONG).show();
-//                },
-//                () -> {     // Event passes all checks
-//                    // set up async. listener to get adminFlag
-//                    db.getRef().child("users").child(username).child("adminFlag").get().addOnCompleteListener(task -> {
-//                        if(!task.isSuccessful()) return;    // adminFlag fetch failed
-//                        // TODO: display some error message in the future
-//
-//                        // adminFlag fetch successful
-//                        Object bool = task.getResult().getValue();
-//                        if(!(bool instanceof Boolean)) return;  // adminFlag is not boolean (failed)
-//                        // TODO: display some error message in the future
-//
-//                        db.setUser(username, password, (Boolean) bool); // set user
-//                        // create intent
-//                        Intent intent;
-//                        if((Boolean)bool)
-//                            intent = new Intent(this, AdminHomeActivity.class);
-//                        else
-//                            intent = new Intent(this, UserHomeActivity.class);
-//                        startActivity(intent);
-//                    });
-//                });
+        db.eventCreateActions(eventName, venueName, players, date, startTime, endTime,
+                () -> {     // incorrect start time format
+                    Toast.makeText(NewEventActivity.this, "Invalid:format of start time is incorrect", Toast.LENGTH_LONG).show();
+                    },
+                () -> {     // incorrect end time format
+                    Toast.makeText(NewEventActivity.this, "Invalid:format of end time is incorrect", Toast.LENGTH_LONG).show();
+                },
+                () -> {     // incorrect date format
+                    Toast.makeText(NewEventActivity.this, "Invalid: format of date is incorrect", Toast.LENGTH_LONG).show();
+                },
+                () -> {     // incorrect event name format
+                    Toast.makeText(NewEventActivity.this, "Invalid: event name must be more than 1 character", Toast.LENGTH_LONG).show();
+                    },
+                () -> {     // incorrect max players name format
+                    Toast.makeText(NewEventActivity.this, "Invalid: max players must be a number greater than 0", Toast.LENGTH_LONG).show();
+                },
+                () -> {     // Event passes all checks
+                    db.createEvent(venueName, eventName, activity, date, startTime, endTime, "0", players);
+                    Intent intent = new Intent(this, UserHomeActivity.class);
+                    startActivity(intent);
+
+                });
 
     }
 
@@ -102,6 +102,7 @@ public class NewEventActivity extends AppCompatActivity implements AdapterView.O
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         String text = parent.getItemAtPosition(position).toString();
+        activity = text;
         Toast.makeText(parent.getContext(), text, Toast.LENGTH_SHORT).show();
     }
 
