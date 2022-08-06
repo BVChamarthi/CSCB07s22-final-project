@@ -23,6 +23,8 @@ public class Venue {
         } else return 1;
     }
 
+    public void addEventNoCheck(Event event) { events.add(event); }
+
     public void removeEvent(Event event){
         events.remove(event);
         //Even if event is not in events list still say its removed anyways cause technically it has been removed from list

@@ -1,8 +1,12 @@
 package com.example.cscb07s22finalproject;
 
+import androidx.annotation.NonNull;
+
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.regex.Matcher;
@@ -20,8 +24,8 @@ public final class DataBase {
     private DataBase() {
         ref = FirebaseDatabase.getInstance().getReference();    // initialise ref to root of database
         user = null;                                            // main user of the app (initially empty)
-        venues = new ArrayList<Venue>();
-        events = new ArrayList<Event>();
+        venues = new ArrayList<>();
+        events = new ArrayList<>();
     }
     public static DataBase getInstance() {      // singleton getInstance()
         if(db == null) db = new DataBase();
@@ -122,34 +126,75 @@ public final class DataBase {
         });
     }
 
+    public interface stringCallBack {
+        void onCallBack(String msg);
+    }
+
+    private static final class eventsConnectionCheck {
+        private static eventsConnectionCheck ecc;
+        private int count;
+        private eventsConnectionCheck() { count = 0; }
+        public static eventsConnectionCheck getInstance() {
+            if(ecc == null) ecc = new eventsConnectionCheck();
+            return ecc;
+        }
+        public void reset() { count = 0; }
+        public int getCount() { return count; }
+        public void checkAndCall(callBack success) {
+            count ++;
+            if(count >= DataBase.getInstance().getEvents().size()) success.onCallBack();
+        }
+    }
+
     public void readVenuesAndEvents(callBack readSuccessful){
 
         // get events
         ref.child("Events").get().addOnCompleteListener(eventsFetch -> {
-            if(eventsFetch.isSuccessful()) {
-                for( DataSnapshot eventRef : eventsFetch.getResult().getChildren()) {
-                    String eventName = eventRef.child("eventName").getValue(String.class);
-                    String activity = eventRef.child("activity").getValue(String.class);
-                    String date = eventRef.child("date").getValue(String.class);
-                    String startTime = eventRef.child("startTime").getValue(String.class);
-                    String endTime = eventRef.child("endTime").getValue(String.class);
-                    int curParticipants = eventRef.child("curParticipants").getValue(Integer.class);
-                    int maxParticipants = eventRef.child("maxParticipants").getValue(Integer.class);
-                    events.add(new Event(eventName, null, activity, date, startTime,
-                            endTime, curParticipants, maxParticipants));
-                }
-                // get venues, attach events
-                ref.child("Venues").get().addOnCompleteListener(venuesFetch -> {
-                    if(venuesFetch.isSuccessful()) {
-                        for( DataSnapshot venueRef : venuesFetch.getResult().getChildren()) {
-                            String venueName = venueRef.child("venueName").getValue(String.class);
-                            ArrayList<String> activities = (ArrayList<String>) venueRef.child("activities").getValue();
-                            venues.add(new Venue(venueName, activities));
-                        }
-                        readSuccessful.onCallBack();
-                    }
-                });
+            if(!eventsFetch.isSuccessful()) return; // if fetch failed, return
+
+            for( DataSnapshot eventRef : eventsFetch.getResult().getChildren()) {
+                String eventName = eventRef.child("eventName").getValue(String.class);
+                String activity = eventRef.child("activity").getValue(String.class);
+                String date = eventRef.child("date").getValue(String.class);
+                String startTime = eventRef.child("startTime").getValue(String.class);
+                String endTime = eventRef.child("endTime").getValue(String.class);
+                int curParticipants = eventRef.child("curParticipants").getValue(Integer.class);
+                int maxParticipants = eventRef.child("maxParticipants").getValue(Integer.class);
+                events.add(new Event(eventName, null, activity, date, startTime,
+                        endTime, curParticipants, maxParticipants));
             }
+
+            eventsConnectionCheck ecc = eventsConnectionCheck.getInstance();
+            ecc.reset();
+            // get venues, attach events
+            ref.child("Venues").get().addOnCompleteListener(venuesFetch -> {
+                if(!venuesFetch.isSuccessful()) return; // if fetch failed, return
+
+                for( DataSnapshot venueRef : venuesFetch.getResult().getChildren()) {
+                    String venueName = venueRef.child("venueName").getValue(String.class);
+                    ArrayList<String> activities = (ArrayList<String>) venueRef.child("activities").getValue();
+                    Venue venue = new Venue(venueName, activities);
+                    venues.add(venue);
+
+                    ref.child("Venues").child(venueName).child("Events").addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            if(snapshot.exists()) {
+                                for(DataSnapshot eventCodeSnap : snapshot.getChildren()) {
+                                    int eventCode = eventCodeSnap.getValue(Integer.class);
+                                    venue.addEventNoCheck(events.get(eventCode));
+                                    ecc.checkAndCall(readSuccessful);
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
+                }
+            });
         });
 
     }
