@@ -9,12 +9,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-<<<<<<< HEAD
-=======
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Objects;
->>>>>>> test-story-2
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 

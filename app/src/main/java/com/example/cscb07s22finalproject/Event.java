@@ -11,10 +11,6 @@ public class Event implements Serializable {
         A: Idk how make the scroll view work with a nested ArrayList
      */
 
-<<<<<<< HEAD
-    private String venueName;
-=======
->>>>>>> test-story-2
     private String eventName;
     private String activity;
     private String date;
@@ -42,7 +38,6 @@ public class Event implements Serializable {
 
     public Event(String eventName, Venue parentVenue, String activity, String date,String startTime,String endTime,int curParticipants, int maxParticipants)
     {
-        this.venueName = venueName;
         this.eventName = eventName;
         this.parentVenue = parentVenue;
         this.activity = activity;
