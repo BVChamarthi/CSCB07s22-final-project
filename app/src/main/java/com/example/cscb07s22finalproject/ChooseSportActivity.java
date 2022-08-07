@@ -9,6 +9,7 @@ import java.util.ArrayList;
 
 public class ChooseSportActivity extends AppCompatActivity {
 
+    // TODO: TO BE DELETED
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

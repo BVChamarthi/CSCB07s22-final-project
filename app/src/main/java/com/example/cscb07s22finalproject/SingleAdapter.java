@@ -19,7 +19,6 @@ public class SingleAdapter extends RecyclerView.Adapter<SingleAdapter.SingleView
         line 59: Change which part of Event is shown is each box
      */
 
-
     DataBase db = DataBase.getInstance();
 
     private Context context;
@@ -38,7 +37,7 @@ public class SingleAdapter extends RecyclerView.Adapter<SingleAdapter.SingleView
         notifyDataSetChanged();
     }
 
-    //Billy's work - for adapter till end
+    // Billy's work - for adapter till end
     class SingleViewHolder extends RecyclerView.ViewHolder{
 
         private TextView textView;
@@ -61,7 +60,7 @@ public class SingleAdapter extends RecyclerView.Adapter<SingleAdapter.SingleView
                 }
             }
 
-            //Change which part of Event is shown is each box
+            //Change which part of Event is shown is each box. In this case, the toString()
             textView.setText(event.toString());
             itemView.setOnClickListener(new View.OnClickListener(){
                 @Override
@@ -76,6 +75,7 @@ public class SingleAdapter extends RecyclerView.Adapter<SingleAdapter.SingleView
         }
     }
 
+    // Returns the event object that is selected by the user (indicated by the checkmark)
     public Event getSelected(){
         if(checkedPosition != -1){
             return events.get(checkedPosition);

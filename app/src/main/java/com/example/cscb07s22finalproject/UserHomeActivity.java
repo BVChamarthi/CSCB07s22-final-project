@@ -72,10 +72,12 @@ public class UserHomeActivity extends AppCompatActivity
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
+
+        // By setting the adapter to the recycleView, it is able to display all events after updating the event list of the adapter
         eventsAdapter = new SingleAdapter(this, events);
         recyclerView.setAdapter(eventsAdapter);
 
-        //this updates the event list so that all events are in the array
+        //this updates the event list so that all events are in the array, ready to be displayed by adapter
         updateEventsList();
 
         btn.setOnClickListener(new View.OnClickListener() {
@@ -117,7 +119,7 @@ public class UserHomeActivity extends AppCompatActivity
 
     }
 
-    //gets snapshot of events at current time and adds it to an array using adapter
+    // Gets snapshot of events at current time and gives it to adapter for displaying
     public void updateEventsList()
     {
         db.viewEventAction(

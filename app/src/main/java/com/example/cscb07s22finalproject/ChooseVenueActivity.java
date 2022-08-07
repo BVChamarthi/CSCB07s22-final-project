@@ -39,9 +39,12 @@ public class ChooseVenueActivity extends AppCompatActivity implements Serializab
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
+
+        // By setting the adapter to the recycleView, it is able to display all venues after updating the venues list of the adapter
         adapter = new SingleVenueAdapter(this, venues);
         recyclerView.setAdapter(adapter);
 
+        // This updates the venue list so that all events are in the array, ready to be displayed by adapter
         updateVenuesList();
 
         btn.setOnClickListener(new View.OnClickListener() {
@@ -50,7 +53,11 @@ public class ChooseVenueActivity extends AppCompatActivity implements Serializab
                 if(adapter.getSelected() != null){
                     //Change the following line to change what happens when join button is clicked
                     ShowToast(adapter.getSelected().getVenueName());
-                    startChooseSport(adapter.getSelected());
+
+                    // Starting the activity to create a new event
+                    // To do so, we need to pass the venue object that is selected, which is
+                    // retrieved from the adapter
+                    startNewEventActivity(adapter.getSelected());
                 }else{
                     ShowToast("No Selection");
                     //Update list but with sports from venue selected
@@ -63,6 +70,7 @@ public class ChooseVenueActivity extends AppCompatActivity implements Serializab
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
 
+    // UNUSED CODE -- Used by Billy to create dummy data at first
     private void CreateList(){
         ArrayList<String> sports = new ArrayList<String>(){{
             add("Swimming");
@@ -86,6 +94,7 @@ public class ChooseVenueActivity extends AppCompatActivity implements Serializab
         adapter.SetVenues(venues);
     }
 
+    // Gets snapshot of venues at current time and gives it to adapter for displaying
     private void updateVenuesList()
     {
         db.viewVenueAction(
@@ -96,7 +105,10 @@ public class ChooseVenueActivity extends AppCompatActivity implements Serializab
         );
     }
 
-    public void startChooseSport(Venue venue){
+    public void startNewEventActivity(Venue venue)
+    {
+        // To pass information between activities, we use extras in intents
+        // We pass the venue that was selected by the user to the NewEventActivity page
         Intent intent = new Intent(this, NewEventActivity.class);
         Bundle args = new Bundle();
         args.putSerializable("VENUE", venue);

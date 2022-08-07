@@ -27,10 +27,11 @@ public class NewEventActivity extends AppCompatActivity implements AdapterView.O
         setContentView(R.layout.activity_new_event);
 
         Intent intent = getIntent();
+
+        // Retrieving the venue object that was passed in
         Bundle args = intent.getBundleExtra("BUNDLE");
         v = (Venue)args.getSerializable("VENUE");
         initSpinner();
-
     }
 
     public void eventActivity(View view)
@@ -83,7 +84,7 @@ public class NewEventActivity extends AppCompatActivity implements AdapterView.O
     }
 
     //front end code
-    //spinner that displays activities
+    //spinner that displays activities using the venue object passed in
     private void initSpinner() {
         Spinner spinner = findViewById(R.id.spinner);
 
