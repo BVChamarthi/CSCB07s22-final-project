@@ -37,13 +37,14 @@ public class MyEventsActivity extends AppCompatActivity {
         adapter = new SingleAdapter(this, events);
         recyclerView.setAdapter(adapter);
 
-        updateEventsList();
+        // updateEventsList();
 
         btn.setOnClickListener(new View.OnClickListener()
         {
             @Override
-            public void onClick(View view) {
-
+            public void onClick(View view)
+            {
+                updateScheduledEventsList("joinedEvents");
             }
         });
 
@@ -51,7 +52,7 @@ public class MyEventsActivity extends AppCompatActivity {
         {
             @Override
             public void onClick(View view) {
-                updateScheduledEventsList();
+                updateScheduledEventsList("scheduledEvents");
             }
         });
     }
@@ -61,18 +62,9 @@ public class MyEventsActivity extends AppCompatActivity {
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
 
-    public void updateEventsList()
+    public void updateScheduledEventsList(String eventType)
     {
-        db.viewEventAction(
-                (ArrayList<Event> events) ->
-                {
-                    adapter.SetEvents(events);
-                });
-    }
-
-    public void updateScheduledEventsList()
-    {
-        db.viewUserEventAction(
+        db.viewUserEventAction(eventType,
                 (ArrayList<Event> events) ->
                 {
                     adapter.SetEvents(events);
