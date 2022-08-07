@@ -41,3 +41,7 @@ August 6th:
 - Ashtian and Keerthiha finished user story 2 
 - Bharath looked over code by Ashtian and Keerthiha to prepare for refactoring and merging with developer
 
+August 7th:
+- Keerthiha and Ashtian reviewed and tested user story 2
+- Keerthiha and Ashtian finished and tested user story 4
+- Bharath refactored the code and worked on user story 3 and 7
