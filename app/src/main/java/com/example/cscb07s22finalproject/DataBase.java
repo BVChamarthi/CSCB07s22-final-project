@@ -22,7 +22,6 @@ public final class DataBase {
     int numEvents;
     int scheduled;
 
-
 /*    public static final int INCORRECT_FORMAT = -1;
     public static final int DOES_NOT_EXIST = -2;
     public static final int ALREADY_EXISTS = -4;
@@ -403,15 +402,13 @@ public final class DataBase {
             // Adding eventCode to current user
             if(user instanceof Customer)
             {
-                ((Customer)user).addScheduledEventToUser(numEvents);
-
-                // Need to use hashmap according to StackExchange to append to database (not override)
+                // Need to use map according to StackExchange to append to database (not override)
+                // This will create a key:value pair, and appends it to the tree
                 // TODO: May fix tomorrow
                 HashMap<String, Object> map = new HashMap<>();
                 map.put(String.valueOf(numEvents), eventName);
                 ref.child("users").child(user.getUsername()).child("scheduledEvents").updateChildren(map);
-               //ref.child("users").child(user.getUsername()).child("scheduledEvents").setValue(((Customer)user).getScheduledEvents());
-
+                //ref.child("users").child(user.getUsername()).child("scheduledEvents").setValue(((Customer)user).getScheduledEvents());
             }
 
             // Adding eventCode to respective venue

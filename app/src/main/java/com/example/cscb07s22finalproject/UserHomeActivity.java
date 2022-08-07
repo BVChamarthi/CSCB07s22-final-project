@@ -129,6 +129,8 @@ public class UserHomeActivity extends AppCompatActivity
         });
     }
 
+
+
     //BILLYS WORK starts - filters and searches on User Home page
     private void initSearchWidget(){
         SearchView searchView = (SearchView) findViewById(R.id.eventsListSearchView);
