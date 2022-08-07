@@ -1,19 +1,25 @@
 package com.example.cscb07s22finalproject;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 
 public class UserHomeActivity extends AppCompatActivity
 {
@@ -24,15 +30,15 @@ public class UserHomeActivity extends AppCompatActivity
      */
     DataBase db = DataBase.getInstance();
     private RecyclerView recyclerView;
-    private Button btn;
 
     private SingleAdapter eventsAdapter;
 
 /*    private String selectedFilter = "all";
     private String currentSearchText = "";
     private SearchView searchView;*/
-    private Spinner spinner;
+    private Switch upcomingEvents;
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,26 +61,21 @@ public class UserHomeActivity extends AppCompatActivity
         Filter filter = new Filter(false, false, false);
 
         // initialise spinner
-        spinner = findViewById(R.id.venue_spinner);
-
-        ArrayAdapter<Venue> adapter = new ArrayAdapter<Venue>(this,
-                android.R.layout.simple_spinner_item, db.getVenues());
-
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                Venue selectedVenue = (Venue) adapterView.getSelectedItem();
-                filter.setFilter(selectedVenue, false, false, false);
-                eventsAdapter.SetEvents(filter.filterPass(db.getEvents(), null));
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
+        VenuesSpinner venuesSpinner = new VenuesSpinner(this,
+                findViewById(R.id.venue_spinner),
+                true,                                       // if you don't want "All venues" option, set this to false
+                selectedVenue -> {
+            filter.setCompareVenue(selectedVenue);
+            eventsAdapter.SetEvents(filter.filterPass(db.getEvents()));
         });
+
+        // initialise upcoming events switch
+        upcomingEvents = findViewById(R.id.switch3);
+        upcomingEvents.setOnClickListener(view -> {
+            filter.setUpcomingEvents(upcomingEvents.isChecked());
+            eventsAdapter.SetEvents(filter.filterPass(db.getEvents()));
+        });
+
     }
 
 
@@ -83,7 +84,6 @@ public class UserHomeActivity extends AppCompatActivity
 
         //Layout of recyclerview
         recyclerView = findViewById(R.id.singleRV);
-        btn = findViewById(R.id.buttonGetSelect);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));

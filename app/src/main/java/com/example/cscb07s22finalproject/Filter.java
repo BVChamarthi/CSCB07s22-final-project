@@ -31,6 +31,11 @@ public class Filter {
         this.upcomingEvents = upcomingEvents;
     }
 
+    public void setCompareVenue(Venue v) { compareVenue = v; }
+    public void setScheduledEvents(boolean b) { scheduledEvents = b; }
+    public void setJoinedEvents(boolean b) { joinedEvents = b; }
+    public void setUpcomingEvents(boolean b) { upcomingEvents = b; }
+
     int[] extractDate(String date) {
         String[] yyyymmddIntermadiate = date.split("-");
         int[] yyyymmdd = {0, 0, 0};
@@ -41,11 +46,11 @@ public class Filter {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    private boolean filterPass(Event e, Customer c) {
+    private boolean filterPass(Event e) {
         if(compareVenue != db.getDefaultEntry() && e.getParentVenue() != compareVenue) return false;
-        if(c != null) {
-            // TODO: check if event is scheduled or joined by customer
-        }
+
+        // TODO: check if event is scheduled or joined by customer (db.getUser())
+
         if(upcomingEvents) {
             int[] eventDate = extractDate(e.getDate());
             int[] currentDate = extractDate(String.valueOf(java.time.LocalDate.now()));
@@ -62,10 +67,11 @@ public class Filter {
         return true;
     }
 
-    public ArrayList<Event> filterPass(ArrayList<Event> events, Customer c) {
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public ArrayList<Event> filterPass(ArrayList<Event> events) {
         ArrayList<Event> filteredEvents = new ArrayList<>();
         for(Event e : events) {
-            if(filterPass(e, c)) filteredEvents.add(e);
+            if(filterPass(e)) filteredEvents.add(e);
         }
         return filteredEvents;
     }

@@ -34,7 +34,6 @@ public final class DataBase {
         events = new ArrayList<>();
         dataFetched = false;
         defaultEntry = new Venue("All Venues", null);
-        venues.add(defaultEntry);
     }
     public static DataBase getInstance() {      // singleton getInstance()
         if(db == null) db = new DataBase();
