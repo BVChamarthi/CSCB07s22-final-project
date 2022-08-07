@@ -33,13 +33,15 @@ public class SingleVenueAdapter extends RecyclerView.Adapter<SingleVenueAdapter.
         this.venues = venues;
     }
 
+    //initializes and sets venues
     public void SetVenues(ArrayList<Venue> venues)
     {
         this.venues = venues;
-        System.out.println("venues address in Adapter" + this.venues);
+       // System.out.println("venues address in Adapter" + this.venues);
         notifyDataSetChanged();
     }
 
+    //BILLY'S WORK - for adapter till end
     class SingleViewHolder extends RecyclerView.ViewHolder{
 
         private TextView textView;
@@ -61,7 +63,8 @@ public class SingleVenueAdapter extends RecyclerView.Adapter<SingleVenueAdapter.
                     imageView.setVisibility(View.GONE);
                 }
             }
-            //Change which part of Event is shown is each box
+
+            //Change which part of Venue is shown is each box. In this case, the toString()
             textView.setText(venue.toString());
             itemView.setOnClickListener(new View.OnClickListener(){
                 @Override
@@ -76,6 +79,7 @@ public class SingleVenueAdapter extends RecyclerView.Adapter<SingleVenueAdapter.
         }
     }
 
+    // Returns the venue object that is selected by the user (indicated by the checkmark)
     public Venue getSelected(){
         if(checkedPosition != -1){
             return venues.get(checkedPosition);

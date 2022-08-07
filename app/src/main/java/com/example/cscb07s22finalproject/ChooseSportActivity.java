@@ -9,6 +9,7 @@ import java.util.ArrayList;
 
 public class ChooseSportActivity extends AppCompatActivity {
 
+    // TODO: TO BE DELETED
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -18,8 +19,6 @@ public class ChooseSportActivity extends AppCompatActivity {
         Bundle args = intent.getBundleExtra("BUNDLE");
         ArrayList<String> sports = (ArrayList<String>) args.getSerializable("ARRAYLIST");
 
-        for(String sport : sports){
-            System.out.println(sport);
-        }
+
     }
 }
