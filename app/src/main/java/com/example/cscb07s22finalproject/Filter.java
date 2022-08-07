@@ -61,8 +61,13 @@ public class Filter {
                     eventDate[1] == currentDate[1] &&
                     eventDate[2] < currentDate[2]) return false;
             // weeded out all past events
-            // TODO: check for upcoming events within a timeframe (1 month)
-            return true;
+            if(currentDate[1] < 12) {       // not currently December
+                if(eventDate[0] > currentDate[0] ||
+                eventDate[1] > currentDate[1] + 1) return false;    // if event is beyond next month, exclude it
+            } else {
+                if( !((eventDate[0] == currentDate[0] && eventDate[1] == 12) ||             // if it's not that it's this year's Dec
+                    (eventDate[0] == currentDate[0]+1 && eventDate[1] == 1))) return false; // or next year's Jan, return false
+            }
         }
         return true;
     }
