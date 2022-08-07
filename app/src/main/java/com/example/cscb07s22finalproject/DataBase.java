@@ -18,7 +18,9 @@ public final class DataBase {
     private static DataBase db;
     private final DatabaseReference ref;
     private static User user;
-    int numEvents;
+
+    private ArrayList<Venue> venues;
+    private ArrayList<Event> events;
 
 /*    public static final int INCORRECT_FORMAT = -1;
     public static final int DOES_NOT_EXIST = -2;
@@ -29,6 +31,8 @@ public final class DataBase {
     private DataBase() {
         ref = FirebaseDatabase.getInstance().getReference();    // initialise ref to root of database
         user = null;                                            // main user of the app (initially empty)
+        venues = new ArrayList<>();
+        events = new ArrayList<>();
     }
     public static DataBase getInstance() {      // singleton getInstance()
         if(db == null) db = new DataBase();
@@ -41,6 +45,8 @@ public final class DataBase {
         if (isAdmin) user = new Admin(username, password);
         else user = new Customer(username, password);
     }
+    public ArrayList<Venue> getVenues() { return venues; }
+    public ArrayList<Event> getEvents() { return events; }
 
     /*
         userActions(), takes in username, password and 4 lambda functions to execute under 4
@@ -73,33 +79,6 @@ public final class DataBase {
             return;                                                 // and return
         }
 
-/*        // if formatting is good, set up async. listener to check if user exists
-        ref.child("users").child(username).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (!snapshot.exists()) {           // if user doesn't exist
-                    userDoesNotExist.onCallBack();  // call userDoesNotExist
-                    return;                         // and return
-                }
-
-                // if user exists, set up async. listener to check password
-                ref.child("users").child(username).child("password").get().addOnCompleteListener(task -> {
-                    if(!task.isSuccessful()) return;    // password fetch failed
-                    // TODO: display some error message in the future
-
-                    // password fetch successful
-                    String actualPassword = task.getResult().getValue().toString();
-                    if(!password.equals(actualPassword)) {
-                        userExists_WrongPassword.onCallBack();
-                    } else userExists_RightPassword.onCallBack();
-                });
-
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });*/
         // if formatting is good, set up async. listener to check if user exists
         ref.child("users").child(username).get().addOnCompleteListener(userFetch -> {
             if (!userFetch.getResult().exists()) {           // if user doesn't exist
@@ -145,22 +124,6 @@ public final class DataBase {
             }
         }
 
-/*        // if formatting is good, set up async. listener to check if venue exists
-        ref.child("Venues").child(venueName).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (!snapshot.exists()) {           // if venue doesn't exist
-                    venueDoesNotExist.onCallBack();  // call venueDoesNotExist
-                }else{
-                    venueExists.onCallBack();
-                }
-                return;
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });*/
         // if formatting is good, set up async. listener to check if venue exists
         ref.child("Venues").child(venueName).get().addOnCompleteListener(venueFetch -> {
             if (!venueFetch.getResult().exists()) {           // if venue doesn't exist

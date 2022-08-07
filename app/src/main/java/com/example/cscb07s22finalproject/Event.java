@@ -11,7 +11,6 @@ public class Event implements Serializable {
         A: Idk how make the scroll view work with a nested ArrayList
      */
 
-    private String venueName;
     private String eventName;
     private String activity;
     private String date;
@@ -21,11 +20,26 @@ public class Event implements Serializable {
     private int curParticipants, maxParticipants;
     private boolean isChecked = false;
 
-    public Event(String eventName, String venueName, String activity, String date,String startTime,String endTime,int curParticipants, int maxParticipants)
+    @Override
+    public boolean equals(Object obj) {
+        if(obj == this) return true;
+        if(!(obj instanceof Event)) return false;   // also checks for null
+        Event objEvent = (Event)obj;
+        return (
+                objEvent.getEventName() == eventName &&
+                        objEvent.getActivity() == activity &&
+                        objEvent.getDate() == date &&
+                        objEvent.getStartTime() == startTime &&
+                        objEvent.getEndTime() == endTime &&
+                        objEvent.getMaxParticipants() == maxParticipants &&
+                        objEvent.getParentVenue() == parentVenue
+                );
+    }
+
+    public Event(String eventName, Venue parentVenue, String activity, String date,String startTime,String endTime,int curParticipants, int maxParticipants)
     {
-        this.venueName = venueName;
         this.eventName = eventName;
-        this.venueName = venueName;
+        this.parentVenue = parentVenue;
         this.activity = activity;
         this.date = date;
         this.startTime = startTime;
@@ -39,43 +53,34 @@ public class Event implements Serializable {
     {
         return eventName;
     }
-
     public void setEventName(String eventName)
     {
         this.eventName = eventName;
     }
 
-    public String getVenueName() {
-        return venueName;
-    }
-
-    public void setVenueName(String venueName) {
-        this.venueName = venueName;
-    }
+    public Venue getParentVenue() { return parentVenue; }
+    public void setParentVenue(Venue parentVenue) { this.parentVenue = parentVenue; }
 
     public String getActivity()
     {
         return activity;
     }
+    public void setActivity(String activity)
+    {
+        this.activity = activity;
+    }
 
     public String getDate() {
         return date;
     }
-
     public void setDate(String date) {
         this.date = date;
-    }
-
-    public void setActivity(String activity)
-    {
-        this.activity = activity;
     }
 
     public String getStartTime()
     {
         return startTime;
     }
-
     public void setStartTime(String startTime)
     {
         this.startTime = startTime;
@@ -85,7 +90,6 @@ public class Event implements Serializable {
     {
         return endTime;
     }
-
     public void setEndTime(String endTime)
     {
         this.endTime = endTime;
@@ -94,7 +98,6 @@ public class Event implements Serializable {
     public int getCurParticipants() {
         return curParticipants;
     }
-
     public void setCurParticipants(int curParticipants) {
         this.curParticipants = curParticipants;
     }
@@ -102,7 +105,6 @@ public class Event implements Serializable {
     public int getMaxParticipants() {
         return maxParticipants;
     }
-
     public void setMaxParticipants(int maxParticipants) {
         this.maxParticipants = maxParticipants;
     }
@@ -110,7 +112,6 @@ public class Event implements Serializable {
     public boolean isChecked() {
         return isChecked;
     }
-
     public void setChecked(boolean checked) {
         isChecked = checked;
     }
@@ -118,7 +119,7 @@ public class Event implements Serializable {
     @Override
     public String toString() {
         return  "\t" + eventName +
-                "\n\t" + venueName +
+                "\n\t" + parentVenue.getVenueName() +
                 "\n\t" + activity +
                 "\n\t" + startTime +
                 ": " + endTime +
