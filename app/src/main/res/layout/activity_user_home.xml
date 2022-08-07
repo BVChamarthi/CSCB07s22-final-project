@@ -19,7 +19,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/buttonGetSelect"
+        android:id="@+id/button5"
         android:layout_width="264dp"
         android:layout_height="61dp"
         android:layout_marginTop="436dp"
@@ -39,15 +39,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonGetSelect"
+        app:layout_constraintTop_toBottomOf="@+id/button5"
         app:layout_constraintVertical_bias="0.146" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/singleRV"
-        android:layout_width="409dp"
-        android:layout_height="365dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button3" />
 </androidx.constraintlayout.widget.ConstraintLayout>
