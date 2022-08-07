@@ -3,17 +3,31 @@ package com.example.cscb07s22finalproject;
 import java.io.Serializable;
 
 public class Event implements Serializable {
+    /*
+    Important methods:
+        toString(): How info from Event is formatted
+
+    Q: Why Event has venueName field despite there being ArrayList<Event> where I can get venueName from?
+        A: Idk how make the scroll view work with a nested ArrayList
+     */
+
+    private String venueName;
     private String eventName;
     private String activity;
+    private String date;
     private String startTime;
     private String endTime;
+    private Venue parentVenue;
     private int curParticipants, maxParticipants;
     private boolean isChecked = false;
 
-    public Event(String eventName, String activity,String startTime,String endTime,int curParticipants, int maxParticipants)
+    public Event(String eventName, String venueName, String activity, String date,String startTime,String endTime,int curParticipants, int maxParticipants)
     {
+        this.venueName = venueName;
         this.eventName = eventName;
+        this.venueName = venueName;
         this.activity = activity;
+        this.date = date;
         this.startTime = startTime;
         this.endTime = endTime;
         this.maxParticipants = maxParticipants;
@@ -31,9 +45,25 @@ public class Event implements Serializable {
         this.eventName = eventName;
     }
 
+    public String getVenueName() {
+        return venueName;
+    }
+
+    public void setVenueName(String venueName) {
+        this.venueName = venueName;
+    }
+
     public String getActivity()
     {
         return activity;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 
     public void setActivity(String activity)
@@ -87,7 +117,8 @@ public class Event implements Serializable {
 
     @Override
     public String toString() {
-        return  eventName +
+        return  "\t" + eventName +
+                "\n\t" + venueName +
                 "\n\t" + activity +
                 "\n\t" + startTime +
                 ": " + endTime +
