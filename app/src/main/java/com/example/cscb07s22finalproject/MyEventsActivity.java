@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -20,6 +21,7 @@ public class MyEventsActivity extends AppCompatActivity {
     private Button btn2;
     private ArrayList<Event> events = new ArrayList<>();
     private SingleAdapter adapter;
+    private TextView eventDisplay;
 
     //page for user story 4
     @Override
@@ -30,6 +32,7 @@ public class MyEventsActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.singleRV);
         btn = findViewById(R.id.buttonGetSelect);
         btn2 = findViewById(R.id.button6);
+        eventDisplay = findViewById(R.id.textView5);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
@@ -44,6 +47,8 @@ public class MyEventsActivity extends AppCompatActivity {
             @Override
             public void onClick(View view)
             {
+                eventDisplay.setText("Joined Events");
+
                 updateScheduledEventsList("joinedEvents");
             }
         });
@@ -52,6 +57,7 @@ public class MyEventsActivity extends AppCompatActivity {
         {
             @Override
             public void onClick(View view) {
+                eventDisplay.setText("Scheduled Events");
                 updateScheduledEventsList("scheduledEvents");
             }
         });
