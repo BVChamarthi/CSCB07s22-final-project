@@ -11,16 +11,16 @@ import androidx.annotation.RequiresApi;
 
 import java.util.ArrayList;
 
-public class VenuesSpinner {
+public class VenuesSpinner {        // helper class to connect venue spinners
 
     interface singleVenueCallBack {
         void onCallBack(Venue venue);
     }
 
-    public static void connectSpinner(Context context,
-                         Spinner spinner,
-                         boolean hasDefaultVenue,
-                         singleVenueCallBack venueCallBack) {
+    public static void connectSpinner(Context context,          // takes in context
+                         Spinner spinner,                       // spinner (findViewById)
+                         boolean hasDefaultVenue,               // whether or not there should be a default venue option
+                         singleVenueCallBack venueCallBack) {   // callback with selected venue, called whenever venue changes
 
         DataBase db = DataBase.getInstance();
 
@@ -40,8 +40,7 @@ public class VenuesSpinner {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                Venue selectedVenue = (Venue) adapterView.getSelectedItem();
-                venueCallBack.onCallBack(selectedVenue);
+                venueCallBack.onCallBack((Venue) adapterView.getSelectedItem());
             }
 
             @Override

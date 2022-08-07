@@ -57,10 +57,10 @@ public class UserHomeActivity extends AppCompatActivity
         Filter filter = new Filter(false, false, false);
 
         // initialise spinner
-        VenuesSpinner.connectSpinner(this,
+        VenuesSpinner.connectSpinner(this,                          // connect the spinner
                 findViewById(R.id.venue_spinner),
                 true,                                       // if you don't want "All venues" option, set this to false
-                selectedVenue -> {
+                selectedVenue -> {                                          // callback with the selected venue whenever it changes
             filter.setCompareVenue(selectedVenue);
             eventsAdapter.SetEvents(filter.filterPass(db.getEvents()));
         });
