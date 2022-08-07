@@ -18,7 +18,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         db.readVenuesAndEvents(()->{
-            Toast.makeText(MainActivity.this, "success" , Toast.LENGTH_LONG).show();
+            Toast.makeText(MainActivity.this, String.valueOf(db.getArraysReady()) , Toast.LENGTH_LONG).show();
         });
 
     }

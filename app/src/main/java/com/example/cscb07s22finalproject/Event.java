@@ -21,7 +21,14 @@ public class Event implements Serializable {
     private int curParticipants, maxParticipants;
 
 
-    public Event(String eventName, String venueName, String activity, String date,String startTime,String endTime,int curParticipants, int maxParticipants)
+/*    public Event(String eventName,
+                 String venueName,
+                 String activity,
+                 String date,
+                 String startTime,
+                 String endTime,
+                 int curParticipants,
+                 int maxParticipants)
     {
         this.eventName = eventName;
         this.venueName = venueName;
@@ -32,6 +39,25 @@ public class Event implements Serializable {
         this.parentVenue = null;
         this.maxParticipants = maxParticipants;
         this.curParticipants = curParticipants;
+    }*/
+
+    public Event(String eventName,
+                 Venue parentVenue,
+                 String activity,
+                 String date,
+                 String startTime,
+                 String endTime,
+                 int curParticipants,
+                 int  maxParticipants) {
+        this.eventName = eventName;
+        this.parentVenue = parentVenue;
+        this.venueName = parentVenue.getVenueName();
+        this.activity = activity;
+        this.date = date;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.curParticipants = curParticipants;
+        this.maxParticipants = maxParticipants;
     }
 
     // Getters and Setters
@@ -43,7 +69,10 @@ public class Event implements Serializable {
     public Venue getVenue() {
         return parentVenue;
     }
-    public void setVenue(Venue v) { parentVenue = v; }
+    public void setVenue(Venue v) {
+        parentVenue = v;
+        venueName = v.getVenueName();
+    }
 
     public String getVenueName() {
         return venueName;

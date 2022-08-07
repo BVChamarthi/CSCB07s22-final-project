@@ -1,29 +1,16 @@
 package com.example.cscb07s22finalproject;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-
-import android.os.Bundle;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.SearchView;
-import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import java.lang.reflect.Array;
 
 import java.util.ArrayList;
 
@@ -40,11 +27,8 @@ public class UserHomeActivity extends AppCompatActivity
 
     private ArrayList<Event> events = new ArrayList<>();
 
-<<<<<<< HEAD
-=======
     private SingleAdapter eventsAdapter;
 
->>>>>>> origin/story-2
     private String selectedFilter = "all";
     private String currentSearchText = "";
     private SearchView searchView;
@@ -54,20 +38,8 @@ public class UserHomeActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_home);
 
-<<<<<<< HEAD
-        TextView usernameText = findViewById(R.id.textView4);
-        usernameText.setText(db.getUser().toString());
-
-        //eventsAdapter.printEvents();
-=======
         initSearchWidget();
         initRecyclerView();
-
-
-//        TextView usernameText = findViewById(R.id.textView4);
-//        usernameText.setText(db.getUser().toString());
-
-        //eventsAdapter.printEvents();
     }
 
 
@@ -77,7 +49,7 @@ public class UserHomeActivity extends AppCompatActivity
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
-        eventsAdapter = new SingleAdapter(this, events);
+        eventsAdapter = new SingleAdapter(this);
         recyclerView.setAdapter(eventsAdapter);
 
         updateEventsList();
@@ -95,38 +67,9 @@ public class UserHomeActivity extends AppCompatActivity
         });
     }
 
-    private void createList(){
-        events = new ArrayList<>();
-
-//        //Change the following lines for change what is displayed in each item
-//        for(int i = 0; i<20; i++){
-//            Event event = new Event(
-//                    "Name "+(i+1)+" ",
-//                    "Venue Name: Pan Am",
-//                    "Activity "+(i+1)+" ",
-//                    "Date "+(i+1)+" ",
-//                    "Start Time "+(i+1)+" ",
-//                    "End Time "+(i+1)+" ",
-//                    i+1,
-//                    i+2
-//            );
-//            events.add(event);
-//        }
-
-        events.add(new Event("Event 1", "Pan Am", "Swimming", "2022-08-04", "12:00", "13:00", 2, 5));
-        events.add(new Event("Event 2", "Pan Am", "Soccer", "2022-08-04", "13:00", "14:00", 1, 5));
-        events.add(new Event("Event 3", "Pan Am", "Surfing", "2022-08-04", "14:00", "15:00", 8, 5));
-
-
-    }
-
     public void updateEventsList()
     {
-        db.viewEventAction(
-                (ArrayList<Event> events) ->
-        {
-            eventsAdapter.SetEvents(events);
-        });
+            eventsAdapter.SetEvents();
     }
 
     private void initSearchWidget(){
@@ -221,6 +164,5 @@ public class UserHomeActivity extends AppCompatActivity
     public void newMyEventActivity(View view) {
         Intent intent = new Intent(this, MyEventsActivity.class);
         startActivity(intent);
->>>>>>> origin/story-2
     }
 }

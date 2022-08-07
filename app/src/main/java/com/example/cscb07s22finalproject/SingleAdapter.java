@@ -10,7 +10,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class SingleAdapter extends RecyclerView.Adapter<SingleAdapter.SingleViewHolder>{
@@ -19,20 +18,17 @@ public class SingleAdapter extends RecyclerView.Adapter<SingleAdapter.SingleView
         line 59: Change which part of Event is shown is each box
      */
 
-    DataBase db = DataBase.getInstance();
+    DataBase db;
 
     private Context context;
-    private ArrayList<Event> events;
     private int checkedPosition = 0; //-1: no default selection, 0: 1st item selected
 
-    public SingleAdapter(Context context, ArrayList<Event> events) {
+    public SingleAdapter(Context context) {
         this.context = context;
-        this.events = events;
+        db = DataBase.getInstance();
     }
 
-    public void SetEvents(ArrayList<Event> events){
-        this.events = new ArrayList<>();
-        this.events = events;
+    public void SetEvents(){
         notifyDataSetChanged();
     }
 
@@ -60,14 +56,11 @@ public class SingleAdapter extends RecyclerView.Adapter<SingleAdapter.SingleView
 
             //Change which part of Event is shown is each box
             textView.setText(event.toString());
-            itemView.setOnClickListener(new View.OnClickListener(){
-                @Override
-                public void onClick(View v){
-                    imageView.setVisibility(View.VISIBLE);
-                    if(checkedPosition != getAdapterPosition()){
-                        notifyItemChanged(checkedPosition);
-                        checkedPosition = getAdapterPosition();
-                    }
+            itemView.setOnClickListener(v -> {
+                imageView.setVisibility(View.VISIBLE);
+                if(checkedPosition != getAdapterPosition()){
+                    notifyItemChanged(checkedPosition);
+                    checkedPosition = getAdapterPosition();
                 }
             });
         }
@@ -75,14 +68,14 @@ public class SingleAdapter extends RecyclerView.Adapter<SingleAdapter.SingleView
 
     public Event getSelected(){
         if(checkedPosition != -1){
-            return events.get(checkedPosition);
+            return db.getEvents().get(checkedPosition);
         }
         return null;
     }
 
     public void printEvents()
     {
-        System.out.println(events);
+        System.out.println(db.getEvents());
     }
 
     @NonNull
@@ -94,11 +87,11 @@ public class SingleAdapter extends RecyclerView.Adapter<SingleAdapter.SingleView
 
     @Override
     public void onBindViewHolder(@NonNull SingleViewHolder holder, int position) {
-        holder.bind(events.get(position));
+        holder.bind(db.getEvents().get(position));
     }
 
     @Override
     public int getItemCount() {
-        return events.size();
+        return db.getEvents().size();
     }
 }

@@ -8,9 +8,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-
-import java.lang.reflect.Array;
-
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -25,6 +22,8 @@ public final class DataBase {
     private ArrayList<Venue> venues;
     private ArrayList<Event> events;
 
+    private boolean arraysReady;
+
 
     private DataBase() {
         ref = FirebaseDatabase.getInstance().getReference();    // initialise ref to root of database
@@ -32,6 +31,7 @@ public final class DataBase {
         venues = new ArrayList<>();
         events = new ArrayList<>();
         numEvents = 0;
+        arraysReady = false;
     }
     public static DataBase getInstance() {      // singleton getInstance()
         if(db == null) db = new DataBase();
@@ -44,8 +44,18 @@ public final class DataBase {
         if (isAdmin) user = new Admin(username, password);
         else user = new Customer(username, password);
     }
-    public ArrayList<Venue> getVenues() { return venues; }
-    public ArrayList<Event> getEvents() { return events; }
+    public ArrayList<Venue> getVenues() {
+        if(arraysReady) return venues;
+        else return null;
+    }
+
+    public ArrayList<Event> getEvents() {
+        if(arraysReady) return events;
+        else return null;
+    }
+
+    public void setArraysReady(boolean ar) { arraysReady = ar; }
+    public boolean getArraysReady() { return arraysReady; }
 
     /*
         userActions(), takes in username, password and 4 lambda functions to execute under 4
@@ -133,10 +143,6 @@ public final class DataBase {
         });
     }
 
-    public interface stringCallBack {
-        void onCallBack(String msg);
-    }
-
     private static final class eventsConnectionCheck {
         private static eventsConnectionCheck ecc;
         private int count;
@@ -149,7 +155,10 @@ public final class DataBase {
         public int getCount() { return count; }
         public void checkAndCall(callBack success) {
             count ++;
-            if(count >= DataBase.getInstance().getEvents().size()) success.onCallBack();
+            if(count >= DataBase.getInstance().getEvents().size()) {
+                DataBase.getInstance().setArraysReady(true);
+                success.onCallBack();
+            }
         }
     }
 
@@ -167,7 +176,7 @@ public final class DataBase {
                 String endTime = eventRef.child("endTime").getValue(String.class);
                 int curParticipants = eventRef.child("curParticipants").getValue(Integer.class);
                 int maxParticipants = eventRef.child("maxParticipants").getValue(Integer.class);
-                events.add(new Event(eventName, null, activity, date, startTime,
+                events.add(new Event(eventName, (Venue) null, activity, date, startTime,
                         endTime, curParticipants, maxParticipants));
             }
 
@@ -207,7 +216,7 @@ public final class DataBase {
     }
 
     public void eventCreateActions(String eventName,
-                                   String venueName,
+                                   Venue v,
                                    String players,
                                    String date,
                                    String startTime,
@@ -280,7 +289,7 @@ public final class DataBase {
         public void onCallBack(ArrayList<Event> events);
     }
 
-    public void viewEventAction(viewEventCallback callback)
+/*    public void viewEventAction(viewEventCallback callback)
     {
         numEvents = 0;
         ref.child("Events").addValueEventListener(new ValueEventListener()
@@ -324,7 +333,7 @@ public final class DataBase {
 
             }
         });
-    }
+    } */
 
     public interface viewVenueCallback
     {
@@ -392,9 +401,9 @@ public final class DataBase {
         ref.child("Venues").child(venueName).child("sports").setValue(activities);
     }
 
-    public void createEvent(String venueName, String eventName, String activity, String date, String startTime, String endTime, String curParticipants, String maxParticipants, Venue venue){
+    public void createEvent(String eventName, Venue parentVenue, String activity, String date, String startTime, String endTime, String curParticipants, String maxParticipants, Venue venue){
 
-            Event e = new Event(eventName, venueName, activity, date, startTime, endTime, Integer.parseInt(curParticipants), Integer.parseInt(maxParticipants));
+            Event e = new Event(eventName, parentVenue, activity, date, startTime, endTime, Integer.parseInt(curParticipants), Integer.parseInt(maxParticipants));
             ref.child("Events").child(String.valueOf(numEvents)).setValue(e);
 
             if(user instanceof Customer)
@@ -404,7 +413,7 @@ public final class DataBase {
             }
 
             venue.addEventCodeToVenue(numEvents);
-            ref.child("Venues").child(venueName).child("Events").setValue(venue.getCodes());
+            ref.child("Venues").child(parentVenue.getVenueName()).child("Events").setValue(venue.getCodes());
     }
 }
 

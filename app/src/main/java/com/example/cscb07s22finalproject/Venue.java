@@ -5,9 +5,6 @@ import java.util.ArrayList;
 
 public class Venue implements Serializable {
 
-
-    public void addEventNoCheck(Event event) { events.add(event); }
-
     String venueName;
     ArrayList<String> activities;
     ArrayList<Event> events;
@@ -39,6 +36,11 @@ public class Venue implements Serializable {
             event.setVenueName(venueName);
             events.add(event);
         }
+    }
+
+    public void addEventNoCheck(Event event) {
+        event.setVenue(this);
+        events.add(event);
     }
 
     public void removeEvent(Event event){

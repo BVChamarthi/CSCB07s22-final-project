@@ -41,8 +41,6 @@ public class NewEventActivity extends AppCompatActivity implements AdapterView.O
         EditText editText = findViewById(R.id.editTextTextPersonName3);
         String eventName = editText.getText().toString();
 
-        String venueName = v.getVenueName();
-
         editText = findViewById(R.id.editTextNumber5);
         String players = editText.getText().toString();
 
@@ -56,7 +54,7 @@ public class NewEventActivity extends AppCompatActivity implements AdapterView.O
         String endTime = editText.getText().toString();
 
 
-        db.eventCreateActions(eventName, venueName, players, date, startTime, endTime,
+        db.eventCreateActions(eventName, v, players, date, startTime, endTime,
                 () -> {     // incorrect start time format
                     Toast.makeText(NewEventActivity.this, "Invalid:format of start time is incorrect", Toast.LENGTH_LONG).show();
                     },
@@ -76,7 +74,7 @@ public class NewEventActivity extends AppCompatActivity implements AdapterView.O
                     Toast.makeText(NewEventActivity.this, "Invalid: end time must be after the start time", Toast.LENGTH_LONG).show();
                 },
                 () -> {     // Event passes all checks
-                    db.createEvent(venueName, eventName, activity, date, startTime, endTime, "0", players, v);
+                    db.createEvent(eventName, v, activity, date, startTime, endTime, "0", players, v);
                     Intent intent = new Intent(this, UserHomeActivity.class);
                     startActivity(intent);
 
