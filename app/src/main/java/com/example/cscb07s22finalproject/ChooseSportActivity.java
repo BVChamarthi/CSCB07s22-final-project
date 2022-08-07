@@ -18,8 +18,6 @@ public class ChooseSportActivity extends AppCompatActivity {
         Bundle args = intent.getBundleExtra("BUNDLE");
         ArrayList<String> sports = (ArrayList<String>) args.getSerializable("ARRAYLIST");
 
-        for(String sport : sports){
-            System.out.println(sport);
-        }
+
     }
 }

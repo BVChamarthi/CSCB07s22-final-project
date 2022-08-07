@@ -33,13 +33,15 @@ public class SingleVenueAdapter extends RecyclerView.Adapter<SingleVenueAdapter.
         this.venues = venues;
     }
 
+    //initializes and sets venues
     public void SetVenues(ArrayList<Venue> venues)
     {
         this.venues = venues;
-        System.out.println("venues address in Adapter" + this.venues);
+       // System.out.println("venues address in Adapter" + this.venues);
         notifyDataSetChanged();
     }
 
+    //BILLY'S WORK - for adapter till end
     class SingleViewHolder extends RecyclerView.ViewHolder{
 
         private TextView textView;

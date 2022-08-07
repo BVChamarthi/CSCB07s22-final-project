@@ -10,6 +10,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -19,6 +20,8 @@ public final class DataBase {
     private final DatabaseReference ref;
     private static User user;
     int numEvents;
+    int scheduled;
+
 
 /*    public static final int INCORRECT_FORMAT = -1;
     public static final int DOES_NOT_EXIST = -2;
@@ -187,48 +190,61 @@ public final class DataBase {
                                    callBack eventCreate
     ) {
 
+        //checks regexes for creating new activity
+
+        //time regex
         Pattern pattern = Pattern.compile("(((2[0-3])||([0-1][0-9])):([0-5][0-9]))");
         Matcher matcher_startTime = pattern.matcher(startTime);
         Matcher matcher_endTime = pattern.matcher(endTime);
 
+        //date regex
         Pattern pattern2 = Pattern.compile("(((202[2-9])||(20[3-9][0-9])||(2[1-9][0-9][0-9]))-((0[1-9])||(1[0-2]))-(([0-2][0-9])||(3[0-1])))");
         Matcher matcher_date = pattern2.matcher(date);
 
+        //event name regex
         Pattern pattern3 = Pattern.compile(".+");
         Matcher matcher_eventName = pattern3.matcher(eventName);
 
+        //max players regex
         Pattern pattern4 = Pattern.compile("[1-9]([0-9]*)");
         Matcher matcher_Players = pattern4.matcher(players);
-        int start = Integer.parseInt(startTime.substring(0,2))*100 + Integer.parseInt(startTime.substring(3));
 
-        int end = Integer.parseInt(endTime.substring(0,2))*100 + Integer.parseInt(endTime.substring(3));
-
-        // check formatting,
+        // if start time doesn't match regex
         if(!matcher_startTime.matches()){
             incorrectstartTimeFormat.onCallBack();
             return;
         }
 
+        // if end time doesn't match regex
         if(!matcher_endTime.matches()){
             incorrectendTimeFormat.onCallBack();
             return;
         }
 
+        // if date doesn't match regex
         if(!matcher_date.matches()){
             incorrectDateFormat.onCallBack();
             return;
         }
 
+        // if event name doesn't match regex
         if(!matcher_eventName.matches()){
             incorrectNameFormat.onCallBack();
             return;
         }
 
+        // if max players doesn't match regex
         if(!matcher_Players.matches()){
             incorrectPlayersFormat.onCallBack();
             return;
         }
 
+        //changes the start and end time to numbers
+        int start = Integer.parseInt(startTime.substring(0,2))*100 + Integer.parseInt(startTime.substring(3));
+
+        int end = Integer.parseInt(endTime.substring(0,2))*100 + Integer.parseInt(endTime.substring(3));
+
+        //if the end time is less than start time, then the time is not valid
         if(end<start){
             incorrectTimePeriod.onCallBack();
             return;
@@ -343,7 +359,6 @@ public final class DataBase {
         });
     }
 
-
     public void createUser(String username, String password) {
 
         ref.child("users").child(username).child("username").setValue(username);
@@ -366,10 +381,15 @@ public final class DataBase {
             Event e = new Event(eventName, venueName, activity, date, startTime, endTime, Integer.parseInt(curParticipants), Integer.parseInt(maxParticipants));
             ref.child("Events").child(String.valueOf(numEvents)).setValue(e);
 
+
             if(user instanceof Customer)
             {
                 ((Customer)user).addScheduledEventToUser(numEvents);
-                ref.child("users").child(user.getUsername()).child("scheduledEvents").setValue(((Customer)user).getScheduledEvents());
+                HashMap<String, Object> map = new HashMap<>();
+                map.put(String.valueOf(numEvents), eventName);
+                ref.child("users").child(user.getUsername()).child("scheduledEvents").updateChildren(map);
+               //ref.child("users").child(user.getUsername()).child("scheduledEvents").setValue(((Customer)user).getScheduledEvents());
+
             }
 
             venue.addEventCodeToVenue(numEvents);

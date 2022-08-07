@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 public class MyEventsActivity extends AppCompatActivity {
 
+    //page for user story 4
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

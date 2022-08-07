@@ -35,6 +35,7 @@ public class NewEventActivity extends AppCompatActivity implements AdapterView.O
 
     public void eventActivity(View view)
     {
+        //gets all values from text boxes and stores as needed
         EditText editText = findViewById(R.id.editTextTextPersonName3);
         String eventName = editText.getText().toString();
 
@@ -52,7 +53,7 @@ public class NewEventActivity extends AppCompatActivity implements AdapterView.O
         editText = findViewById(R.id.editTextNumber3);
         String endTime = editText.getText().toString();
 
-
+        //gives message based on which error occurred from incorrect regex format, etc. - if everything is correct, it creates an event
         db.eventCreateActions(eventName, venueName, players, date, startTime, endTime,
                 () -> {     // incorrect start time format
                     Toast.makeText(NewEventActivity.this, "Invalid:format of start time is incorrect", Toast.LENGTH_LONG).show();
@@ -81,8 +82,8 @@ public class NewEventActivity extends AppCompatActivity implements AdapterView.O
 
     }
 
-
-
+    //front end code
+    //spinner that displays activities
     private void initSpinner() {
         Spinner spinner = findViewById(R.id.spinner);
 

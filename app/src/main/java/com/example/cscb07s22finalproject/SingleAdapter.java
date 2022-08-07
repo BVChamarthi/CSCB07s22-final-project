@@ -19,6 +19,7 @@ public class SingleAdapter extends RecyclerView.Adapter<SingleAdapter.SingleView
         line 59: Change which part of Event is shown is each box
      */
 
+
     DataBase db = DataBase.getInstance();
 
     private Context context;
@@ -30,12 +31,14 @@ public class SingleAdapter extends RecyclerView.Adapter<SingleAdapter.SingleView
         this.events = events;
     }
 
+    //initializes array of events
     public void SetEvents(ArrayList<Event> events){
         this.events = new ArrayList<>();
         this.events = events;
         notifyDataSetChanged();
     }
 
+    //Billy's work - for adapter till end
     class SingleViewHolder extends RecyclerView.ViewHolder{
 
         private TextView textView;

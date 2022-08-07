@@ -54,6 +54,7 @@ public class UserHomeActivity extends AppCompatActivity
         initSearchWidget();
         initRecyclerView();
 
+        //db.fetchUserScheduledEvents();
 
 //        TextView usernameText = findViewById(R.id.textView4);
 //        usernameText.setText(db.getUser().toString());
@@ -62,7 +63,10 @@ public class UserHomeActivity extends AppCompatActivity
     }
 
 
+    //Front end - recycler view layout code
     private void initRecyclerView(){
+
+        //Layout of recyclerview
         recyclerView = findViewById(R.id.singleRV);
         btn = findViewById(R.id.buttonGetSelect);
 
@@ -71,6 +75,7 @@ public class UserHomeActivity extends AppCompatActivity
         eventsAdapter = new SingleAdapter(this, events);
         recyclerView.setAdapter(eventsAdapter);
 
+        //this updates the event list so that all events are in the array
         updateEventsList();
 
         btn.setOnClickListener(new View.OnClickListener() {
@@ -86,6 +91,7 @@ public class UserHomeActivity extends AppCompatActivity
         });
     }
 
+    //Not used - created to add events
     private void createList(){
         events = new ArrayList<>();
 
@@ -111,6 +117,7 @@ public class UserHomeActivity extends AppCompatActivity
 
     }
 
+    //gets snapshot of events at current time and adds it to an array using adapter
     public void updateEventsList()
     {
         db.viewEventAction(
@@ -120,6 +127,7 @@ public class UserHomeActivity extends AppCompatActivity
         });
     }
 
+    //BILLYS WORK starts - filters and searches on User Home page
     private void initSearchWidget(){
         SearchView searchView = (SearchView) findViewById(R.id.eventsListSearchView);
 
@@ -154,6 +162,7 @@ public class UserHomeActivity extends AppCompatActivity
             }
         });
     }
+
 
     private void filterList(String status)
     {
@@ -194,6 +203,8 @@ public class UserHomeActivity extends AppCompatActivity
     {
 
     }
+    //Billy's work ends - filters
+
 
     private void ShowToast(String msg){
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
