@@ -33,35 +33,12 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/singleRV"
-        android:layout_width="413dp"
-        android:layout_height="246dp"
+        android:layout_width="417dp"
+        android:layout_height="322dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
-
-    <Button
-        android:id="@+id/buttonGetSelect"
-        android:layout_width="264dp"
-        android:layout_height="61dp"
-        android:layout_marginTop="16dp"
-        android:text="Join Event"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/singleRV" />
-
-    <Button
-        android:id="@+id/button6"
-        android:layout_width="264dp"
-        android:layout_height="61dp"
-        android:layout_marginTop="8dp"
-        android:onClick="newEventActivity"
-        android:text="New Event"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonGetSelect" />
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -97,10 +74,21 @@
     </LinearLayout>
 
     <Button
+        android:id="@+id/buttonGetSelect"
+        android:layout_width="264dp"
+        android:layout_height="61dp"
+        android:layout_marginTop="20dp"
+        android:text="Join Event"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/singleRV" />
+
+    <Button
         android:id="@+id/button5"
         android:layout_width="264dp"
         android:layout_height="61dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="4dp"
         android:onClick="newMyEventActivity"
         android:text="My Events"
         app:layout_constraintEnd_toEndOf="parent"
@@ -114,5 +102,18 @@
         android:layout_height="wrap_content"
         android:text="TextView"
         tools:layout_editor_absoluteX="97dp"
-        tools:layout_editor_absoluteY="631dp" />
+        tools:layout_editor_absoluteY="640dp" />
+
+    <Button
+        android:id="@+id/button6"
+        android:layout_width="264dp"
+        android:layout_height="61dp"
+        android:layout_marginTop="8dp"
+        android:onClick="newEventActivity"
+        android:text="New Event"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonGetSelect" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

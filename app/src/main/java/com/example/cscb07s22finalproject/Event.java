@@ -118,12 +118,12 @@ public class Event implements Serializable {
     @Override
     public String toString() {
         return  "\t" + eventName +
-                "\n\n\t" + venueName +
-                "\n\t" + activity +
+                "\n\n\tVenue: " + venueName +
+                "\n\tActivity: " + activity +
                 "\n\n\t" + date +
                 "\n\t" + startTime +
                 " - " + endTime +
-                "\n\tPlayers: " + curParticipants +
+                "\n\n\tPlayers: " + curParticipants +
                 "/" + maxParticipants;
     }
 }

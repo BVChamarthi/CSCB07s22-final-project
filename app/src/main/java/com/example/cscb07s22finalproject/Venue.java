@@ -74,13 +74,13 @@ public class Venue implements Serializable {
     @Override
     public String toString()
     {
-        String venueToString = "\t" + venueName + "\n\n";
+        String venueToString = "\t" + venueName + "\n\n\tActivities: \n";
 
         for(String activity : activities)
         {
-            venueToString += "\t" + activity + "\n";
+            venueToString += "\t\t" + activity + "\n";
         }
 
-        return venueToString.trim();
+        return venueToString.substring(0,venueToString.length()-1);
     }
 }

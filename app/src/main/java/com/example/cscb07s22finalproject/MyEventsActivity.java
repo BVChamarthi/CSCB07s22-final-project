@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -33,6 +34,7 @@ public class MyEventsActivity extends AppCompatActivity {
         btn = findViewById(R.id.buttonGetSelect);
         btn2 = findViewById(R.id.button6);
         eventDisplay = findViewById(R.id.textView5);
+        eventDisplay.setGravity(Gravity.CENTER);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
@@ -48,7 +50,7 @@ public class MyEventsActivity extends AppCompatActivity {
             public void onClick(View view)
             {
                 eventDisplay.setText("Joined Events");
-
+                eventDisplay.setGravity(Gravity.CENTER);
                 updateScheduledEventsList("joinedEvents");
             }
         });
@@ -58,6 +60,7 @@ public class MyEventsActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 eventDisplay.setText("Scheduled Events");
+                eventDisplay.setGravity(Gravity.CENTER);
                 updateScheduledEventsList("scheduledEvents");
             }
         });
@@ -74,7 +77,6 @@ public class MyEventsActivity extends AppCompatActivity {
                 (ArrayList<Event> events) ->
                 {
                     adapter.SetEvents(events);
-                    System.out.println(events);
                 });
     }
 

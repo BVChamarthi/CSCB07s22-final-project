@@ -362,7 +362,6 @@ public final class DataBase {
 
                 for(DataSnapshot dEventSnap : eventTree.getChildren())
                 {
-                    System.out.println("Events" + Integer.parseInt(dEventSnap.getKey()));
                     if(userEventCodes.contains(Integer.parseInt(dEventSnap.getKey())))
                     {
                         // Getting all fields from a particular event

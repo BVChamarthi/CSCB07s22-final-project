@@ -195,8 +195,9 @@ public class UserHomeActivity extends AppCompatActivity
         filterList("Venue");
     }
 
-    public void eventFilterTapped(View view){
-        filterList("Event");
+    public void eventFilterTapped(View view)
+    {
+        initRecyclerView();
     }
 
     public void sportFilterTapped(View view){
