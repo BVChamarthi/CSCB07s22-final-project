@@ -11,6 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintEnd_toEndOf="parent"
+<<<<<<< HEAD
         app:layout_constraintStart_toStartOf="parent"
         tools:context=".NewVenueActivity"
         tools:layout_editor_absoluteY="52dp">
@@ -20,10 +21,24 @@
             android:layout_width="409dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="48dp"
+=======
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:context=".NewEventActivity"
+        tools:layout_editor_absoluteY="-79dp">
+
+        <Spinner
+            android:id="@+id/spinner"
+            android:layout_width="206dp"
+            android:layout_height="61dp"
+            android:layout_marginTop="24dp"
+            android:contentDescription="@string/spinner_label"
+>>>>>>> test-story-2
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView" />
 
+<<<<<<< HEAD
         <Spinner
             android:id="@+id/spinner2"
             android:layout_width="409dp"
@@ -32,17 +47,44 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/spinner" />
+=======
+        <EditText
+            android:id="@+id/editTextTextPersonName3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:hint="Event Name"
+            app:layout_constraintBottom_toTopOf="@+id/editTextNumber5"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/spinner"
+            app:layout_constraintVertical_bias="0.589" />
+>>>>>>> test-story-2
 
         <EditText
             android:id="@+id/editTextNumber"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+<<<<<<< HEAD
             android:layout_marginTop="28dp"
             android:ems="10"
             android:hint="Date"
             android:inputType="number"
             android:minHeight="48dp"
             app:layout_constraintEnd_toEndOf="parent"
+=======
+            android:layout_marginTop="30dp"
+            android:ems="10"
+            android:hint="Date"
+            android:inputType="date"
+            android:minHeight="48dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.512"
+>>>>>>> test-story-2
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/editTextNumber5" />
 
@@ -50,7 +92,11 @@
             android:id="@+id/editTextNumber5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+<<<<<<< HEAD
             android:layout_marginTop="44dp"
+=======
+            android:layout_marginTop="116dp"
+>>>>>>> test-story-2
             android:ems="10"
             android:hint="Max Players"
             android:inputType="number"
@@ -58,16 +104,20 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.502"
             app:layout_constraintStart_toStartOf="parent"
+<<<<<<< HEAD
             app:layout_constraintTop_toBottomOf="@+id/spinner2" />
+=======
+            app:layout_constraintTop_toBottomOf="@+id/spinner" />
+>>>>>>> test-story-2
 
         <EditText
             android:id="@+id/editTextNumber2"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="30dp"
             android:ems="10"
             android:hint="Start Time"
-            android:inputType="number"
+            android:inputType="text"
             android:minHeight="48dp"
             app:layout_constraintEnd_toEndOf="@+id/editTextNumber"
             app:layout_constraintHorizontal_bias="0.0"
@@ -78,10 +128,10 @@
             android:id="@+id/editTextNumber3"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="30dp"
             android:ems="10"
             android:hint="End Time"
-            android:inputType="number"
+            android:inputType="text"
             android:minHeight="48dp"
             app:layout_constraintEnd_toEndOf="@+id/editTextNumber"
             app:layout_constraintHorizontal_bias="1.0"
@@ -93,7 +143,10 @@
             android:layout_width="214dp"
             android:layout_height="57dp"
             android:layout_marginTop="40dp"
+            android:layout_marginBottom="16dp"
+            android:onClick="eventActivity"
             android:text="Create Event"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/editTextNumber3"
             app:layout_constraintHorizontal_bias="0.476"
             app:layout_constraintStart_toStartOf="@+id/editTextNumber2"
@@ -109,6 +162,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

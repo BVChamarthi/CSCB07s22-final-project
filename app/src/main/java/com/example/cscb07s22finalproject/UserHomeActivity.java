@@ -1,33 +1,23 @@
 package com.example.cscb07s22finalproject;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 
-import android.os.Bundle;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.SearchView;
-import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import java.lang.reflect.Array;
 
-import java.util.ArrayList;
-
-public class UserHomeActivity extends AppCompatActivity{
+public class UserHomeActivity extends AppCompatActivity
+{
     /*
     Important methods:
         CreateList(): fill Event items with info
@@ -35,89 +25,87 @@ public class UserHomeActivity extends AppCompatActivity{
      */
     DataBase db = DataBase.getInstance();
     private RecyclerView recyclerView;
-    private Button btn;
-
-    private ArrayList<Event> events = new ArrayList<>();
 
     private SingleAdapter eventsAdapter;
 
-    private String selectedFilter = "all";
+/*    private String selectedFilter = "all";
     private String currentSearchText = "";
-    private SearchView searchView;
+    private SearchView searchView;*/
+    private Switch upcomingEvents;
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_home);
 
-        initSearchWidget();
+
+        TextView usernameDisplay = findViewById(R.id.textView2);
+        usernameDisplay.setText(db.getUser().getUsername());
+
+//        initSearchWidget();
         initRecyclerView();
 
-        TextView usernameText = findViewById(R.id.textView4);
-        usernameText.setText(db.getUser().toString());
+        //db.fetchUserScheduledEvents();
+
+//        TextView usernameText = findViewById(R.id.textView4);
+//        usernameText.setText(db.getUser().toString());
 
         //eventsAdapter.printEvents();
+
+        // initialise filter
+        Filter filter = new Filter(false, false, false);
+
+        // initialise spinner
+        VenuesSpinner venuesSpinner = new VenuesSpinner(this,
+                findViewById(R.id.venue_spinner),
+                true,                                       // if you don't want "All venues" option, set this to false
+                selectedVenue -> {
+            filter.setCompareVenue(selectedVenue);
+            eventsAdapter.SetEvents(filter.filterPass(db.getEvents()));
+        });
+
+        // initialise upcoming events switch
+        upcomingEvents = findViewById(R.id.switch3);
+        upcomingEvents.setOnClickListener(view -> {
+            filter.setUpcomingEvents(upcomingEvents.isChecked());
+            eventsAdapter.SetEvents(filter.filterPass(db.getEvents()));
+        });
+
     }
 
 
+    //Front end - recycler view layout code
     private void initRecyclerView(){
+
+        //Layout of recyclerview
         recyclerView = findViewById(R.id.singleRV);
-        btn = findViewById(R.id.buttonGetSelect);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
-        eventsAdapter = new SingleAdapter(this, events);
+
+        // By setting the adapter to the recycleView, it is able to display all events after updating the event list of the adapter
+        eventsAdapter = new SingleAdapter(this, db.getEvents());
         recyclerView.setAdapter(eventsAdapter);
 
-        updateEventsList();
+        //this updates the event list so that all events are in the array, ready to be displayed by adapter
+//        updateEventsList();
 
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (eventsAdapter.getSelected() != null) {
-                    //Change the following line to change what happens when join button is clicked
-                    ShowToast(eventsAdapter.getSelected().getActivity());
-                } else {
-                    ShowToast("No Selection");
-                }
-            }
-        });
     }
 
-    private void createList(){
-        events = new ArrayList<>();
-
-//        //Change the following lines for change what is displayed in each item
-//        for(int i = 0; i<20; i++){
-//            Event event = new Event(
-//                    "Name "+(i+1)+" ",
-//                    "Venue Name: Pan Am",
-//                    "Activity "+(i+1)+" ",
-//                    "Date "+(i+1)+" ",
-//                    "Start Time "+(i+1)+" ",
-//                    "End Time "+(i+1)+" ",
-//                    i+1,
-//                    i+2
-//            );
-//            events.add(event);
-//        }
-
-        events.add(new Event("Event 1", "Pan Am", "Swimming", "2022-08-04", "12:00", "13:00", 2, 5));
-        events.add(new Event("Event 2", "Pan Am", "Soccer", "2022-08-04", "13:00", "14:00", 1, 5));
-        events.add(new Event("Event 3", "Pan Am", "Surfing", "2022-08-04", "14:00", "15:00", 8, 5));
-
-        db.getRef().child("Events").setValue(events);
-    }
-
+/*    // Gets snapshot of events at current time and gives it to adapter for displaying
     public void updateEventsList()
     {
-        db.viewEventAction(
-                (ArrayList<Event> events) ->
-        {
-            eventsAdapter.SetEvents(events);
-        });
-    }
+//        Toast.makeText(this, String.valueOf(db.getDataFetched()), Toast.LENGTH_LONG).show();
 
+        db.readVenuesAndEvents(
+                events -> {
+                    eventsAdapter.SetEvents(new ArrayList<>(events));
+                },
+                venues -> {}, str -> {});
+    }*/
+
+/*    //BILLYS WORK starts - filters and searches on User Home page
     private void initSearchWidget(){
         SearchView searchView = (SearchView) findViewById(R.id.eventsListSearchView);
 
@@ -137,7 +125,7 @@ public class UserHomeActivity extends AppCompatActivity{
                 for (Event event : events) {
                     name = event.getEventName();
                     if (selectedFilter == "Venue") {
-                        name = event.getVenueName();
+                        name = event.getParentVenue().getVenueName();
                     } else if (selectedFilter == "Event") {
                         name = event.getEventName();
                     } else if (selectedFilter == "Sport") {
@@ -153,6 +141,7 @@ public class UserHomeActivity extends AppCompatActivity{
         });
     }
 
+
     private void filterList(String status)
     {
         selectedFilter = status;
@@ -163,7 +152,9 @@ public class UserHomeActivity extends AppCompatActivity{
         for(Event event: events)
         {
             if(status == "Venue") {
-                name = event.getVenueName();
+
+                name = event.getParentVenue().getVenueName();
+
             }else if(status == "Event"){
                 name = event.getEventName();
             }else if(status == "Sport"){
@@ -192,6 +183,8 @@ public class UserHomeActivity extends AppCompatActivity{
     {
 
     }
+    //Billy's work ends - filters*/
+
 
     private void ShowToast(String msg){
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
@@ -202,13 +195,13 @@ public class UserHomeActivity extends AppCompatActivity{
         startActivity(intent);
     }
 
-    public void newEventActivity(View view) {
-        Intent intent = new Intent(this, NewEventActivity.class);
+/*    public void newEventActivity(View view) {
+        Intent intent = new Intent(this, ChooseVenueActivity.class);
         startActivity(intent);
     }
 
-    public void newMyEventActivtity(View view) {
+    public void newMyEventActivity(View view) {
         Intent intent = new Intent(this, MyEventsActivity.class);
         startActivity(intent);
-    }
+    }*/
 }
