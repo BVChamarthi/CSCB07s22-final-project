@@ -54,8 +54,14 @@ public class NewEventActivity extends AppCompatActivity implements AdapterView.O
         editText = findViewById(R.id.editTextNumber3);
         String endTime = editText.getText().toString();
 
+        db.checkEventTimesAction(venueName, activity, date, startTime, endTime,
+                (boolean eventOverlaps) ->
+                {
+                    System.out.println(eventOverlaps);
+                });
+
         //gives message based on which error occurred from incorrect regex format, etc. - if everything is correct, it creates an event
-        db.eventCreateActions(eventName, venueName, players, date, startTime, endTime,
+        db.eventCreateActions(eventName, venueName, activity, players, date, startTime, endTime,
                 () -> {     // incorrect start time format
                     Toast.makeText(NewEventActivity.this, "Invalid:format of start time is incorrect", Toast.LENGTH_LONG).show();
                     },
@@ -73,6 +79,10 @@ public class NewEventActivity extends AppCompatActivity implements AdapterView.O
                 },
                 () -> {     // incorrect time period - the end time is before the start time
                     Toast.makeText(NewEventActivity.this, "Invalid: end time must be after the start time", Toast.LENGTH_LONG).show();
+                },
+                () -> {
+                    System.out.println("Invalid: There exists an event at this venue that occurs at the same time and has the same activity");
+                    Toast.makeText(NewEventActivity.this, "Invalid: There exists an event at this venue that occurs at the same time and has the same activity", Toast.LENGTH_LONG).show();
                 },
                 () -> {     // Event passes all checks
                     db.createEvent(venueName, eventName, activity, date, startTime, endTime, "0", players, v);

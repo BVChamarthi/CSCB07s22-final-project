@@ -176,6 +176,7 @@ public final class DataBase {
 
     public void eventCreateActions(String eventName,
                                    String venueName,
+                                   String activity,
                                    String players,
                                    String date,
                                    String startTime,
@@ -186,6 +187,7 @@ public final class DataBase {
                                    callBack incorrectNameFormat,
                                    callBack incorrectPlayersFormat,
                                    callBack incorrectTimePeriod,
+                                   callBack eventsOverlap,
                                    callBack eventCreate
     ) {
 
@@ -244,15 +246,24 @@ public final class DataBase {
         int end = Integer.parseInt(endTime.substring(0,2))*100 + Integer.parseInt(endTime.substring(3));
 
         //if the end time is less than start time, then the time is not valid
-        if(end<start){
+        if(end<start)
+        {
             incorrectTimePeriod.onCallBack();
             return;
         }
 
-        eventCreate.onCallBack();
-        return;
-
-
+        // If events overlap at the same venue
+        db.checkEventTimesAction(venueName, activity, date, startTime, endTime,
+                (boolean eventOverlaps) ->
+                {
+                    if(eventOverlaps)
+                    {
+                        eventsOverlap.onCallBack();
+                        return;
+                    }
+                    eventCreate.onCallBack();
+                    return;
+                });
 
     }
 
@@ -362,6 +373,62 @@ public final class DataBase {
 
                 // Using callback to send back all venues
                 callback.onCallBack(allVenues);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    public interface checkEventTimesCallback
+    {
+        // Using a separate onCallBack so that events can be sent back to adapter
+        public void onCallBack(boolean eventTimeOverlaps);
+    }
+
+    public void checkEventTimesAction(String venueName, String activity, String date, String startTime, String endTime, checkEventTimesCallback callback)
+    {
+        // Using a valueEventListener so we can loop through DataSnapshot
+        ref.child("Events").addValueEventListener(new ValueEventListener()
+        {
+            boolean eventTimeOverlaps = false;
+
+            String startLoopedEventStr;
+            String endLoopedEventStr;
+            int startLoopedEvent;
+            int endLoopedEvent;
+
+            // Converting startTime and endTime to ints (using military time)
+            // EX. 12:00 and 13:00 turn to 1200 and 1300
+            int startPassedEvent = Integer.parseInt(startTime.substring(0,2))*100 + Integer.parseInt(startTime.substring(3));
+            int endPassedEvent = Integer.parseInt(endTime.substring(0,2))*100 + Integer.parseInt(endTime.substring(3));
+
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot)
+            {
+                for(DataSnapshot dSnap : snapshot.getChildren())
+                {
+                    if(dSnap.child("venueName").getValue().toString().equals(venueName) &&
+                            dSnap.child("activity").getValue().toString().equals(activity) &&
+                            dSnap.child("date").getValue().toString().equals(date))
+                    {
+                        startLoopedEventStr = dSnap.child("startTime").getValue().toString();
+                        startLoopedEvent = Integer.parseInt(startLoopedEventStr.substring(0,2))*100 + Integer.parseInt(startLoopedEventStr.substring(3));
+
+                        endLoopedEventStr = dSnap.child("endTime").getValue().toString();
+                        endLoopedEvent = Integer.parseInt(endLoopedEventStr.substring(0,2))*100 + Integer.parseInt(endLoopedEventStr.substring(3));
+
+                        if((startPassedEvent < endLoopedEvent) && (startLoopedEvent < endPassedEvent))
+                        {
+                            eventTimeOverlaps = true;
+                        }
+                    }
+                }
+
+                // Using callback to send back check
+                callback.onCallBack(eventTimeOverlaps);
             }
 
             @Override
