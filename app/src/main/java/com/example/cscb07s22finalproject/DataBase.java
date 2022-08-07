@@ -25,12 +25,16 @@ public final class DataBase {
     private ArrayList<Venue> venues;
     private ArrayList<Event> events;
 
+    private final Venue defaultEntry;                       // default selection for spinner
+
     private DataBase() {
         ref = FirebaseDatabase.getInstance().getReference();    // initialise ref to root of database
         user = null;                                            // main user of the app (initially empty)
         venues = new ArrayList<>();
         events = new ArrayList<>();
         dataFetched = false;
+        defaultEntry = new Venue("All Venues", null);
+        venues.add(defaultEntry);
     }
     public static DataBase getInstance() {      // singleton getInstance()
         if(db == null) db = new DataBase();
@@ -47,6 +51,7 @@ public final class DataBase {
     public ArrayList<Event> getEvents() { return events; }
     public void setDataFetched(boolean b) { dataFetched = b; }
     public boolean getDataFetched() { return dataFetched; }
+    public Venue getDefaultEntry() { return defaultEntry; }
 
     /*
         userActions(), takes in username, password and 4 lambda functions to execute under 4

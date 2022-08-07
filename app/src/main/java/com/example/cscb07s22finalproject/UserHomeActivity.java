@@ -1,17 +1,11 @@
 package com.example.cscb07s22finalproject;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
-import android.os.Bundle;
-import android.view.View;
-
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.SearchView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,12 +14,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import java.lang.reflect.Array;
-
-import java.util.ArrayList;
 
 public class UserHomeActivity extends AppCompatActivity
 {
@@ -38,19 +26,20 @@ public class UserHomeActivity extends AppCompatActivity
     private RecyclerView recyclerView;
     private Button btn;
 
-    private ArrayList<Event> events;        // model array for storing events
-
     private SingleAdapter eventsAdapter;
 
-    private String selectedFilter = "all";
+/*    private String selectedFilter = "all";
     private String currentSearchText = "";
-    private SearchView searchView;
+    private SearchView searchView;*/
+    private Spinner spinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_home);
-        events = new ArrayList<>();
+
+        TextView usernameDisplay = findViewById(R.id.textView2);
+        usernameDisplay.setText(db.getUser().getUsername());
 
 //        initSearchWidget();
         initRecyclerView();
@@ -61,6 +50,31 @@ public class UserHomeActivity extends AppCompatActivity
 //        usernameText.setText(db.getUser().toString());
 
         //eventsAdapter.printEvents();
+
+        // initialise filter
+        Filter filter = new Filter(false, false, false);
+
+        // initialise spinner
+        spinner = findViewById(R.id.venue_spinner);
+
+        ArrayAdapter<Venue> adapter = new ArrayAdapter<Venue>(this,
+                android.R.layout.simple_spinner_item, db.getVenues());
+
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                Venue selectedVenue = (Venue) adapterView.getSelectedItem();
+                filter.setFilter(selectedVenue, false, false, false);
+                eventsAdapter.SetEvents(filter.filterPass(db.getEvents(), null));
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
     }
 
 
@@ -75,26 +89,15 @@ public class UserHomeActivity extends AppCompatActivity
         recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
 
         // By setting the adapter to the recycleView, it is able to display all events after updating the event list of the adapter
-        eventsAdapter = new SingleAdapter(this, events);
+        eventsAdapter = new SingleAdapter(this, db.getEvents());
         recyclerView.setAdapter(eventsAdapter);
 
         //this updates the event list so that all events are in the array, ready to be displayed by adapter
-        updateEventsList();
+//        updateEventsList();
 
-/*        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (eventsAdapter.getSelected() != null) {
-                    //Change the following line to change what happens when join button is clicked
-                    ShowToast(eventsAdapter.getSelected().getActivity());
-                } else {
-                    ShowToast("No Selection");
-                }
-            }
-        });*/
     }
 
-    // Gets snapshot of events at current time and gives it to adapter for displaying
+/*    // Gets snapshot of events at current time and gives it to adapter for displaying
     public void updateEventsList()
     {
 //        Toast.makeText(this, String.valueOf(db.getDataFetched()), Toast.LENGTH_LONG).show();
@@ -102,12 +105,9 @@ public class UserHomeActivity extends AppCompatActivity
         db.readVenuesAndEvents(
                 events -> {
                     eventsAdapter.SetEvents(new ArrayList<>(events));
-                    eventsAdapter.notifyDataSetChanged();
                 },
                 venues -> {}, str -> {});
-    }
-
-
+    }*/
 
 /*    //BILLYS WORK starts - filters and searches on User Home page
     private void initSearchWidget(){

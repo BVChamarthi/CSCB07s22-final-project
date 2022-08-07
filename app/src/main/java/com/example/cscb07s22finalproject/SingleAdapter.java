@@ -23,11 +23,12 @@ public class SingleAdapter extends RecyclerView.Adapter<SingleAdapter.SingleView
 
     private Context context;
     private ArrayList<Event> events;
-    private int checkedPosition = 0; //-1: no default selection, 0: 1st item selected
+    private int checkedPosition; //-1: no default selection, 0: 1st item selected
 
     public SingleAdapter(Context context, ArrayList<Event> events) {    // pass in copy of events array when getting from db
         this.context = context;
         this.events = events;
+        checkedPosition = -1;
     }
 
     //initializes array of events
@@ -64,6 +65,10 @@ public class SingleAdapter extends RecyclerView.Adapter<SingleAdapter.SingleView
                     if(checkedPosition != getAdapterPosition()){
                         notifyItemChanged(checkedPosition);
                         checkedPosition = getAdapterPosition();
+                    } else {
+                        int i = checkedPosition;
+                        checkedPosition = -1;
+                        notifyItemChanged(i);
                     }
                 }
             });

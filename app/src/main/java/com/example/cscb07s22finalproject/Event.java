@@ -121,8 +121,7 @@ public class Event implements Serializable {
         return  "\t" + eventName +
                 "\n\t" + parentVenue.getVenueName() +
                 "\n\t" + activity +
-                "\n\t" + startTime +
-                ": " + endTime +
+                "\n\t" + date + ", " + startTime + " - " + endTime +
                 "\n\tPlayers: " + curParticipants +
                 "/" + maxParticipants;
     }

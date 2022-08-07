@@ -63,8 +63,11 @@ public class Venue implements Serializable {
     public ArrayList<Event> getEvents() { return events; }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
+        return venueName;
+    }
+
+    public String getVenueAsString() {
         String venueToString = "\t" + venueName + "\n\n";
 
         for(String activity : activities)
