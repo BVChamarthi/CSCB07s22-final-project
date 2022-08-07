@@ -1,15 +1,11 @@
 package com.example.cscb07s22finalproject;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
 
@@ -26,21 +22,19 @@ public class NewEventActivity extends AppCompatActivity implements AdapterView.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_event);
 
-        Intent intent = getIntent();
+//        Intent intent = getIntent();
 
         // Retrieving the venue object that was passed in
-        Bundle args = intent.getBundleExtra("BUNDLE");
+/*        Bundle args = intent.getBundleExtra("BUNDLE");
         v = (Venue)args.getSerializable("VENUE");
-        initSpinner();
+        initSpinner();*/
     }
 
-    public void eventActivity(View view)
+/*    public void eventActivity(View view)
     {
         //gets all values from text boxes and stores as needed
         EditText editText = findViewById(R.id.editTextTextPersonName3);
         String eventName = editText.getText().toString();
-
-        String venueName = v.getVenueName();
 
         editText = findViewById(R.id.editTextNumber5);
         String players = editText.getText().toString();
@@ -55,7 +49,7 @@ public class NewEventActivity extends AppCompatActivity implements AdapterView.O
         String endTime = editText.getText().toString();
 
         //gives message based on which error occurred from incorrect regex format, etc. - if everything is correct, it creates an event
-        db.eventCreateActions(eventName, venueName, players, date, startTime, endTime,
+        db.eventCreateActions(eventName, v, players, date, startTime, endTime,
                 () -> {     // incorrect start time format
                     Toast.makeText(NewEventActivity.this, "Invalid:format of start time is incorrect", Toast.LENGTH_LONG).show();
                     },
@@ -75,7 +69,7 @@ public class NewEventActivity extends AppCompatActivity implements AdapterView.O
                     Toast.makeText(NewEventActivity.this, "Invalid: end time must be after the start time", Toast.LENGTH_LONG).show();
                 },
                 () -> {     // Event passes all checks
-                    db.createEvent(venueName, eventName, activity, date, startTime, endTime, "0", players, v);
+                    db.createEvent(eventName, v, activity, date, startTime, endTime, "0", players, v);
                     Intent intent = new Intent(this, UserHomeActivity.class);
                     startActivity(intent);
 
@@ -97,7 +91,7 @@ public class NewEventActivity extends AppCompatActivity implements AdapterView.O
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(spinnerAdapter);
         spinner.setOnItemSelectedListener(this);
-    }
+    }*/
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {

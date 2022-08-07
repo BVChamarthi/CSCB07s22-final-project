@@ -8,9 +8,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -44,6 +45,8 @@ public final class DataBase {
     }
     public ArrayList<Venue> getVenues() { return venues; }
     public ArrayList<Event> getEvents() { return events; }
+    public void setDataFetched(boolean b) { dataFetched = b; }
+    public boolean getDataFetched() { return dataFetched; }
 
     /*
         userActions(), takes in username, password and 4 lambda functions to execute under 4
@@ -56,7 +59,11 @@ public final class DataBase {
         format for lambda functions: () -> {...your code here...}
      */
     public interface callBack {         // interface to define lambda functions for userActions
-        public void onCallBack();
+        void onCallBack();
+    }
+
+    public interface stringCallBack {
+        void onCallBack(String msg);
     }
 
     public void userActions(String username, String password,
@@ -89,7 +96,7 @@ public final class DataBase {
                 // TODO: display some error message in the future
 
                 // password fetch successful
-                String actualPassword = passwordFetch.getResult().getValue().toString();
+                String actualPassword = Objects.requireNonNull(passwordFetch.getResult().getValue()).toString();
                 if(!password.equals(actualPassword)) {
                     userExists_WrongPassword.onCallBack();
                 } else userExists_RightPassword.onCallBack();
@@ -113,8 +120,8 @@ public final class DataBase {
             return;
         }
 
-        for (int i = 0; i < activities.length; i++) {
-            Matcher matcher_activity = pattern.matcher(activities[i]);
+        for (String activity : activities) {
+            Matcher matcher_activity = pattern.matcher(activity);
             if (!matcher_activity.matches()) {
                 incorrectFormat.onCallBack();
                 return;
@@ -128,18 +135,17 @@ public final class DataBase {
             }else{
                 venueExists.onCallBack();
             }
-            return;
         });
     }
 
     public void eventCreateActions(String eventName,
-                                   String venueName,
+                                   Venue parentVenue,
                                    String players,
                                    String date,
                                    String startTime,
                                    String endTime,
-                                   callBack incorrectstartTimeFormat,
-                                   callBack incorrectendTimeFormat,
+                                   callBack incorrectStartTimeFormat,
+                                   callBack incorrectEndTimeFormat,
                                    callBack incorrectDateFormat,
                                    callBack incorrectNameFormat,
                                    callBack incorrectPlayersFormat,
@@ -168,13 +174,13 @@ public final class DataBase {
 
         // if start time doesn't match regex
         if(!matcher_startTime.matches()){
-            incorrectstartTimeFormat.onCallBack();
+            incorrectStartTimeFormat.onCallBack();
             return;
         }
 
         // if end time doesn't match regex
         if(!matcher_endTime.matches()){
-            incorrectendTimeFormat.onCallBack();
+            incorrectEndTimeFormat.onCallBack();
             return;
         }
 
@@ -208,8 +214,6 @@ public final class DataBase {
         }
 
         eventCreate.onCallBack();
-        return;
-
 
 
     }
@@ -217,19 +221,43 @@ public final class DataBase {
     public interface viewEventCallback
     {
         // Using a separate onCallBack so that events can be sent back to adapter
-        public void onCallBack(ArrayList<Event> events);
+        void onCallBack(ArrayList<Event> events);
     }
 
     public interface viewVenueCallback
     {
         // Using a separate onCallBack so that venues can be passed back to adapter
-        public void onCallBack(ArrayList<Venue> venues);
+        void onCallBack(ArrayList<Venue> venues);
+    }
+
+    private static final class eventsConnectionCheck {
+        private static eventsConnectionCheck ecc;
+        private int count;
+        private eventsConnectionCheck() { count = 0; }
+        public static eventsConnectionCheck getInstance() {
+            if(ecc == null) ecc = new eventsConnectionCheck();
+            return ecc;
+        }
+        public void reset() { count = 0; }
+        public int getCount() { return count; }
+        public void checkAndCall(callBack success) {
+            count ++;
+            if(count >= DataBase.getInstance().getEvents().size()) {
+                DataBase.getInstance().setDataFetched(true);
+                success.onCallBack();
+            }
+        }
     }
 
     public void readVenuesAndEvents(viewEventCallback eventCallback,
-                                    viewVenueCallback venueCallback){
+                                    viewVenueCallback venueCallback,
+                                    stringCallBack msg){                // only used for debugging
 
-
+        if(dataFetched) {
+            eventCallback.onCallBack(events);
+            venueCallback.onCallBack(venues);
+            return;
+        }
 
         // get events
         ref.child("Events").get().addOnCompleteListener(eventsFetch -> {
@@ -243,7 +271,7 @@ public final class DataBase {
                 String endTime = eventRef.child("endTime").getValue(String.class);
                 int curParticipants = eventRef.child("curParticipants").getValue(Integer.class);
                 int maxParticipants = eventRef.child("maxParticipants").getValue(Integer.class);
-                events.add(new Event(eventName, (Venue) null, activity, date, startTime,
+                events.add(new Event(eventName, null, activity, date, startTime,
                         endTime, curParticipants, maxParticipants));
             }
 
@@ -263,10 +291,14 @@ public final class DataBase {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             if(snapshot.exists()) {
-                                for(DataSnapshot eventCodeSnap : snapshot.getChildren()) {
-                                    int eventCode = eventCodeSnap.getValue(Integer.class);
-                                    venue.addEventNoCheck(events.get(eventCode));
-                                    ecc.checkAndCall(readSuccessful);
+                                ArrayList<Integer> eventCodes = (ArrayList<Integer>) snapshot.getValue();
+                                for(int i = 0; i < eventCodes.size(); i++) {
+                                    int j = Integer.parseInt(String.valueOf(eventCodes.get(i)));    // don't ask
+                                    venue.addEventNoCheck(events.get(j));
+                                    ecc.checkAndCall(() -> {
+                                        eventCallback.onCallBack(events);
+                                        venueCallback.onCallBack(venues);
+                                    });
                                 }
                             }
                         }
@@ -292,39 +324,38 @@ public final class DataBase {
     }
 
     public void createVenue(String venueName, String[] activities){
-        ref.child(venueName);
         ref.child("Venues").child(venueName).child("venueName").setValue(venueName);
-        for(int i = 0; i < activities.length; i++){
-            ref.child("Venues").child(venueName).child("sports").child("sport" + (i+1)).setValue(activities[i]);
-        }
+        ref.child("Venues").child(venueName).child("sports").setValue(activities);
+
+        venues.add(new Venue(venueName, new ArrayList<String>(Arrays.asList(activities))));
     }
 
-    public void createEvent(String venueName, String eventName, String activity, String date, String startTime, String endTime, String curParticipants, String maxParticipants, Venue venue){
+    public void createEvent(String eventName, Venue parentVenue, String activity, String date, String startTime, String endTime, String curParticipants, String maxParticipants, Venue venue){
 
-            // Creating an event object
-            // When passing in an object to Firebase, it will automatically add
-            // All fields as children. It is just easier this way.
-            Event e = new Event(eventName, venueName, activity, date, startTime, endTime, Integer.parseInt(curParticipants), Integer.parseInt(maxParticipants));
+        // Creating an event object
+        // When passing in an object to Firebase, it will automatically add
+        // All fields as children. It is just easier this way.
+        Event e = new Event(eventName, parentVenue, activity, date, startTime, endTime, Integer.parseInt(curParticipants), Integer.parseInt(maxParticipants));
 
-            // When adding events to database, we use numEvents as the "EventCode"
-            // This way, every event has a different "EventCode"
-            ref.child("Events").child(String.valueOf(numEvents)).setValue(e);
+        // adding event to firebase
+        ref.child("Events").child(String.valueOf(events.size())).setValue(e);
+        ref.child("Venues").child(parentVenue.getVenueName()).child("Events").child(String.valueOf(parentVenue.getEvents().size())).setValue(events.size());
 
-            // Adding eventCode to current user
-            if(user instanceof Customer)
-            {
-                // Need to use map according to StackExchange to append to database (not override)
-                // This will create a key:value pair, and appends it to the tree
-                // TODO: May fix tomorrow
-                HashMap<String, Object> map = new HashMap<>();
-                map.put(String.valueOf(numEvents), eventName);
-                ref.child("users").child(user.getUsername()).child("scheduledEvents").updateChildren(map);
-                //ref.child("users").child(user.getUsername()).child("scheduledEvents").setValue(((Customer)user).getScheduledEvents());
-            }
+        // adding event in code
+        parentVenue.addEvent(e);
+        events.add(e);
 
-            // Adding eventCode to respective venue
-            venue.addEventCodeToVenue(numEvents);
-            ref.child("Venues").child(venueName).child("Events").setValue(venue.getCodes());
+        // Adding eventCode to current user
+        if(user instanceof Customer)
+        {
+            // Need to use map according to StackExchange to append to database (not override)
+            // This will create a key:value pair, and appends it to the tree
+            // TODO: May fix tomorrow
+            HashMap<String, Object> map = new HashMap<>();
+            map.put(String.valueOf(events.size()), eventName);
+            ref.child("users").child(user.getUsername()).child("scheduledEvents").updateChildren(map);
+            //ref.child("users").child(user.getUsername()).child("scheduledEvents").setValue(((Customer)user).getScheduledEvents());
+        }
     }
 }
 

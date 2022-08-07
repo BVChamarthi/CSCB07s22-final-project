@@ -38,7 +38,7 @@ public class UserHomeActivity extends AppCompatActivity
     private RecyclerView recyclerView;
     private Button btn;
 
-    private ArrayList<Event> events = new ArrayList<>();
+    private ArrayList<Event> events;        // model array for storing events
 
     private SingleAdapter eventsAdapter;
 
@@ -50,8 +50,9 @@ public class UserHomeActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_home);
+        events = new ArrayList<>();
 
-        initSearchWidget();
+//        initSearchWidget();
         initRecyclerView();
 
         //db.fetchUserScheduledEvents();
@@ -80,7 +81,7 @@ public class UserHomeActivity extends AppCompatActivity
         //this updates the event list so that all events are in the array, ready to be displayed by adapter
         updateEventsList();
 
-        btn.setOnClickListener(new View.OnClickListener() {
+/*        btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (eventsAdapter.getSelected() != null) {
@@ -90,48 +91,25 @@ public class UserHomeActivity extends AppCompatActivity
                     ShowToast("No Selection");
                 }
             }
-        });
-    }
-
-    //Not used - created to add events
-    private void createList(){
-        events = new ArrayList<>();
-
-//        //Change the following lines for change what is displayed in each item
-//        for(int i = 0; i<20; i++){
-//            Event event = new Event(
-//                    "Name "+(i+1)+" ",
-//                    "Venue Name: Pan Am",
-//                    "Activity "+(i+1)+" ",
-//                    "Date "+(i+1)+" ",
-//                    "Start Time "+(i+1)+" ",
-//                    "End Time "+(i+1)+" ",
-//                    i+1,
-//                    i+2
-//            );
-//            events.add(event);
-//        }
-
-        events.add(new Event("Event 1", "Pan Am", "Swimming", "2022-08-04", "12:00", "13:00", 2, 5));
-        events.add(new Event("Event 2", "Pan Am", "Soccer", "2022-08-04", "13:00", "14:00", 1, 5));
-        events.add(new Event("Event 3", "Pan Am", "Surfing", "2022-08-04", "14:00", "15:00", 8, 5));
-
-
+        });*/
     }
 
     // Gets snapshot of events at current time and gives it to adapter for displaying
     public void updateEventsList()
     {
-        db.viewEventAction(
-                (ArrayList<Event> events) ->
-        {
-            eventsAdapter.SetEvents(events);
-        });
+//        Toast.makeText(this, String.valueOf(db.getDataFetched()), Toast.LENGTH_LONG).show();
+
+        db.readVenuesAndEvents(
+                events -> {
+                    eventsAdapter.SetEvents(new ArrayList<>(events));
+                    eventsAdapter.notifyDataSetChanged();
+                },
+                venues -> {}, str -> {});
     }
 
 
 
-    //BILLYS WORK starts - filters and searches on User Home page
+/*    //BILLYS WORK starts - filters and searches on User Home page
     private void initSearchWidget(){
         SearchView searchView = (SearchView) findViewById(R.id.eventsListSearchView);
 
@@ -151,7 +129,7 @@ public class UserHomeActivity extends AppCompatActivity
                 for (Event event : events) {
                     name = event.getEventName();
                     if (selectedFilter == "Venue") {
-                        name = event.getVenueName();
+                        name = event.getParentVenue().getVenueName();
                     } else if (selectedFilter == "Event") {
                         name = event.getEventName();
                     } else if (selectedFilter == "Sport") {
@@ -178,7 +156,7 @@ public class UserHomeActivity extends AppCompatActivity
         for(Event event: events)
         {
             if(status == "Venue") {
-                name = event.getVenueName();
+                name = event.getParentVenue().getVenueName();
             }else if(status == "Event"){
                 name = event.getEventName();
             }else if(status == "Sport"){
@@ -207,7 +185,7 @@ public class UserHomeActivity extends AppCompatActivity
     {
 
     }
-    //Billy's work ends - filters
+    //Billy's work ends - filters*/
 
 
     private void ShowToast(String msg){
@@ -219,7 +197,7 @@ public class UserHomeActivity extends AppCompatActivity
         startActivity(intent);
     }
 
-    public void newEventActivity(View view) {
+/*    public void newEventActivity(View view) {
         Intent intent = new Intent(this, ChooseVenueActivity.class);
         startActivity(intent);
     }
@@ -227,5 +205,5 @@ public class UserHomeActivity extends AppCompatActivity
     public void newMyEventActivity(View view) {
         Intent intent = new Intent(this, MyEventsActivity.class);
         startActivity(intent);
-    }
+    }*/
 }

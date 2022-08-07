@@ -25,14 +25,13 @@ public class SingleAdapter extends RecyclerView.Adapter<SingleAdapter.SingleView
     private ArrayList<Event> events;
     private int checkedPosition = 0; //-1: no default selection, 0: 1st item selected
 
-    public SingleAdapter(Context context, ArrayList<Event> events) {
+    public SingleAdapter(Context context, ArrayList<Event> events) {    // pass in copy of events array when getting from db
         this.context = context;
         this.events = events;
     }
 
     //initializes array of events
     public void SetEvents(ArrayList<Event> events){
-        this.events = new ArrayList<>();
         this.events = events;
         notifyDataSetChanged();
     }
@@ -50,14 +49,10 @@ public class SingleAdapter extends RecyclerView.Adapter<SingleAdapter.SingleView
         }
 
         void bind(final Event event){
-            if(checkedPosition == -1){
-                imageView.setVisibility(View.GONE);
-            }else{
-                if(checkedPosition == getAdapterPosition()){
+            if(checkedPosition == getAdapterPosition()){
                     imageView.setVisibility(View.VISIBLE);
-                }else{
-                    imageView.setVisibility(View.GONE);
-                }
+            }else{
+                imageView.setVisibility(View.GONE);
             }
 
             //Change which part of Event is shown is each box. In this case, the toString()
@@ -91,17 +86,19 @@ public class SingleAdapter extends RecyclerView.Adapter<SingleAdapter.SingleView
     @NonNull
     @Override
     public SingleViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        // inflate the view, make it visible
         View view = LayoutInflater.from(context).inflate(R.layout.item_event, parent, false);
         return new SingleViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull SingleViewHolder holder, int position) {
+        // initialise a view
         holder.bind(events.get(position));
     }
 
     @Override
     public int getItemCount() {
         return events.size();
-    }
+    }   // get number of views
 }

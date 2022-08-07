@@ -15,14 +15,20 @@ public class Venue implements Serializable {
         this.events = new ArrayList<Event>();
     }
 
-    public void addEvent(Event event)
+    public int addEvent(Event event)
     {
         //Not sure if .contains() properly compares two objs, might have to change 2nd predicate
         // implemented Event.equals(), hopefully events are compared properly now
         if(activities.contains(event.getActivity()) && !(events.contains(event))){
             event.setParentVenue(this);
             events.add(event);
-        }
+            return 0;
+        } else return 1;
+    }
+
+    public void addEventNoCheck(Event e) {
+        e.setParentVenue(this);
+        events.add(e);
     }
 
     public void removeEvent(Event event){
@@ -53,6 +59,8 @@ public class Venue implements Serializable {
     public void setVenueName(String venueName) {
         this.venueName = venueName;
     }
+
+    public ArrayList<Event> getEvents() { return events; }
 
     @Override
     public String toString()
