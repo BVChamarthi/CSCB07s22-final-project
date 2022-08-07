@@ -11,17 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintEnd_toEndOf="parent"
-<<<<<<< HEAD
-        app:layout_constraintStart_toStartOf="parent"
-        tools:context=".NewVenueActivity"
-        tools:layout_editor_absoluteY="52dp">
 
-        <Spinner
-            android:id="@+id/spinner"
-            android:layout_width="409dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="48dp"
-=======
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         tools:context=".NewEventActivity"
@@ -33,21 +23,11 @@
             android:layout_height="61dp"
             android:layout_marginTop="24dp"
             android:contentDescription="@string/spinner_label"
->>>>>>> test-story-2
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView" />
 
-<<<<<<< HEAD
-        <Spinner
-            android:id="@+id/spinner2"
-            android:layout_width="409dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/spinner" />
-=======
+
         <EditText
             android:id="@+id/editTextTextPersonName3"
             android:layout_width="wrap_content"
@@ -63,20 +43,12 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/spinner"
             app:layout_constraintVertical_bias="0.589" />
->>>>>>> test-story-2
 
         <EditText
             android:id="@+id/editTextNumber"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-<<<<<<< HEAD
-            android:layout_marginTop="28dp"
-            android:ems="10"
-            android:hint="Date"
-            android:inputType="number"
-            android:minHeight="48dp"
-            app:layout_constraintEnd_toEndOf="parent"
-=======
+
             android:layout_marginTop="30dp"
             android:ems="10"
             android:hint="Date"
@@ -84,7 +56,6 @@
             android:minHeight="48dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.512"
->>>>>>> test-story-2
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/editTextNumber5" />
 
@@ -92,11 +63,9 @@
             android:id="@+id/editTextNumber5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-<<<<<<< HEAD
-            android:layout_marginTop="44dp"
-=======
+
             android:layout_marginTop="116dp"
->>>>>>> test-story-2
+
             android:ems="10"
             android:hint="Max Players"
             android:inputType="number"
@@ -104,11 +73,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.502"
             app:layout_constraintStart_toStartOf="parent"
-<<<<<<< HEAD
-            app:layout_constraintTop_toBottomOf="@+id/spinner2" />
-=======
+
             app:layout_constraintTop_toBottomOf="@+id/spinner" />
->>>>>>> test-story-2
 
         <EditText
             android:id="@+id/editTextNumber2"

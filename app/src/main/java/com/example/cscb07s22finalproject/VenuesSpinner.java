@@ -12,20 +12,17 @@ import androidx.annotation.RequiresApi;
 import java.util.ArrayList;
 
 public class VenuesSpinner {
-    private Spinner spinner;
-    private Context context;
-    private DataBase db = DataBase.getInstance();
 
     interface singleVenueCallBack {
         void onCallBack(Venue venue);
     }
 
-    public VenuesSpinner(Context context,
+    public static void connectSpinner(Context context,
                          Spinner spinner,
                          boolean hasDefaultVenue,
                          singleVenueCallBack venueCallBack) {
-        this.context = context;
-        this.spinner = spinner;
+
+        DataBase db = DataBase.getInstance();
 
         // initialise venues array
         ArrayList<Venue> venues = new ArrayList<>();

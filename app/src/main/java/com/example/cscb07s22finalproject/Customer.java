@@ -43,21 +43,4 @@ public class Customer extends User
     public void setScheduledEvents(ArrayList<Integer> scheduledEvents) {
         this.scheduledEvents = scheduledEvents;
     }
-
-    // Getters and Setters
-    public ArrayList<Integer> getJoinedEvents() {
-        return joinedEvents;
-    }
-
-    public void setJoinedEvents(ArrayList<Integer> joinedEvents) {
-        this.joinedEvents = joinedEvents;
-    }
-
-    public ArrayList<Integer> getScheduledEvents() {
-        return scheduledEvents;
-    }
-
-    public void setScheduledEvents(ArrayList<Integer> scheduledEvents) {
-        this.scheduledEvents = scheduledEvents;
-    }
 }
