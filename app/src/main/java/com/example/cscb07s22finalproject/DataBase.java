@@ -23,13 +23,6 @@ public final class DataBase {
     private ArrayList<Venue> venues;
     private ArrayList<Event> events;
 
-
-/*    public static final int INCORRECT_FORMAT = -1;
-    public static final int DOES_NOT_EXIST = -2;
-    public static final int ALREADY_EXISTS = -4;
-    public static final int INCORRECT_PASSWORD = -3;
-    public static final int CAN_LOGIN = 0;*/
-
     private DataBase() {
         ref = FirebaseDatabase.getInstance().getReference();    // initialise ref to root of database
         user = null;                                            // main user of the app (initially empty)
@@ -225,114 +218,13 @@ public final class DataBase {
         public void onCallBack(ArrayList<Event> events);
     }
 
-    public void viewEventAction(viewEventCallback callback)
-    {
-        // Setting numEvents back to zero so it updates correctly
-        numEvents = 0;
-
-        // Using a valueEventListener so we can loop through DataSnapshot
-        ref.child("Events").addValueEventListener(new ValueEventListener()
-        {
-            // Storing all the events from the database in an ArrayList
-            ArrayList<Event> allEvents = new ArrayList<Event>();
-
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot)
-            {
-                String eventName;
-                String venueName;
-                String activity;
-                String date;
-                String startTime;
-                String endTime;
-                int curParticipants;
-                int maxParticipants;
-
-                for(DataSnapshot dSnap : snapshot.getChildren())
-                {
-                    // Getting all fields from a particular event
-                    eventName = dSnap.child("eventName").getValue().toString();
-                    venueName = dSnap.child("venueName").getValue().toString();
-                    activity = dSnap.child("activity").getValue().toString();
-                    date = dSnap.child("date").getValue().toString();
-                    startTime = dSnap.child("startTime").getValue().toString();
-                    endTime = dSnap.child("endTime").getValue().toString();
-                    curParticipants = Integer.parseInt(dSnap.child("curParticipants").getValue().toString());
-                    maxParticipants = Integer.parseInt(dSnap.child("maxParticipants").getValue().toString());
-
-                    // Inserting event into list
-                    allEvents.add(new Event(eventName, venueName, activity, date, startTime, endTime, curParticipants, maxParticipants));
-
-                    // Incrementing numEvents
-                    numEvents++;
-                }
-
-                // Using callback to send back all events
-                callback.onCallBack(allEvents);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-    }
-
     public interface viewVenueCallback
     {
         // Using a separate onCallBack so that venues can be passed back to adapter
         public void onCallBack(ArrayList<Venue> venues);
     }
 
-    public void viewVenueAction(viewVenueCallback callback)
-    {
-        // Using a valueEventListener so we can loop through DataSnapshot
-        ref.child("Venues").addValueEventListener(new ValueEventListener()
-        {
-            // Storing all the venues from the database in an ArrayList
-            ArrayList<Venue> allVenues = new ArrayList<Venue>();
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot)
-            {
-                ArrayList<String> activities;
-                ArrayList<Integer> eventCodes;
-                String venueName;
 
-                for(DataSnapshot dSnap : snapshot.getChildren())
-                {
-                    // Getting fields from a particular venue
-                    venueName = dSnap.child("venueName").getValue().toString();
-                    activities = new ArrayList<String>();
-                    eventCodes = new ArrayList<Integer>();
-
-                    // For every sport in that venue, add to an ArrayList
-                    for(DataSnapshot sportsDSnap : dSnap.child("sports").getChildren())
-                    {
-                        activities.add(sportsDSnap.getValue().toString());
-                    }
-
-                    // If that venue has any events, add to an ArrayList
-                    if(dSnap.hasChild("Events"))
-                    {
-                        for(DataSnapshot eventsDSnap : dSnap.child("Events").getChildren())
-                        {
-                            eventCodes.add(Integer.parseInt(eventsDSnap.getValue().toString()));
-                        }
-                    }
-
-                    allVenues.add(new Venue(venueName, activities, eventCodes));
-                }
-
-                // Using callback to send back all venues
-                callback.onCallBack(allVenues);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-    }
 
     public void createUser(String username, String password)
     {
