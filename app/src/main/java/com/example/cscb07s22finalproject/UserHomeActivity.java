@@ -24,7 +24,6 @@ public class UserHomeActivity extends AppCompatActivity
         line 52: what happens after join button is clicked
      */
     DataBase db = DataBase.getInstance();
-    private RecyclerView recyclerView;
 
     private SingleAdapter eventsAdapter;
 
@@ -79,7 +78,7 @@ public class UserHomeActivity extends AppCompatActivity
     private void initRecyclerView(){
 
         //Layout of recyclerview
-        recyclerView = findViewById(R.id.singleRV);
+        RecyclerView recyclerView = findViewById(R.id.singleRV);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
