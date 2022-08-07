@@ -35,3 +35,9 @@ August 4th:
 August 5th:
 - Had tutorial - presented what we've done
 - Billy, Ashtian and Keerthiha worked together on user story 2 - not complete yet
+- Bharath read over work done in user story 2 - tried to fix spinner code implemented by Ashtian and Keerthiha
+
+August 6th:
+- Ashtian and Keerthiha finished user story 2 
+- Bharath looked over code by Ashtian and Keerthiha to prepare for refactoring and merging with developer
+
