@@ -17,7 +17,7 @@ public class NewVenueActivity extends AppCompatActivity {
         setContentView(R.layout.activity_new_venue);
     }
 
-    public void createVenue(View view) {
+/*    public void createVenue(View view) {
         EditText editText = findViewById(R.id.venueName);
         String venueName = editText.getText().toString();
 
@@ -36,5 +36,5 @@ public class NewVenueActivity extends AppCompatActivity {
                 () -> {     // venue exists
                     Toast.makeText(NewVenueActivity.this, "Venue already exists", Toast.LENGTH_LONG).show();
                 });
-    }
+    }*/
 }
