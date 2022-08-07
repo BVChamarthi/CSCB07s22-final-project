@@ -19,6 +19,7 @@ public final class DataBase {
     private static DataBase db;
     private final DatabaseReference ref;
     private static User user;
+    private boolean dataFetched;
 
     private ArrayList<Venue> venues;
     private ArrayList<Event> events;
@@ -28,6 +29,7 @@ public final class DataBase {
         user = null;                                            // main user of the app (initially empty)
         venues = new ArrayList<>();
         events = new ArrayList<>();
+        dataFetched = false;
     }
     public static DataBase getInstance() {      // singleton getInstance()
         if(db == null) db = new DataBase();
@@ -224,7 +226,61 @@ public final class DataBase {
         public void onCallBack(ArrayList<Venue> venues);
     }
 
+    public void readVenuesAndEvents(viewEventCallback eventCallback,
+                                    viewVenueCallback venueCallback){
 
+
+
+        // get events
+        ref.child("Events").get().addOnCompleteListener(eventsFetch -> {
+            if(!eventsFetch.isSuccessful()) return; // if fetch failed, return
+
+            for( DataSnapshot eventRef : eventsFetch.getResult().getChildren()) {
+                String eventName = eventRef.child("eventName").getValue(String.class);
+                String activity = eventRef.child("activity").getValue(String.class);
+                String date = eventRef.child("date").getValue(String.class);
+                String startTime = eventRef.child("startTime").getValue(String.class);
+                String endTime = eventRef.child("endTime").getValue(String.class);
+                int curParticipants = eventRef.child("curParticipants").getValue(Integer.class);
+                int maxParticipants = eventRef.child("maxParticipants").getValue(Integer.class);
+                events.add(new Event(eventName, (Venue) null, activity, date, startTime,
+                        endTime, curParticipants, maxParticipants));
+            }
+
+            eventsConnectionCheck ecc = eventsConnectionCheck.getInstance();
+            ecc.reset();
+            // get venues, attach events
+            ref.child("Venues").get().addOnCompleteListener(venuesFetch -> {
+                if(!venuesFetch.isSuccessful()) return; // if fetch failed, return
+
+                for( DataSnapshot venueRef : venuesFetch.getResult().getChildren()) {
+                    String venueName = venueRef.child("venueName").getValue(String.class);
+                    ArrayList<String> activities = (ArrayList<String>) venueRef.child("activities").getValue();
+                    Venue venue = new Venue(venueName, activities);
+                    venues.add(venue);
+
+                    ref.child("Venues").child(venueName).child("Events").addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            if(snapshot.exists()) {
+                                for(DataSnapshot eventCodeSnap : snapshot.getChildren()) {
+                                    int eventCode = eventCodeSnap.getValue(Integer.class);
+                                    venue.addEventNoCheck(events.get(eventCode));
+                                    ecc.checkAndCall(readSuccessful);
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
+                }
+            });
+        });
+
+    }
 
     public void createUser(String username, String password)
     {
