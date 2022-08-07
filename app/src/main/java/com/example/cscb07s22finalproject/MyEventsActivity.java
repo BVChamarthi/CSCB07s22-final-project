@@ -33,45 +33,33 @@ public class MyEventsActivity extends AppCompatActivity {
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
+
         adapter = new SingleAdapter(this, events);
         recyclerView.setAdapter(adapter);
 
         updateEventsList();
 
-        btn.setOnClickListener(new View.OnClickListener() {
+        btn.setOnClickListener(new View.OnClickListener()
+        {
             @Override
             public void onClick(View view) {
-                if(adapter.getSelected() != null){
-                    //Change the following line to change what happens when join button is clicked
-                    //ShowToast(adapter.getSelected().getEventName());
 
-                    //startChooseSport(adapter.getSelected());
-                }else{
-                    ShowToast("No Selection");
-                    //Update list but with sports from venue selected
-                }
             }
         });
 
-        btn2.setOnClickListener(new View.OnClickListener() {
+        btn2.setOnClickListener(new View.OnClickListener()
+        {
             @Override
             public void onClick(View view) {
-                if(adapter.getSelected() != null){
-                    //Change the following line to change what happens when join button is clicked
-                    //ShowToast(adapter.getSelected().getEventName());
-                    //startChooseSport(adapter.getSelected());
-                }else{
-                    ShowToast("No Selection");
-                    //Update list but with sports from venue selected
-                }
+                updateScheduledEventsList();
             }
         });
     }
 
-    private void ShowToast(String msg){
+    private void ShowToast(String msg)
+    {
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
-
 
     public void updateEventsList()
     {
@@ -79,6 +67,16 @@ public class MyEventsActivity extends AppCompatActivity {
                 (ArrayList<Event> events) ->
                 {
                     adapter.SetEvents(events);
+                });
+    }
+
+    public void updateScheduledEventsList()
+    {
+        db.viewUserEventAction(
+                (ArrayList<Event> events) ->
+                {
+                    adapter.SetEvents(events);
+                    System.out.println(events);
                 });
     }
 

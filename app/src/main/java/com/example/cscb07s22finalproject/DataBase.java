@@ -326,6 +326,73 @@ public final class DataBase {
         });
     }
 
+    public void viewUserEventAction(viewEventCallback scheduledEventCallback)
+    {
+        // Using a valueEventListener so we can loop through DataSnapshot
+        ref.addValueEventListener(new ValueEventListener()
+        {
+            ArrayList<Integer> userScheduledEventCodes = new ArrayList<Integer>();
+            ArrayList<Event> userScheduledEvents = new ArrayList<Event>();
+
+            String eventName;
+            String venueName;
+            String activity;
+            String date;
+            String startTime;
+            String endTime;
+            int curParticipants;
+            int maxParticipants;
+
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot)
+            {
+                // Snapshot of user tree
+                DataSnapshot userTree = snapshot.child("users").child(user.getUsername());
+
+                // Snapshot of events
+                DataSnapshot eventTree = snapshot.child("Events");
+
+                if(userTree.hasChild("scheduledEvents"))
+                {
+                    System.out.println("has scheduled Events");
+                    for(DataSnapshot dSchedSnap : userTree.child("scheduledEvents").getChildren())
+                    {
+                        userScheduledEventCodes.add(Integer.parseInt(dSchedSnap.getKey()));
+                        System.out.println("In user tree" + Integer.parseInt(dSchedSnap.getKey()));
+                    }
+                }
+
+                for(DataSnapshot dEventSnap : eventTree.getChildren())
+                {
+                    System.out.println("Events" + Integer.parseInt(dEventSnap.getKey()));
+                    if(userScheduledEventCodes.contains(Integer.parseInt(dEventSnap.getKey())))
+                    {
+                        // Getting all fields from a particular event
+                        eventName = dEventSnap.child("eventName").getValue().toString();
+                        venueName = dEventSnap.child("venueName").getValue().toString();
+                        activity = dEventSnap.child("activity").getValue().toString();
+                        date = dEventSnap.child("date").getValue().toString();
+                        startTime = dEventSnap.child("startTime").getValue().toString();
+                        endTime = dEventSnap.child("endTime").getValue().toString();
+                        curParticipants = Integer.parseInt(dEventSnap.child("curParticipants").getValue().toString());
+                        maxParticipants = Integer.parseInt(dEventSnap.child("maxParticipants").getValue().toString());
+
+                        // Inserting event into list
+                        userScheduledEvents.add(new Event(eventName, venueName, activity, date, startTime, endTime, curParticipants, maxParticipants));
+                    }
+                }
+
+                // Using callback to send back all events
+                scheduledEventCallback.onCallBack(userScheduledEvents);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
     public interface viewVenueCallback
     {
         // Using a separate onCallBack so that venues can be passed back to adapter
