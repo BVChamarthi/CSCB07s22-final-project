@@ -53,60 +53,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/button6" />
 
-    <SearchView
-        android:id="@+id/eventsListSearchView"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_marginTop="64dp"
-        android:iconifiedByDefault="false"
-        android:queryHint="Venue/Sport name"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/singleRV"
-        android:layout_width="417dp"
-        android:layout_height="322dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
-
-    <LinearLayout
-        android:id="@+id/linearLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@+id/eventsListSearchView">
-
-        <Button
-            android:id="@+id/venueFilter"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:onClick="venueFilterTapped"
-            android:text="Venue" />
-
-        <Button
-            android:id="@+id/eventFilter"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:onClick="eventFilterTapped"
-            android:text="Event" />
-
-        <Button
-            android:id="@+id/sportFilter"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:onClick="sportFilterTapped"
-            android:text="Sport" />
-
-    </LinearLayout>
-
     <Button
         android:id="@+id/buttonGetSelect"
         android:layout_width="264dp"

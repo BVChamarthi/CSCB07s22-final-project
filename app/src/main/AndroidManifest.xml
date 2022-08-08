@@ -32,12 +32,10 @@
                 android:value=".UserHomeActivity" />
         </activity>
         <activity
-<<<<<<< HEAD
-=======
+
             android:name=".ChooseSportActivity"
             android:exported="false" />
         <activity
->>>>>>> story-4
             android:name=".NewEventActivity"
             android:exported="false" />
         <activity
