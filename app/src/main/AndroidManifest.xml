@@ -14,6 +14,15 @@
         android:theme="@style/Theme.CSCB07s22FinalProject"
         tools:targetApi="31">
         <activity
+            android:name=".MyEventsActivity"
+            android:parentActivityName=".UserHomeActivity">
+
+            <!-- The meta-data tag is required if you support API level 15 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".UserHomeActivity" />
+        </activity>
+        <activity
             android:name=".ChooseVenueActivity"
             android:parentActivityName=".UserHomeActivity">
 
@@ -23,14 +32,12 @@
                 android:value=".UserHomeActivity" />
         </activity>
         <activity
-            android:name=".NewEventActivity"
-            android:parentActivityName=".UserHomeActivity">
 
-            <!-- The meta-data tag is required if you support API level 15 and lower -->
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".UserHomeActivity" />
-        </activity>
+            android:name=".ChooseSportActivity"
+            android:exported="false" />
+        <activity
+            android:name=".NewEventActivity"
+            android:exported="false" />
         <activity
             android:name=".NewVenueActivity"
             android:parentActivityName=".AdminHomeActivity">
@@ -46,15 +53,6 @@
         <activity
             android:name=".UserHomeActivity"
             android:exported="false" />
-        <activity
-            android:name=".SignUpActivity"
-            android:parentActivityName=".MainActivity">
-
-            <!-- The meta-data tag is required if you support API level 15 and lower -->
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
-        </activity>
         <activity
             android:name=".MainActivity"
             android:exported="true">

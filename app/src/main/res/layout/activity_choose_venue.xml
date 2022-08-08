@@ -8,8 +8,10 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/singleRV2"
-        android:layout_width="412dp"
-        android:layout_height="458dp"
+
+        android:layout_width="422dp"
+        android:layout_height="565dp"
+
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -18,10 +20,13 @@
         android:id="@+id/buttonNext"
         android:layout_width="264dp"
         android:layout_height="61dp"
-        android:layout_marginTop="24dp"
-        android:text="Button"
+
+        android:layout_marginTop="52dp"
+        android:onClick="startChooseSport"
+        android:text="Choose Venue"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.496"
+
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/singleRV2" />
 </androidx.constraintlayout.widget.ConstraintLayout>
