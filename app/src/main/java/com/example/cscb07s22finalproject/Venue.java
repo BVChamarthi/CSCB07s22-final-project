@@ -4,28 +4,29 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class Venue implements Serializable {
+    DataBase db = DataBase.getInstance();
 
     String venueName;
     ArrayList<String> activities;
-    ArrayList<Event> events;
-    ArrayList<Integer> codes;
+//    ArrayList<Event> events;
+    ArrayList<Integer> events;
 
 
     public Venue(String venueName, ArrayList<String> activities) {
         this.venueName = venueName;
         this.activities = activities;
-        this.events = new ArrayList<Event>();
+        this.events = new ArrayList<Integer>();
     }
 
-    public Venue(String venueName, ArrayList<String> activities, ArrayList<Integer> codes) {
+    public Venue(String venueName, ArrayList<String> activities, ArrayList<Integer> events) {
         this.venueName = venueName;
         this.activities = activities;
-        this.events = new ArrayList<Event>();
-        this.codes = codes;
+        this.events = events;
     }
 
-    public int addEvent(Event event)
+    public int addEvent(int eventCode)
     {
+        /*
         //Not sure if .contains() properly compares two objs, might have to change 2nd predicate
         // implemented Event.equals(), hopefully events are compared properly now
         if(activities.contains(event.getActivity()) && !(events.contains(event))){
@@ -33,15 +34,19 @@ public class Venue implements Serializable {
             events.add(event);
             return 0;
         } else return 1;
+
+         */
+        Event event = db.getEvents().get(eventCode);
+        if(activities.contains(event.getActivity()) && !(events.contains(eventCode))) {
+            event.setParentVenue(this);
+            events.add(eventCode);
+            return 0;
+        }
+        else return 1;
     }
 
-    public void addEventNoCheck(Event e) {
-        e.setParentVenue(this);
-        events.add(e);
-    }
-
-    public void removeEvent(Event event){
-        events.remove(event);
+    public void removeEvent(int eventCode){
+        events.remove(eventCode);
         //Even if event is not in events list still say its removed anyways cause technically it has been removed from list
     }
 
@@ -67,7 +72,7 @@ public class Venue implements Serializable {
 
     public void setVenueName(String venueName) { this.venueName = venueName; }
 
-
+/*
     public void addEventCodeToVenue(int eventCode)
     {
         codes.add(eventCode);
@@ -76,8 +81,8 @@ public class Venue implements Serializable {
     public ArrayList<Integer> getCodes() {
         return codes;
     }
-
-    public ArrayList<Event> getEvents() { return events; }
+*/
+    public ArrayList<Integer> getEvents() { return events; }
 
     @Override
     public String toString() {

@@ -473,7 +473,7 @@ public final class DataBase {
                                 ArrayList<Integer> eventCodes = (ArrayList<Integer>) snapshot.getValue();
                                 for(int i = 0; i < eventCodes.size(); i++) {
                                     int j = Integer.parseInt(String.valueOf(eventCodes.get(i)));    // don't ask
-                                    venue.addEventNoCheck(events.get(j));
+                                    venue.addEvent(j);
                                     ecc.checkAndCall(() -> {
                                         eventCallback.onCallBack(events);
                                         venueCallback.onCallBack(venues);
@@ -581,7 +581,7 @@ public final class DataBase {
         } else limitReachedCallBack.onCallBack();
     }
 
-    public void createEvent(String eventName, Venue parentVenue, String activity, String date, String startTime, String endTime, String curParticipants, String maxParticipants, Venue venue){
+/*    public void createEvent(String eventName, Venue parentVenue, String activity, String date, String startTime, String endTime, String curParticipants, String maxParticipants){
 
         // Creating an event object
         // When passing in an object to Firebase, it will automatically add
@@ -607,34 +607,48 @@ public final class DataBase {
             ref.child("users").child(user.getUsername()).child("scheduledEvents").updateChildren(map);
             //ref.child("users").child(user.getUsername()).child("scheduledEvents").setValue(((Customer)user).getScheduledEvents());
         }
-    }
+    }*/
 
-    public void createEvent(Venue parentVenue, String eventName, String activity, String date, String startTime, String endTime, String curParticipants, String maxParticipants, Venue venue){
+    public void createEvent(String eventName, Venue parentVenue, String activity, String date, String startTime, String endTime, String curParticipants, String maxParticipants){
 
+        // Adding eventCode to current user
+        if(user instanceof Customer)            // assumed true
+        {
             // Creating an event object
             // When passing in an object to Firebase, it will automatically add
             // All fields as children. It is just easier this way.
             Event e = new Event(eventName, parentVenue, activity, date, startTime, endTime, Integer.parseInt(curParticipants), Integer.parseInt(maxParticipants));
 
-            // When adding events to database, we use numEvents as the "EventCode"
-            // This way, every event has a different "EventCode"
+            // adding event to firebase
             ref.child("Events").child(String.valueOf(events.size())).setValue(e);
+            ref.child("Venues").child(parentVenue.getVenueName()).child("Events").child(String.valueOf(parentVenue.getEvents().size())).setValue(events.size());
 
-            // Adding eventCode to current user
-            if(user instanceof Customer)
-            {
-                // Need to use map according to StackExchange to append to database (not override)
-                // This will create a key:value pair, and appends it to the tree
-                // TODO: May fix tomorrow
-                HashMap<String, Object> map = new HashMap<>();
-                map.put(String.valueOf(events.size()), eventName);
-                ref.child("users").child(user.getUsername()).child("scheduledEvents").updateChildren(map);
-                //ref.child("users").child(user.getUsername()).child("scheduledEvents").setValue(((Customer)user).getScheduledEvents());
-            }
+            // adding event in code
+            parentVenue.addEvent(events.size());
+            events.add(e);
+            /*
+             Need to use map according to StackExchange to append to database (not override)
+             This will create a key:value pair, and appends it to the tree
+             TODO: May fix tomorrow
+            HashMap<String, Object> map = new HashMap<>();
+            map.put(String.valueOf(events.size()), eventName);
+            ref.child("users").child(user.getUsername()).child("scheduledEvents").updateChildren(map);
+            ref.child("users").child(user.getUsername()).child("scheduledEvents").setValue(((Customer)user).getScheduledEvents());
+            */
 
-            // Adding eventCode to respective venue
-            venue.addEventCodeToVenue(events.size());
-            ref.child("Venues").child(parentVenue.getVenueName()).child("Events").setValue(venue.getCodes());
+            ref.child("users").
+                    child(user.getUsername()).
+                    child("scheduledEvents").
+                    child(String.valueOf(((Customer) user).getScheduledEvents().size())).
+                    setValue(events.size()-1);
+
+
+        }
+/*
+        // Adding eventCode to respective venue
+        parentVenue.addEventCodeToVenue(events.size());
+        ref.child("Venues").child(parentVenue.getVenueName()).child("Events").setValue(parentVenue.getCodes());
+ */
     }
 }
 
