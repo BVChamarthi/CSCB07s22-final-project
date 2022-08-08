@@ -4,16 +4,15 @@ import java.util.ArrayList;
 
 public class Admin extends User
 {
-    private ArrayList<Integer> addedVenues;
+//    private ArrayList<Integer> addedVenues;
 
     public Admin(String username, String password)
     {
         super(username, password);
-
-        addedVenues = new ArrayList<Integer>();
+//        addedVenues = new ArrayList<Integer>();
     }
 
-    // Suggestion: If the admin wants to add a venue, take in the following parameters:
+ /*   // Suggestion: If the admin wants to add a venue, take in the following parameters:
 
     //             String venue, ArayList<String> activities, int capacity
 
@@ -35,5 +34,5 @@ public class Admin extends User
     public void editVenue()
     {
 
-    }
+    }*/
 }

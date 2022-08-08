@@ -17,9 +17,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        db.readVenuesAndEvents(()->{
-            Toast.makeText(MainActivity.this, String.valueOf(db.getArraysReady()) , Toast.LENGTH_LONG).show();
-        });
+        Toast.makeText(this, "hello", Toast.LENGTH_LONG).show();
+        db.readVenuesAndEvents(a->{}, b->{}, str->{});   // read contents at the start of the app
 
     }
 
