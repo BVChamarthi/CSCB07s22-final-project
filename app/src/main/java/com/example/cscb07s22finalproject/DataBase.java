@@ -22,6 +22,8 @@ public final class DataBase {
     private static User user;
     private boolean dataFetched;
 
+    private String code;
+
     private ArrayList<Venue> venues;
     private ArrayList<Event> events;
 
@@ -333,6 +335,25 @@ public final class DataBase {
         ref.child("Venues").child(venueName).child("sports").setValue(activities);
 
         venues.add(new Venue(venueName, new ArrayList<String>(Arrays.asList(activities))));
+    }
+
+    public void joinEvent(String username, Event selectedEvent){
+        ref.child("Events").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot event : dataSnapshot.getChildren() ){
+                    if(event.getValue() == selectedEvent){
+                        ref.child("users").child(username).child("joinedEvents").child(event.getKey()).setValue(event.child("activity").getValue());
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
     }
 
     public void createEvent(String eventName, Venue parentVenue, String activity, String date, String startTime, String endTime, String curParticipants, String maxParticipants, Venue venue){

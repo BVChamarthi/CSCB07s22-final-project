@@ -117,6 +117,8 @@ public class Event implements Serializable {
         isChecked = checked;
     }
 
+    public void addParticipant() {curParticipants++;}
+
     @Override
     public String toString() {
         return  "\t" + eventName +

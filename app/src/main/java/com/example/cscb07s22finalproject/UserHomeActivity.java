@@ -5,6 +5,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 
+import android.widget.Button;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,6 +27,7 @@ public class UserHomeActivity extends AppCompatActivity
     DataBase db = DataBase.getInstance();
 
     private SingleAdapter eventsAdapter;
+    private Button btn;
 
 /*    private String selectedFilter = "all";
     private String currentSearchText = "";
@@ -41,6 +43,8 @@ public class UserHomeActivity extends AppCompatActivity
 
         TextView usernameDisplay = findViewById(R.id.textView2);
         usernameDisplay.setText(db.getUser().getUsername());
+
+        btn = findViewById(R.id.buttonGetSelect);
 
 //        initSearchWidget();
         initRecyclerView();
@@ -71,7 +75,31 @@ public class UserHomeActivity extends AppCompatActivity
             eventsAdapter.SetEvents(filter.filterPass(db.getEvents()));
         });
 
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(eventsAdapter.getSelected() != null){
+                    //Change the following line to change what happens when join button is clicked
+                    Event selectedEvent = eventsAdapter.getSelected();
+                    ShowToast(eventsAdapter.getSelected().getEventName());
+
+                    if(selectedEvent.getCurParticipants() < selectedEvent.getMaxParticipants()){
+                        selectedEvent.addParticipant();
+                        db.joinEvent((String)usernameDisplay.getText(), selectedEvent);
+                    }
+
+                    // Starting the activity to create a new event
+                    // To do so, we need to pass the venue object that is selected, which is
+                    // retrieved from the adapter
+                    //startNewEventActivity(adapter.getSelected());
+                }else{
+                    ShowToast("No Selection");
+                    //Update list but with sports from venue selected
+                }
+            }
+        });
     }
+
 
 
     //Front end - recycler view layout code
