@@ -337,23 +337,21 @@ public final class DataBase {
         venues.add(new Venue(venueName, new ArrayList<String>(Arrays.asList(activities))));
     }
 
-    public void joinEvent(String username, Event selectedEvent){
-        ref.child("Events").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for(DataSnapshot event : dataSnapshot.getChildren() ){
-                    if(event.getValue() == selectedEvent){
-                        ref.child("users").child(username).child("joinedEvents").child(event.getKey()).setValue(event.child("activity").getValue());
-                    }
-                }
+    public void joinEvent(Event selectedEvent,
+                          callBack alreadyJoinedCallBack,
+                          callBack limitReachedCallBack){
+
+        if(selectedEvent.getCurParticipants() < selectedEvent.getMaxParticipants()){
+            if(events.contains(selectedEvent)){
+                alreadyJoinedCallBack.onCallBack();
+                return;
             }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-
+            selectedEvent.addParticipant();
+            ref.child("users").child(user.getUsername()).child("joinedEvents").child(String.valueOf(events.indexOf(selectedEvent))).setValue(selectedEvent.getEventName());
+            ref.child("Events").child(String.valueOf(events.indexOf(selectedEvent))).child("curParticipants").setValue(selectedEvent.getCurParticipants());
+            Customer c = (Customer)user;
+            c.joinEvent(events.indexOf(selectedEvent));
+        } else limitReachedCallBack.onCallBack();
     }
 
     public void createEvent(String eventName, Venue parentVenue, String activity, String date, String startTime, String endTime, String curParticipants, String maxParticipants, Venue venue){

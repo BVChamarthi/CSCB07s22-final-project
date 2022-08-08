@@ -75,27 +75,22 @@ public class UserHomeActivity extends AppCompatActivity
             eventsAdapter.SetEvents(filter.filterPass(db.getEvents()));
         });
 
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(eventsAdapter.getSelected() != null){
-                    //Change the following line to change what happens when join button is clicked
-                    Event selectedEvent = eventsAdapter.getSelected();
-                    ShowToast(eventsAdapter.getSelected().getEventName());
+        btn.setOnClickListener(view -> {
+            if(eventsAdapter.getSelected() != null){
+                //Change the following line to change what happens when join button is clicked
+                Event selectedEvent = eventsAdapter.getSelected();
 
-                    if(selectedEvent.getCurParticipants() < selectedEvent.getMaxParticipants()){
-                        selectedEvent.addParticipant();
-                        db.joinEvent((String)usernameDisplay.getText(), selectedEvent);
-                    }
+                db.joinEvent(selectedEvent,
+                        () -> {ShowToast("Already Joined Event");},
+                        () -> {ShowToast("Max Participants reached");});
 
-                    // Starting the activity to create a new event
-                    // To do so, we need to pass the venue object that is selected, which is
-                    // retrieved from the adapter
-                    //startNewEventActivity(adapter.getSelected());
-                }else{
-                    ShowToast("No Selection");
-                    //Update list but with sports from venue selected
-                }
+                // Starting the activity to create a new event
+                // To do so, we need to pass the venue object that is selected, which is
+                // retrieved from the adapter
+                //startNewEventActivity(adapter.getSelected());
+            }else{
+                ShowToast("No Selection");
+                //Update list but with sports from venue selected
             }
         });
     }
