@@ -332,7 +332,9 @@ public final class DataBase {
 
     public void createVenue(String venueName, String[] activities){
         ref.child("Venues").child(venueName).child("venueName").setValue(venueName);
-        ref.child("Venues").child(venueName).child("sports").setValue(activities);
+        for(int i = 0; i < activities.length; i++){
+            ref.child("Venues").child(venueName).child("sports").child("sport" + (i+1)).setValue(activities[i]);
+        }
 
         venues.add(new Venue(venueName, new ArrayList<String>(Arrays.asList(activities))));
     }
