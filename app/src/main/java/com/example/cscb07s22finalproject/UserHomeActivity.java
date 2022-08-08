@@ -5,8 +5,18 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 
+
 import android.widget.Button;
 import android.widget.Switch;
+
+import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.SearchView;
+import android.widget.Spinner;
+
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -16,6 +26,11 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import java.lang.reflect.Array;
+
+import java.util.ArrayList;
 
 public class UserHomeActivity extends AppCompatActivity
 {
@@ -25,6 +40,7 @@ public class UserHomeActivity extends AppCompatActivity
         line 52: what happens after join button is clicked
      */
     DataBase db = DataBase.getInstance();
+
 
     private SingleAdapter eventsAdapter;
     private Button btn;
@@ -91,10 +107,10 @@ public class UserHomeActivity extends AppCompatActivity
             }else{
                 ShowToast("No Selection");
                 //Update list but with sports from venue selected
+
             }
         });
     }
-
 
 
     //Front end - recycler view layout code
@@ -128,6 +144,47 @@ public class UserHomeActivity extends AppCompatActivity
     }*/
 
 /*    //BILLYS WORK starts - filters and searches on User Home page
+=======
+    //Not used - created to add events
+    private void createList(){
+        events = new ArrayList<>();
+
+//        //Change the following lines for change what is displayed in each item
+//        for(int i = 0; i<20; i++){
+//            Event event = new Event(
+//                    "Name "+(i+1)+" ",
+//                    "Venue Name: Pan Am",
+//                    "Activity "+(i+1)+" ",
+//                    "Date "+(i+1)+" ",
+//                    "Start Time "+(i+1)+" ",
+//                    "End Time "+(i+1)+" ",
+//                    i+1,
+//                    i+2
+//            );
+//            events.add(event);
+//        }
+
+        events.add(new Event("Event 1", "Pan Am", "Swimming", "2022-08-04", "12:00", "13:00", 2, 5));
+        events.add(new Event("Event 2", "Pan Am", "Soccer", "2022-08-04", "13:00", "14:00", 1, 5));
+        events.add(new Event("Event 3", "Pan Am", "Surfing", "2022-08-04", "14:00", "15:00", 8, 5));
+
+
+    }
+
+    // Gets snapshot of events at current time and gives it to adapter for displaying
+    public void updateEventsList()
+    {
+        db.viewEventAction(
+                (ArrayList<Event> events) ->
+        {
+            eventsAdapter.SetEvents(events);
+        });
+    }
+
+
+
+    //BILLYS WORK starts - filters and searches on User Home page
+>>>>>>> story-4
     private void initSearchWidget(){
         SearchView searchView = (SearchView) findViewById(R.id.eventsListSearchView);
 
@@ -147,7 +204,11 @@ public class UserHomeActivity extends AppCompatActivity
                 for (Event event : events) {
                     name = event.getEventName();
                     if (selectedFilter == "Venue") {
+<<<<<<< HEAD
                         name = event.getParentVenue().getVenueName();
+=======
+                        name = event.getVenueName();
+>>>>>>> story-4
                     } else if (selectedFilter == "Event") {
                         name = event.getEventName();
                     } else if (selectedFilter == "Sport") {
@@ -174,9 +235,13 @@ public class UserHomeActivity extends AppCompatActivity
         for(Event event: events)
         {
             if(status == "Venue") {
+<<<<<<< HEAD
 
                 name = event.getParentVenue().getVenueName();
 
+=======
+                name = event.getVenueName();
+>>>>>>> story-4
             }else if(status == "Event"){
                 name = event.getEventName();
             }else if(status == "Sport"){
@@ -193,8 +258,14 @@ public class UserHomeActivity extends AppCompatActivity
         filterList("Venue");
     }
 
+<<<<<<< HEAD
     public void eventFilterTapped(View view){
         filterList("Event");
+=======
+    public void eventFilterTapped(View view)
+    {
+        initRecyclerView();
+>>>>>>> story-4
     }
 
     public void sportFilterTapped(View view){
@@ -205,6 +276,7 @@ public class UserHomeActivity extends AppCompatActivity
     {
 
     }
+<<<<<<< HEAD
     //Billy's work ends - filters*/
 
 
@@ -217,7 +289,8 @@ public class UserHomeActivity extends AppCompatActivity
         startActivity(intent);
     }
 
-/*    public void newEventActivity(View view) {
+
+    public void newEventActivity(View view) {
         Intent intent = new Intent(this, ChooseVenueActivity.class);
         startActivity(intent);
     }
@@ -225,5 +298,5 @@ public class UserHomeActivity extends AppCompatActivity
     public void newMyEventActivity(View view) {
         Intent intent = new Intent(this, MyEventsActivity.class);
         startActivity(intent);
-    }*/
+    }
 }

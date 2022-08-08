@@ -56,7 +56,6 @@ public class SingleAdapter extends RecyclerView.Adapter<SingleAdapter.SingleView
                 imageView.setVisibility(View.GONE);
             }
 
-
             //Change which part of Event is shown is each box. In this case, the toString()
             textView.setText(event.toString());
             itemView.setOnClickListener(new View.OnClickListener(){

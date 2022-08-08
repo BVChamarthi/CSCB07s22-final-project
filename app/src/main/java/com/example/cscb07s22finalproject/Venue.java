@@ -8,12 +8,20 @@ public class Venue implements Serializable {
     String venueName;
     ArrayList<String> activities;
     ArrayList<Event> events;
+    ArrayList<Integer> codes;
 
 
     public Venue(String venueName, ArrayList<String> activities) {
         this.venueName = venueName;
         this.activities = activities;
         this.events = new ArrayList<Event>();
+    }
+
+    public Venue(String venueName, ArrayList<String> activities, ArrayList<Integer> codes) {
+        this.venueName = venueName;
+        this.activities = activities;
+        this.events = new ArrayList<Event>();
+        this.codes = codes;
     }
 
     public int addEvent(Event event)
@@ -57,9 +65,16 @@ public class Venue implements Serializable {
         this.activities = activities;
     }
 
-    public void setVenueName(String venueName) {
-        this.venueName = venueName;
+    public void setVenueName(String venueName) { this.venueName = venueName; }
 
+
+    public void addEventCodeToVenue(int eventCode)
+    {
+        codes.add(eventCode);
+    }
+
+    public ArrayList<Integer> getCodes() {
+        return codes;
     }
 
     public ArrayList<Event> getEvents() { return events; }

@@ -1,14 +1,17 @@
 package com.example.cscb07s22finalproject;
 
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import java.util.ArrayList;
-
 
 public class NewEventActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
@@ -23,15 +26,15 @@ public class NewEventActivity extends AppCompatActivity implements AdapterView.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_event);
 
-//        Intent intent = getIntent();
+        Intent intent = getIntent();
 
         // Retrieving the venue object that was passed in
-/*        Bundle args = intent.getBundleExtra("BUNDLE");
+        Bundle args = intent.getBundleExtra("BUNDLE");
         v = (Venue)args.getSerializable("VENUE");
-        initSpinner();*/
+        initSpinner();
     }
 
-/*    public void eventActivity(View view)
+    public void eventActivity(View view)
     {
         //gets all values from text boxes and stores as needed
         EditText editText = findViewById(R.id.editTextTextPersonName3);
@@ -49,8 +52,14 @@ public class NewEventActivity extends AppCompatActivity implements AdapterView.O
         editText = findViewById(R.id.editTextNumber3);
         String endTime = editText.getText().toString();
 
+        db.checkEventTimesAction(v, activity, date, startTime, endTime,
+                (boolean eventOverlaps) ->
+                {
+                    System.out.println(eventOverlaps);
+                });
+
         //gives message based on which error occurred from incorrect regex format, etc. - if everything is correct, it creates an event
-        db.eventCreateActions(eventName, v, players, date, startTime, endTime,
+        db.eventCreateActions(eventName, v, activity, players, date, startTime, endTime,
                 () -> {     // incorrect start time format
                     Toast.makeText(NewEventActivity.this, "Invalid:format of start time is incorrect", Toast.LENGTH_LONG).show();
                     },
@@ -69,8 +78,12 @@ public class NewEventActivity extends AppCompatActivity implements AdapterView.O
                 () -> {     // incorrect time period - the end time is before the start time
                     Toast.makeText(NewEventActivity.this, "Invalid: end time must be after the start time", Toast.LENGTH_LONG).show();
                 },
+                () -> {
+                    System.out.println("Invalid: There exists an event at this venue that occurs at the same time and has the same activity");
+                    Toast.makeText(NewEventActivity.this, "Invalid: There exists an event at this venue that occurs at the same time and has the same activity", Toast.LENGTH_LONG).show();
+                },
                 () -> {     // Event passes all checks
-                    db.createEvent(eventName, v, activity, date, startTime, endTime, "0", players, v);
+                    db.createEvent(v, eventName, activity, date, startTime, endTime, "0", players, v);
                     Intent intent = new Intent(this, UserHomeActivity.class);
                     startActivity(intent);
 
@@ -87,40 +100,12 @@ public class NewEventActivity extends AppCompatActivity implements AdapterView.O
                 this,
                 android.R.layout.simple_spinner_item,
                 v.getActivities()
->>>>>>> test-story-2
         );
 
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(spinnerAdapter);
-<<<<<<< HEAD
-        updateVenuesList();
         spinner.setOnItemSelectedListener(this);
-
-        Spinner spinner2 = findViewById(R.id.spinner2);
-        String values2[] = {"Three", "Two", "Three", "Four", "Five"};
-        ArrayAdapter<String> spinnerAdapter2 = new ArrayAdapter<>(
-                this,
-                android.R.layout.simple_spinner_item,
-                values2
-        );
-
-        spinnerAdapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner2.setAdapter(spinnerAdapter2);
-        spinner2.setOnItemSelectedListener(this);
     }
-
-    private void updateVenuesList()
-    {
-        db.viewVenueAction(
-                (ArrayList<Venue> venues) ->
-                {
-                    venueAdapter.SetVenues(venues);
-                }
-        );
-    }
-=======
-        spinner.setOnItemSelectedListener(this);
-    }*/
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {

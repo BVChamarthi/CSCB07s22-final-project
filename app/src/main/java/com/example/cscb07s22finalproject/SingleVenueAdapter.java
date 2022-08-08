@@ -64,9 +64,8 @@ public class SingleVenueAdapter extends RecyclerView.Adapter<SingleVenueAdapter.
                 }
             }
 
-
             //Change which part of Venue is shown is each box. In this case, the toString()
-            textView.setText(venue.toString());
+            textView.setText(venue.getVenueAsString());
             itemView.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View v){
@@ -79,7 +78,6 @@ public class SingleVenueAdapter extends RecyclerView.Adapter<SingleVenueAdapter.
             });
         }
     }
-
 
     // Returns the venue object that is selected by the user (indicated by the checkmark)
     public Venue getSelected(){

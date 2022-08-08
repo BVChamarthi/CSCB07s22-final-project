@@ -20,6 +20,7 @@ public class Event implements Serializable {
     private int curParticipants, maxParticipants;
     private boolean isChecked = false;
 
+
     @Override
     public boolean equals(Object obj) {
         if(obj == this) return true;
@@ -37,6 +38,7 @@ public class Event implements Serializable {
     }
 
     public Event(String eventName, Venue parentVenue, String activity, String date,String startTime,String endTime,int curParticipants, int maxParticipants)
+
     {
         this.eventName = eventName;
         this.parentVenue = parentVenue;
@@ -57,6 +59,7 @@ public class Event implements Serializable {
     {
         this.eventName = eventName;
     }
+
 
     public Venue getParentVenue() { return parentVenue; }
     public void setParentVenue(Venue parentVenue) { this.parentVenue = parentVenue; }
@@ -125,7 +128,6 @@ public class Event implements Serializable {
                 "\n\t" + parentVenue.getVenueName() +
                 "\n\t" + activity +
                 "\n\t" + date + ", " + startTime + " - " + endTime +
-                "\n\tPlayers: " + curParticipants +
-                "/" + maxParticipants;
+                "\n\tPlayers: " + curParticipants + "/" + maxParticipants;
     }
 }
