@@ -24,7 +24,7 @@ public class Venue implements Serializable {
         this.events = events;
     }
 
-    public int addEvent(int eventCode)
+    public void addEvent(int eventCode)
     {
         /*
         //Not sure if .contains() properly compares two objs, might have to change 2nd predicate
@@ -37,12 +37,8 @@ public class Venue implements Serializable {
 
          */
         Event event = db.getEvents().get(eventCode);
-        if(activities.contains(event.getActivity()) && !(events.contains(eventCode))) {
-            event.setParentVenue(this);
-            events.add(eventCode);
-            return 0;
-        }
-        else return 1;
+        event.setParentVenue(this);
+        events.add(eventCode);
     }
 
     public void removeEvent(int eventCode){

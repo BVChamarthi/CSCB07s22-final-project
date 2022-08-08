@@ -10,7 +10,6 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -25,7 +24,7 @@ public final class DataBase {
     private ArrayList<Venue> venues;
     private ArrayList<Event> events;
 
-    private final Venue defaultEntry;                       // default selection for spinner
+    private static Venue defaultEntry;                       // default selection for spinner
 
     private DataBase() {
         ref = FirebaseDatabase.getInstance().getReference();    // initialise ref to root of database
@@ -33,10 +32,12 @@ public final class DataBase {
         venues = new ArrayList<>();
         events = new ArrayList<>();
         dataFetched = false;
-        defaultEntry = new Venue("All Venues", null);
     }
     public static DataBase getInstance() {      // singleton getInstance()
-        if(db == null) db = new DataBase();
+        if(db == null) {
+            db = new DataBase();
+            defaultEntry = new Venue("All Venues", null);
+        }
         return db;
     }
 
@@ -466,6 +467,8 @@ public final class DataBase {
                         endTime, curParticipants, maxParticipants));
             }
 
+            msg.onCallBack("Events " + events.size());
+
             eventsConnectionCheck ecc = eventsConnectionCheck.getInstance();
             ecc.reset();
             // get venues, attach events
@@ -482,14 +485,9 @@ public final class DataBase {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             if(snapshot.exists()) {
-                                ArrayList<Integer> eventCodes = (ArrayList<Integer>) snapshot.getValue();
-                                for(int i = 0; i < eventCodes.size(); i++) {
-                                    int j = Integer.parseInt(String.valueOf(eventCodes.get(i)));    // don't ask
-                                    venue.addEvent(j);
-                                    ecc.checkAndCall(() -> {
-                                        eventCallback.onCallBack(events);
-                                        venueCallback.onCallBack(venues);
-                                    });
+                                for(DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                                    int eventCode = dataSnapshot.getValue(Integer.class);
+                                    venue.addEvent(eventCode);
                                 }
                             }
                         }
@@ -500,6 +498,7 @@ public final class DataBase {
                         }
                     });
                 }
+                msg.onCallBack("Venues " + venues.size());
             });
         });
     }

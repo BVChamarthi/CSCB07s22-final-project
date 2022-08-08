@@ -51,7 +51,9 @@ public class UserHomeActivity extends AppCompatActivity
     private SearchView searchView;*/
     @SuppressLint("UseSwitchCompatOrMaterialCode")
     private Switch upcomingEvents;
+    @SuppressLint("UseSwitchCompatOrMaterialCode")
     private Switch joinedEvents;
+    @SuppressLint("UseSwitchCompatOrMaterialCode")
     private Switch scheduledEvents;
 
     @RequiresApi(api = Build.VERSION_CODES.O)

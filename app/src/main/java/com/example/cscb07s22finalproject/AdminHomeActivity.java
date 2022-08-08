@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -19,6 +20,7 @@ public class AdminHomeActivity extends AppCompatActivity {
 
     private SingleAdapter eventsAdapter;
 
+    @SuppressLint("UseSwitchCompatOrMaterialCode")
     private Switch upcomingEvents;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
