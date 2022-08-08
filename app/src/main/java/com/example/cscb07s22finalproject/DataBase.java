@@ -344,14 +344,14 @@ public final class DataBase {
                           callBack limitReachedCallBack){
 
         if(selectedEvent.getCurParticipants() < selectedEvent.getMaxParticipants()){
-            if(events.contains(selectedEvent)){
+            Customer c = (Customer)user;
+            if(c.isJoined(events.indexOf(selectedEvent))){
                 alreadyJoinedCallBack.onCallBack();
                 return;
             }
             selectedEvent.addParticipant();
             ref.child("users").child(user.getUsername()).child("joinedEvents").child(String.valueOf(events.indexOf(selectedEvent))).setValue(selectedEvent.getEventName());
             ref.child("Events").child(String.valueOf(events.indexOf(selectedEvent))).child("curParticipants").setValue(selectedEvent.getCurParticipants());
-            Customer c = (Customer)user;
             c.joinEvent(events.indexOf(selectedEvent));
         } else limitReachedCallBack.onCallBack();
     }

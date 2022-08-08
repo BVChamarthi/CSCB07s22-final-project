@@ -43,4 +43,8 @@ public class Customer extends User
     public void setScheduledEvents(ArrayList<Integer> scheduledEvents) {
         this.scheduledEvents = scheduledEvents;
     }
+
+    public boolean isJoined(int eventCode){
+        return joinedEvents.contains(eventCode);
+    }
 }
