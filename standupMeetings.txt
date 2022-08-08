@@ -44,4 +44,6 @@ August 6th:
 August 7th:
 - Keerthiha and Ashtian reviewed and tested user story 2
 - Keerthiha and Ashtian finished and tested user story 4
-- Bharath refactored the code and worked on user story 3 and 7
+- Bharath refactored the code
+- Bharath finished user story 7
+- Laksh and Aidan worked on user story 3
