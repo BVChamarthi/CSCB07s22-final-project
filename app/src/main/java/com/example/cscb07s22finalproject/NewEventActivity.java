@@ -73,7 +73,7 @@ public class NewEventActivity extends AppCompatActivity {
         editText = findViewById(R.id.editTextNumber5);
         String players = editText.getText().toString();
 
-        editText = findViewById(R.id.editTextNumber);
+        editText = findViewById(R.id.editTextTextPersonName2);
         String date = editText.getText().toString();
 
         editText = findViewById(R.id.editTextNumber2);
@@ -82,11 +82,12 @@ public class NewEventActivity extends AppCompatActivity {
         editText = findViewById(R.id.editTextNumber3);
         String endTime = editText.getText().toString();
 
-        db.checkEventTimesAction(v, activity, date, startTime, endTime,
+        //eventCreateActions already checks for thos
+        /*db.checkEventTimesAction(v, activity, date, startTime, endTime,
                 (boolean eventOverlaps) ->
                 {
                     System.out.println(eventOverlaps);
-                });
+                });*/
 
         //gives message based on which error occurred from incorrect regex format, etc. - if everything is correct, it creates an event
         db.eventCreateActions(eventName, v, activity, players, date, startTime, endTime,

@@ -32,20 +32,6 @@
             app:layout_constraintTop_toBottomOf="@+id/textView7" />
 
         <EditText
-            android:id="@+id/editTextNumber"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-
-            android:layout_marginTop="10dp"
-            android:ems="10"
-            android:hint="Date"
-            android:inputType="date"
-            android:minHeight="48dp"
-            app:layout_constraintEnd_toEndOf="@+id/editTextNumber5"
-            app:layout_constraintStart_toStartOf="@+id/editTextNumber5"
-            app:layout_constraintTop_toBottomOf="@+id/editTextNumber5" />
-
-        <EditText
             android:id="@+id/editTextNumber5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -70,20 +56,19 @@
             android:hint="Start Time"
             android:inputType="text"
             android:minHeight="48dp"
-            app:layout_constraintStart_toStartOf="@+id/editTextNumber"
-            app:layout_constraintTop_toBottomOf="@+id/editTextNumber" />
+            app:layout_constraintStart_toStartOf="@+id/editTextTextPersonName2"
+            app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName2" />
 
         <EditText
             android:id="@+id/editTextNumber3"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
             android:ems="10"
             android:hint="End Time"
             android:inputType="text"
             android:minHeight="48dp"
-            app:layout_constraintEnd_toEndOf="@+id/editTextNumber"
-            app:layout_constraintTop_toBottomOf="@+id/editTextNumber" />
+            app:layout_constraintEnd_toEndOf="@+id/editTextTextPersonName2"
+            app:layout_constraintTop_toTopOf="@+id/editTextNumber2" />
 
         <Button
             android:id="@+id/button8"
@@ -92,9 +77,10 @@
             android:onClick="eventActivity"
             android:text="Create Event"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/editTextNumber"
-            app:layout_constraintStart_toStartOf="@+id/editTextNumber"
-            app:layout_constraintTop_toBottomOf="@+id/editTextNumber2" />
+            app:layout_constraintEnd_toEndOf="@+id/editTextNumber3"
+            app:layout_constraintStart_toStartOf="@+id/editTextNumber2"
+            app:layout_constraintTop_toBottomOf="@+id/editTextNumber2"
+            app:layout_constraintVertical_bias="0.501" />
 
         <TextView
             android:id="@+id/textView"
@@ -153,6 +139,19 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView6" />
+
+        <EditText
+            android:id="@+id/editTextTextPersonName2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:ems="10"
+            android:hint="Date: YYYY-MM-DD"
+            android:inputType="textPersonName"
+            app:layout_constraintEnd_toEndOf="@+id/editTextNumber5"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/editTextNumber5"
+            app:layout_constraintTop_toBottomOf="@+id/editTextNumber5" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

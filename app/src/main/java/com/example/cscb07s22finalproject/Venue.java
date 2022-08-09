@@ -41,6 +41,7 @@ public class Venue implements Serializable {
         events.add(eventCode);
     }
 
+
     public void removeEvent(int eventCode){
         events.remove(eventCode);
         //Even if event is not in events list still say its removed anyways cause technically it has been removed from list

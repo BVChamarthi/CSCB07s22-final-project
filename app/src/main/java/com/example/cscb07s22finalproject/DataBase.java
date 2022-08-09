@@ -584,7 +584,7 @@ public final class DataBase {
             {
                 for(DataSnapshot dSnap : snapshot.getChildren())
                 {
-                    if(dSnap.child("venueName").getValue().toString().equals(parentVenue.getVenueName()) &&
+                    if(dSnap.child("parentVenue").child("venueName").getValue().toString().equals(parentVenue.getVenueName()) &&
                             dSnap.child("activity").getValue().toString().equals(activity) &&
                             dSnap.child("date").getValue().toString().equals(date))
                     {
@@ -616,6 +616,8 @@ public final class DataBase {
     {
         ref.child("users").child(username).child("username").setValue(username);
         ref.child("users").child(username).child("password").setValue(password);
+        ref.child("users").child(username).child("joinedEvents");
+        ref.child("users").child(username).child("scheduledEvents");
         ref.child("users").child(username).child("adminFlag").setValue(false);
 
         setUser(username, password, false);
@@ -697,7 +699,8 @@ public final class DataBase {
             ref.child("Venues").child(parentVenue.getVenueName()).child("Events").child(String.valueOf(parentVenue.getEvents().size())).setValue(events.size());
 
             // adding event in code
-            parentVenue.addEvent(events.size());
+            //addEvent calls db.getEvent().get(eventCode) which is basically events.get(events.size)
+            parentVenue.addEvent(events.size()-1);
             events.add(e);
             /*
              Need to use map according to StackExchange to append to database (not override)
