@@ -50,28 +50,36 @@ public class SingleAdapter extends RecyclerView.Adapter<SingleAdapter.SingleView
         }
 
         void bind(final int eventCode){
-            if(checkedPosition == getAdapterPosition()){
-                    imageView.setVisibility(View.VISIBLE);
-            }else{
+            if (checkedPosition == getAdapterPosition()) {
+                imageView.setVisibility(View.VISIBLE);
+            } else {
                 imageView.setVisibility(View.GONE);
             }
 
             //Change which part of Event is shown is each box. In this case, the toString()
             textView.setText(db.getEvents().get(eventCode).toString());
-            itemView.setOnClickListener(new View.OnClickListener(){
-                @Override
-                public void onClick(View v){
-                    imageView.setVisibility(View.VISIBLE);
-                    if(checkedPosition != getAdapterPosition()){
-                        notifyItemChanged(checkedPosition);
-                        checkedPosition = getAdapterPosition();
-                    } else {
-                        int i = checkedPosition;
-                        checkedPosition = -1;
-                        notifyItemChanged(i);
+
+            // Only shows checkmark if a customer
+            if(db.getUser() instanceof Customer) {
+                itemView.setOnClickListener(new View.OnClickListener(){
+                    @Override
+                    public void onClick(View v){
+                        imageView.setVisibility(View.VISIBLE);
+                        if(checkedPosition != getAdapterPosition()){
+                            notifyItemChanged(checkedPosition);
+                            checkedPosition = getAdapterPosition();
+                        } else {
+                            int i = checkedPosition;
+                            checkedPosition = -1;
+                            notifyItemChanged(i);
+                        }
                     }
-                }
-            });
+                });
+            }
+            else
+            {
+                imageView.setVisibility(View.GONE);
+            }
         }
     }
 
