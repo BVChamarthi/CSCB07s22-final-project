@@ -26,25 +26,20 @@ public class NewEventActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_event);
 
-//        Intent intent = getIntent();
-
-        // Retrieving the venue object that was passed in
-//        Bundle args = intent.getBundleExtra("BUNDLE");
-//        v = (Venue)args.getSerializable("VENUE");
-
         VenuesSpinner.connectSpinner(this,
                 findViewById(R.id.spinner3),
                 false,
                 selectedVenue-> {
+                    Toast.makeText(NewEventActivity.this, selectedVenue.getVenueAsString(), Toast.LENGTH_LONG).show();
                     v = selectedVenue;
                     Spinner spinner = findViewById(R.id.spinner);
-                    ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(
-                            this,
+                    ArrayAdapter<String> activitiesAdapter = new ArrayAdapter<>(
+                            NewEventActivity.this,
                             android.R.layout.simple_spinner_item,
                             v.getActivities()
                     );
-                    spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                    spinner.setAdapter(spinnerAdapter);
+                    activitiesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    spinner.setAdapter(activitiesAdapter);
                     spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                         @Override
                         public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -59,8 +54,6 @@ public class NewEventActivity extends AppCompatActivity {
                         }
                     });
                 });
-
-//        initSpinner();
     }
 
     public void eventActivity(View view)
@@ -80,12 +73,6 @@ public class NewEventActivity extends AppCompatActivity {
 
         editText = findViewById(R.id.editTextNumber3);
         String endTime = editText.getText().toString();
-
-        db.checkEventTimesAction(v, activity, date, startTime, endTime,
-                (boolean eventOverlaps) ->
-                {
-                    System.out.println(eventOverlaps);
-                });
 
         //gives message based on which error occurred from incorrect regex format, etc. - if everything is correct, it creates an event
         db.eventCreateActions(eventName, v, activity, players, date, startTime, endTime,
@@ -119,32 +106,4 @@ public class NewEventActivity extends AppCompatActivity {
                 });
 
     }
-
-    //front end code
-    //spinner that displays activities using the venue object passed in
-/*    private void initSpinner() {
-        Spinner spinner = findViewById(R.id.spinner);
-
-        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(
-                this,
-                android.R.layout.simple_spinner_item,
-                v.getActivities()
-        );
-
-        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(spinnerAdapter);
-        spinner.setOnItemSelectedListener(this);
-    }
-
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        String text = parent.getItemAtPosition(position).toString();
-        activity = text;
-        Toast.makeText(parent.getContext(), text, Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-
-    }*/
 }

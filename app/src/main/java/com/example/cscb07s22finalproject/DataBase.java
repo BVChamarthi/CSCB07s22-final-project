@@ -1,5 +1,7 @@
 package com.example.cscb07s22finalproject;
 
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 
 import com.google.firebase.database.DataSnapshot;
@@ -10,7 +12,6 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -25,7 +26,7 @@ public final class DataBase {
     private ArrayList<Venue> venues;
     private ArrayList<Event> events;
 
-    private final Venue defaultEntry;                       // default selection for spinner
+    private static Venue defaultEntry;                       // default selection for spinner
 
     private DataBase() {
         ref = FirebaseDatabase.getInstance().getReference();    // initialise ref to root of database
@@ -33,24 +34,68 @@ public final class DataBase {
         venues = new ArrayList<>();
         events = new ArrayList<>();
         dataFetched = false;
-        defaultEntry = new Venue("All Venues", null);
     }
     public static DataBase getInstance() {      // singleton getInstance()
-        if(db == null) db = new DataBase();
+        if(db == null) {
+            db = new DataBase();
+            defaultEntry = new Venue("All Venues", null);
+        }
         return db;
     }
 
     public DatabaseReference getRef() {return ref;}             // getter for ref
     public User getUser() {return user;}                        // getter for user
+
     public void setUser(String username, String password, boolean isAdmin) {    // setter for user (unsafe code)
         if (isAdmin) user = new Admin(username, password);
-        else user = new Customer(username, password);
+        else {
+            user = new Customer(username, password);
+            Customer c = (Customer) user;
+            ref.child("users").child(username).child("joinedEvents").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if(snapshot.exists()) {
+                        c.setJoinedEvents(new ArrayList<>());
+                        for (DataSnapshot snapshot1 : snapshot.getChildren())
+                            c.getJoinedEvents().add(snapshot1.getValue(Integer.class));
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+            ref.child("users").child(username).child("scheduledEvents").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if(snapshot.exists()) {
+                        c.setScheduledEvents(new ArrayList<>());
+                        for (DataSnapshot snapshot1 : snapshot.getChildren())
+                            c.getScheduledEvents().add(snapshot1.getValue(Integer.class));
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+        }
     }
     public ArrayList<Venue> getVenues() { return venues; }
     public ArrayList<Event> getEvents() { return events; }
     public void setDataFetched(boolean b) { dataFetched = b; }
     public boolean getDataFetched() { return dataFetched; }
     public Venue getDefaultEntry() { return defaultEntry; }
+
+    public ArrayList<Integer> constructEventsArray() {
+        ArrayList<Integer> ans = new ArrayList<>(events.size());
+        for(int i = 0; i < events.size(); i++) {
+            ans.add(i);
+        }
+        return ans;
+    }
 
     /*
         userActions(), takes in username, password and 4 lambda functions to execute under 4
@@ -238,121 +283,6 @@ public final class DataBase {
         void onCallBack(ArrayList<Event> events);
     }
 
-/*    public void viewEventAction(viewEventCallback callback)
-    {
-        // Setting numEvents back to zero so it updates correctly
-
-        // Using a valueEventListener so we can loop through DataSnapshot
-        ref.child("Events").addValueEventListener(new ValueEventListener()
-        {
-            // Storing all the events from the database in an ArrayList
-            ArrayList<Event> allEvents = new ArrayList<Event>();
-
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot)
-            {
-                String eventName;
-                String venueName;
-                String activity;
-                String date;
-                String startTime;
-                String endTime;
-                int curParticipants;
-                int maxParticipants;
-
-                for(DataSnapshot dSnap : snapshot.getChildren())
-                {
-                    // Getting all fields from a particular event
-                    eventName = dSnap.child("eventName").getValue().toString();
-                    venueName = dSnap.child("venueName").getValue().toString();
-                    activity = dSnap.child("activity").getValue().toString();
-                    date = dSnap.child("date").getValue().toString();
-                    startTime = dSnap.child("startTime").getValue().toString();
-                    endTime = dSnap.child("endTime").getValue().toString();
-                    curParticipants = Integer.parseInt(dSnap.child("curParticipants").getValue().toString());
-                    maxParticipants = Integer.parseInt(dSnap.child("maxParticipants").getValue().toString());
-
-                    // Inserting event into list
-                    allEvents.add(new Event(eventName, venueName, activity, date, startTime, endTime, curParticipants, maxParticipants));
-
-                    // Incrementing numEvents
-                }
-
-                // Using callback to send back all events
-                callback.onCallBack(allEvents);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-    }*/
-
-    public void viewUserEventAction(String eventType, viewEventCallback scheduledEventCallback)
-    {
-        // Using a valueEventListener so we can loop through DataSnapshot
-        ref.addValueEventListener(new ValueEventListener()
-        {
-            ArrayList<Integer> userEventCodes = new ArrayList<Integer>();
-            ArrayList<Event> userEvents = new ArrayList<Event>();
-
-            String eventName;
-            String venueName;
-            String activity;
-            String date;
-            String startTime;
-            String endTime;
-            int curParticipants;
-            int maxParticipants;
-
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot)
-            {
-                // Snapshot of user tree
-                DataSnapshot userTree = snapshot.child("users").child(user.getUsername());
-
-                // Snapshot of events
-                DataSnapshot eventTree = snapshot.child("Events");
-
-                if(userTree.hasChild(eventType))
-                {
-                    for(DataSnapshot dSchedSnap : userTree.child(eventType).getChildren())
-                    {
-                        userEventCodes.add(Integer.parseInt(dSchedSnap.getKey()));
-                    }
-                }
-
-                for(DataSnapshot dEventSnap : eventTree.getChildren())
-                {
-                    if(userEventCodes.contains(Integer.parseInt(dEventSnap.getKey())))
-                    {
-                        // Getting all fields from a particular event
-                        eventName = dEventSnap.child("eventName").getValue().toString();
-                        venueName = dEventSnap.child("venueName").getValue().toString();
-                        activity = dEventSnap.child("activity").getValue().toString();
-                        date = dEventSnap.child("date").getValue().toString();
-                        startTime = dEventSnap.child("startTime").getValue().toString();
-                        endTime = dEventSnap.child("endTime").getValue().toString();
-                        curParticipants = Integer.parseInt(dEventSnap.child("curParticipants").getValue().toString());
-                        maxParticipants = Integer.parseInt(dEventSnap.child("maxParticipants").getValue().toString());
-
-                        // Inserting event into list
-                        userEvents.add(new Event(eventName, null, activity, date, startTime, endTime, curParticipants, maxParticipants));
-                    }
-                }
-
-                // Using callback to send back all events
-                scheduledEventCallback.onCallBack(userEvents);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-    }
-
     public interface viewVenueCallback
     {
         // Using a separate onCallBack so that venues can be passed back to adapter
@@ -378,56 +308,6 @@ public final class DataBase {
         }
     }
 
-    public void viewVenueAction(viewVenueCallback callback)
-    {
-        // Using a valueEventListener so we can loop through DataSnapshot
-        ref.child("Venues").addValueEventListener(new ValueEventListener()
-        {
-            // Storing all the venues from the database in an ArrayList
-            ArrayList<Venue> allVenues = new ArrayList<Venue>();
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot)
-            {
-                ArrayList<String> activities;
-                ArrayList<Integer> eventCodes;
-                String venueName;
-
-                for(DataSnapshot dSnap : snapshot.getChildren())
-                {
-                    // Getting fields from a particular venue
-                    venueName = dSnap.child("venueName").getValue().toString();
-                    activities = new ArrayList<String>();
-                    eventCodes = new ArrayList<Integer>();
-
-                    // For every sport in that venue, add to an ArrayList
-                    for(DataSnapshot sportsDSnap : dSnap.child("sports").getChildren())
-                    {
-                        activities.add(sportsDSnap.getValue().toString());
-                    }
-
-                    // If that venue has any events, add to an ArrayList
-                    if(dSnap.hasChild("Events"))
-                    {
-                        for(DataSnapshot eventsDSnap : dSnap.child("Events").getChildren())
-                        {
-                            eventCodes.add(Integer.parseInt(eventsDSnap.getValue().toString()));
-                        }
-                    }
-
-                    allVenues.add(new Venue(venueName, activities, eventCodes));
-                }
-
-                // Using callback to send back all venues
-                callback.onCallBack(allVenues);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-    }
-
     public void readVenuesAndEvents(viewEventCallback eventCallback,
                                     viewVenueCallback venueCallback,
                                     stringCallBack msg){                // only used for debugging
@@ -437,7 +317,8 @@ public final class DataBase {
             venueCallback.onCallBack(venues);
             return;
         }
-
+        events = new ArrayList<>();
+        venues = new ArrayList<>();
         // get events
         ref.child("Events").get().addOnCompleteListener(eventsFetch -> {
             if(!eventsFetch.isSuccessful()) return; // if fetch failed, return
@@ -454,6 +335,8 @@ public final class DataBase {
                         endTime, curParticipants, maxParticipants));
             }
 
+            msg.onCallBack("Events " + events.size());
+
             eventsConnectionCheck ecc = eventsConnectionCheck.getInstance();
             ecc.reset();
             // get venues, attach events
@@ -462,7 +345,24 @@ public final class DataBase {
 
                 for( DataSnapshot venueRef : venuesFetch.getResult().getChildren()) {
                     String venueName = venueRef.child("venueName").getValue(String.class);
-                    ArrayList<String> activities = (ArrayList<String>) venueRef.child("activities").getValue();
+                    ArrayList<String> activities = new ArrayList<>();
+
+                    ref.child("Venues").child(venueName).child("sports").addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            if(snapshot.exists()){
+                                for(DataSnapshot snapshot1 : snapshot.getChildren())
+                                    activities.add(snapshot1.getValue(String.class));
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
+
+
                     Venue venue = new Venue(venueName, activities);
                     venues.add(venue);
 
@@ -470,14 +370,9 @@ public final class DataBase {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             if(snapshot.exists()) {
-                                ArrayList<Integer> eventCodes = (ArrayList<Integer>) snapshot.getValue();
-                                for(int i = 0; i < eventCodes.size(); i++) {
-                                    int j = Integer.parseInt(String.valueOf(eventCodes.get(i)));    // don't ask
-                                    venue.addEvent(j);
-                                    ecc.checkAndCall(() -> {
-                                        eventCallback.onCallBack(events);
-                                        venueCallback.onCallBack(venues);
-                                    });
+                                for(DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                                    int eventCode = dataSnapshot.getValue(Integer.class);
+                                    venue.addEvent(eventCode);
                                 }
                             }
                         }
@@ -488,6 +383,7 @@ public final class DataBase {
                         }
                     });
                 }
+                msg.onCallBack("Venues " + venues.size());
             });
         });
     }
@@ -520,7 +416,7 @@ public final class DataBase {
             {
                 for(DataSnapshot dSnap : snapshot.getChildren())
                 {
-                    if(dSnap.child("venueName").getValue().toString().equals(parentVenue.getVenueName()) &&
+                    if(dSnap.child("parentVenue").child("venueName").getValue().toString().equals(parentVenue.getVenueName()) &&
                             dSnap.child("activity").getValue().toString().equals(activity) &&
                             dSnap.child("date").getValue().toString().equals(date))
                     {
@@ -552,6 +448,8 @@ public final class DataBase {
     {
         ref.child("users").child(username).child("username").setValue(username);
         ref.child("users").child(username).child("password").setValue(password);
+        ref.child("users").child(username).child("joinedEvents");
+        ref.child("users").child(username).child("scheduledEvents");
         ref.child("users").child(username).child("adminFlag").setValue(false);
 
         setUser(username, password, false);
@@ -559,61 +457,43 @@ public final class DataBase {
 
     public void createVenue(String venueName, String[] activities){
         ref.child("Venues").child(venueName).child("venueName").setValue(venueName);
-        ref.child("Venues").child(venueName).child("sports").setValue(activities);
-
+        for(int i = 0; i < activities.length; i++){
+            ref.child("Venues").child(venueName).child("sports").child(String.valueOf(i)).setValue(activities[i]);
+        }
         venues.add(new Venue(venueName, new ArrayList<String>(Arrays.asList(activities))));
     }
 
-    public void joinEvent(Event selectedEvent,
+    public void joinEvent(int eventCode,
                           callBack alreadyJoinedCallBack,
                           callBack limitReachedCallBack){
-
-        if(selectedEvent.getCurParticipants() < selectedEvent.getMaxParticipants()){
-            if(events.contains(selectedEvent)){
+        Customer c = (Customer) user;
+        System.out.println(events.get(eventCode).getCurParticipants());
+        System.out.println(events.get(eventCode).getMaxParticipants());
+        if(events.get(eventCode).getCurParticipants() < events.get(eventCode).getMaxParticipants()){
+            if(c.getJoinedEvents().contains(eventCode)){
                 alreadyJoinedCallBack.onCallBack();
                 return;
             }
-            selectedEvent.addParticipant();
-            ref.child("users").child(user.getUsername()).child("joinedEvents").child(String.valueOf(events.indexOf(selectedEvent))).setValue(selectedEvent.getEventName());
-            ref.child("Events").child(String.valueOf(events.indexOf(selectedEvent))).child("curParticipants").setValue(selectedEvent.getCurParticipants());
-            Customer c = (Customer)user;
-            c.joinEvent(events.indexOf(selectedEvent));
+            events.get(eventCode).addParticipant();
+            ref.child("users")
+                    .child(user.getUsername())
+                    .child("joinedEvents")
+                    .child(String.valueOf(c.getJoinedEvents().size()))
+                    .setValue(eventCode);
+            ref.child("Events")
+                    .child(String.valueOf(eventCode))
+                    .child("curParticipants")
+                    .setValue(events.get(eventCode).getCurParticipants());
+            c.joinEvent(eventCode);
         } else limitReachedCallBack.onCallBack();
     }
-
-/*    public void createEvent(String eventName, Venue parentVenue, String activity, String date, String startTime, String endTime, String curParticipants, String maxParticipants){
-
-        // Creating an event object
-        // When passing in an object to Firebase, it will automatically add
-        // All fields as children. It is just easier this way.
-        Event e = new Event(eventName, parentVenue, activity, date, startTime, endTime, Integer.parseInt(curParticipants), Integer.parseInt(maxParticipants));
-
-        // adding event to firebase
-        ref.child("Events").child(String.valueOf(events.size())).setValue(e);
-        ref.child("Venues").child(parentVenue.getVenueName()).child("Events").child(String.valueOf(parentVenue.getEvents().size())).setValue(events.size());
-
-        // adding event in code
-        parentVenue.addEvent(e);
-        events.add(e);
-
-        // Adding eventCode to current user
-        if(user instanceof Customer)
-        {
-            // Need to use map according to StackExchange to append to database (not override)
-            // This will create a key:value pair, and appends it to the tree
-            // TODO: May fix tomorrow
-            HashMap<String, Object> map = new HashMap<>();
-            map.put(String.valueOf(events.size()), eventName);
-            ref.child("users").child(user.getUsername()).child("scheduledEvents").updateChildren(map);
-            //ref.child("users").child(user.getUsername()).child("scheduledEvents").setValue(((Customer)user).getScheduledEvents());
-        }
-    }*/
 
     public void createEvent(String eventName, Venue parentVenue, String activity, String date, String startTime, String endTime, String curParticipants, String maxParticipants){
 
         // Adding eventCode to current user
         if(user instanceof Customer)            // assumed true
         {
+            Customer c = (Customer) user;
             // Creating an event object
             // When passing in an object to Firebase, it will automatically add
             // All fields as children. It is just easier this way.
@@ -624,31 +504,21 @@ public final class DataBase {
             ref.child("Venues").child(parentVenue.getVenueName()).child("Events").child(String.valueOf(parentVenue.getEvents().size())).setValue(events.size());
 
             // adding event in code
-            parentVenue.addEvent(events.size());
+            //addEvent calls db.getEvent().get(eventCode) which is basically events.get(events.size)
+            parentVenue.addEvent(events.size()-1);
             events.add(e);
-            /*
-             Need to use map according to StackExchange to append to database (not override)
-             This will create a key:value pair, and appends it to the tree
-             TODO: May fix tomorrow
-            HashMap<String, Object> map = new HashMap<>();
-            map.put(String.valueOf(events.size()), eventName);
-            ref.child("users").child(user.getUsername()).child("scheduledEvents").updateChildren(map);
-            ref.child("users").child(user.getUsername()).child("scheduledEvents").setValue(((Customer)user).getScheduledEvents());
-            */
 
+            // set scheduled events in database
             ref.child("users").
                     child(user.getUsername()).
                     child("scheduledEvents").
-                    child(String.valueOf(((Customer) user).getScheduledEvents().size())).
+                    child(String.valueOf(c.getScheduledEvents().size())).
                     setValue(events.size()-1);
 
+            // set scheduled events in code
+            c.getScheduledEvents().add(events.size() - 1);
 
         }
-/*
-        // Adding eventCode to respective venue
-        parentVenue.addEventCodeToVenue(events.size());
-        ref.child("Venues").child(parentVenue.getVenueName()).child("Events").setValue(parentVenue.getCodes());
- */
     }
 }
 

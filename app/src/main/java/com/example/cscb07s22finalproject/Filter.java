@@ -10,30 +10,19 @@ import java.util.ArrayList;
 public class Filter {
     private DataBase db = DataBase.getInstance();
     private Venue compareVenue;
-    private boolean scheduledEvents;
-    private boolean joinedEvents;
     private boolean upcomingEvents;
 
-    public Filter(boolean scheduledEvents, boolean joinedEvents, boolean upcomingEvents) {
+    public Filter(boolean upcomingEvents) {
         this.compareVenue = db.getDefaultEntry();
-        this.scheduledEvents = scheduledEvents;
-        this.joinedEvents = joinedEvents;
         this.upcomingEvents = upcomingEvents;
     }
 
-    public void setFilter(Venue v,
-                          boolean scheduledEvents,
-                          boolean joinedEvents,
-                          boolean upcomingEvents) {
+    public void setFilter(Venue v, boolean upcomingEvents) {
         compareVenue = v;
-        this.scheduledEvents = scheduledEvents;
-        this.joinedEvents = joinedEvents;
         this.upcomingEvents = upcomingEvents;
     }
 
     public void setCompareVenue(Venue v) { compareVenue = v; }
-    public void setScheduledEvents(boolean b) { scheduledEvents = b; }
-    public void setJoinedEvents(boolean b) { joinedEvents = b; }
     public void setUpcomingEvents(boolean b) { upcomingEvents = b; }
 
     int[] extractDate(String date) {
@@ -46,7 +35,8 @@ public class Filter {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    private boolean filterPass(Event e) {
+    private boolean filterPass(int eventCode) {
+        Event e = db.getEvents().get(eventCode);
         if(compareVenue != db.getDefaultEntry() && e.getParentVenue() != compareVenue) return false;
 
         // TODO: check if event is scheduled or joined by customer (db.getUser())
@@ -73,10 +63,10 @@ public class Filter {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public ArrayList<Event> filterPass(ArrayList<Event> events) {
-        ArrayList<Event> filteredEvents = new ArrayList<>();
-        for(Event e : events) {
-            if(filterPass(e)) filteredEvents.add(e);
+    public ArrayList<Integer> filterPass(ArrayList<Integer> events) {
+        ArrayList<Integer> filteredEvents = new ArrayList<>();
+        for(int code : events) {
+            if(filterPass(code)) filteredEvents.add(code);
         }
         return filteredEvents;
     }

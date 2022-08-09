@@ -14,28 +14,28 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class SingleAdapter extends RecyclerView.Adapter<SingleAdapter.SingleViewHolder>{
-    /*
-    Important methods:
-        line 59: Change which part of Event is shown is each box
-     */
-
     DataBase db = DataBase.getInstance();
 
     private Context context;
-    private ArrayList<Event> events;
+    private ArrayList<Integer> events;
+    private boolean checkMark;
     private int checkedPosition; //-1: no default selection, 0: 1st item selected
 
-    public SingleAdapter(Context context, ArrayList<Event> events) {    // pass in copy of events array when getting from db
+    public SingleAdapter(Context context, ArrayList<Integer> events) {    // pass in copy of events array when getting from db
         this.context = context;
         this.events = events;
         checkedPosition = -1;
+        checkMark=true;
     }
 
+
     //initializes array of events
-    public void SetEvents(ArrayList<Event> events){
+    public void SetEvents(ArrayList<Integer> events){
         this.events = events;
         notifyDataSetChanged();
     }
+
+    public void setCheckMark(boolean tf){ checkMark = tf;}
 
     // Billy's work - for adapter till end
     class SingleViewHolder extends RecyclerView.ViewHolder{
@@ -49,7 +49,10 @@ public class SingleAdapter extends RecyclerView.Adapter<SingleAdapter.SingleView
             imageView = itemView.findViewById(R.id.imageview);
         }
 
-        void bind(final Event event){
+
+
+
+        void bind(final int eventCode){
             if(checkedPosition == getAdapterPosition()){
                     imageView.setVisibility(View.VISIBLE);
             }else{
@@ -57,11 +60,13 @@ public class SingleAdapter extends RecyclerView.Adapter<SingleAdapter.SingleView
             }
 
             //Change which part of Event is shown is each box. In this case, the toString()
-            textView.setText(event.toString());
+            textView.setText(db.getEvents().get(eventCode).toString());
             itemView.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View v){
-                    imageView.setVisibility(View.VISIBLE);
+                    if(checkMark){
+                        imageView.setVisibility(View.VISIBLE);
+                    }
                     if(checkedPosition != getAdapterPosition()){
                         notifyItemChanged(checkedPosition);
                         checkedPosition = getAdapterPosition();
@@ -76,11 +81,11 @@ public class SingleAdapter extends RecyclerView.Adapter<SingleAdapter.SingleView
     }
 
     // Returns the event object that is selected by the user (indicated by the checkmark)
-    public Event getSelected(){
-        if(checkedPosition != -1){
-            return events.get(checkedPosition);
+    public int getSelected(){
+        if(checkedPosition == -1){
+            return -1;
         }
-        return null;
+        return events.get(checkedPosition);
     }
 
     public void printEvents()

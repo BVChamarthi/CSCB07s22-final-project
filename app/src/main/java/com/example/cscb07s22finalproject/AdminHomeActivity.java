@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -19,6 +20,7 @@ public class AdminHomeActivity extends AppCompatActivity {
 
     private SingleAdapter eventsAdapter;
 
+    @SuppressLint("UseSwitchCompatOrMaterialCode")
     private Switch upcomingEvents;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -32,7 +34,7 @@ public class AdminHomeActivity extends AppCompatActivity {
 
         initRecyclerView();
 
-        Filter filter = new Filter(false, false, false);
+        Filter filter = new Filter(false);
 
         // initialise spinner
         VenuesSpinner.connectSpinner(this,                          // connect the spinner
@@ -40,14 +42,14 @@ public class AdminHomeActivity extends AppCompatActivity {
                 true,                                       // if you don't want "All venues" option, set this to false
                 selectedVenue -> {                                          // callback with the selected venue whenever it changes
                     filter.setCompareVenue(selectedVenue);
-                    eventsAdapter.SetEvents(filter.filterPass(db.getEvents()));
+                    eventsAdapter.SetEvents(filter.filterPass(db.constructEventsArray()));
                 });
 
         // initialise upcoming events switch
         upcomingEvents = findViewById(R.id.switch4);
         upcomingEvents.setOnClickListener(view -> {
             filter.setUpcomingEvents(upcomingEvents.isChecked());
-            eventsAdapter.SetEvents(filter.filterPass(db.getEvents()));
+            eventsAdapter.SetEvents(filter.filterPass(db.constructEventsArray()));
         });
     }
 
@@ -60,7 +62,8 @@ public class AdminHomeActivity extends AppCompatActivity {
         recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
 
         // By setting the adapter to the recycleView, it is able to display all events after updating the event list of the adapter
-        eventsAdapter = new SingleAdapter(this, db.getEvents());
+        eventsAdapter = new SingleAdapter(this, db.constructEventsArray());
+        eventsAdapter.setCheckMark(false);
         recyclerView.setAdapter(eventsAdapter);
 
     }

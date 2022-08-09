@@ -8,7 +8,6 @@ public class Venue implements Serializable {
 
     String venueName;
     ArrayList<String> activities;
-//    ArrayList<Event> events;
     ArrayList<Integer> events;
 
 
@@ -24,26 +23,13 @@ public class Venue implements Serializable {
         this.events = events;
     }
 
-    public int addEvent(int eventCode)
+    public void addEvent(int eventCode)
     {
-        /*
-        //Not sure if .contains() properly compares two objs, might have to change 2nd predicate
-        // implemented Event.equals(), hopefully events are compared properly now
-        if(activities.contains(event.getActivity()) && !(events.contains(event))){
-            event.setParentVenue(this);
-            events.add(event);
-            return 0;
-        } else return 1;
-
-         */
         Event event = db.getEvents().get(eventCode);
-        if(activities.contains(event.getActivity()) && !(events.contains(eventCode))) {
-            event.setParentVenue(this);
-            events.add(eventCode);
-            return 0;
-        }
-        else return 1;
+        event.setParentVenue(this);
+        events.add(eventCode);
     }
+
 
     public void removeEvent(int eventCode){
         events.remove(eventCode);
@@ -72,16 +58,6 @@ public class Venue implements Serializable {
 
     public void setVenueName(String venueName) { this.venueName = venueName; }
 
-/*
-    public void addEventCodeToVenue(int eventCode)
-    {
-        codes.add(eventCode);
-    }
-
-    public ArrayList<Integer> getCodes() {
-        return codes;
-    }
-*/
     public ArrayList<Integer> getEvents() { return events; }
 
     @Override
