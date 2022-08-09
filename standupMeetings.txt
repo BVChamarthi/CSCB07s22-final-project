@@ -51,3 +51,8 @@ August 7th:
 =======
 - Billy added a search bar to filter events and venues by name
 >>>>>>> story-3
+
+August 8th:
+- The group met in person for a meeting to discuss plans for the next two days
+- Laksh finished user story 2
+- Bharath refactored the code, finishing up the coding portion of the project
