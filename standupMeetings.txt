@@ -53,3 +53,7 @@ August 8th:
 - Laksh finished user story 2
 - Bharath refactored the code, finishing up the coding portion of the project
 - Billy tested the code and fixed creating event
+
+August 9th:
+- Ashtian tested and fixed bugs in the code
+- Keerthiha created a design for the app
