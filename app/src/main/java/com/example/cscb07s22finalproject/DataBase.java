@@ -1,5 +1,7 @@
 package com.example.cscb07s22finalproject;
 
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 
 import com.google.firebase.database.DataSnapshot;
@@ -43,9 +45,43 @@ public final class DataBase {
 
     public DatabaseReference getRef() {return ref;}             // getter for ref
     public User getUser() {return user;}                        // getter for user
+
     public void setUser(String username, String password, boolean isAdmin) {    // setter for user (unsafe code)
         if (isAdmin) user = new Admin(username, password);
-        else user = new Customer(username, password);
+        else {
+            user = new Customer(username, password);
+            Customer c = (Customer) user;
+            ref.child("users").child(username).child("joinedEvents").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if(snapshot.exists()) {
+                        c.setJoinedEvents(new ArrayList<>());
+                        for (DataSnapshot snapshot1 : snapshot.getChildren())
+                            c.getJoinedEvents().add(snapshot1.getValue(Integer.class));
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+            ref.child("users").child(username).child("scheduledEvents").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if(snapshot.exists()) {
+                        c.setScheduledEvents(new ArrayList<>());
+                        for (DataSnapshot snapshot1 : snapshot.getChildren())
+                            c.getScheduledEvents().add(snapshot1.getValue(Integer.class));
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+        }
     }
     public ArrayList<Venue> getVenues() { return venues; }
     public ArrayList<Event> getEvents() { return events; }
@@ -581,13 +617,20 @@ public final class DataBase {
         Customer c = (Customer) user;
 
         if(events.get(eventCode).getCurParticipants() < events.get(eventCode).getMaxParticipants()){
-            if(c.getScheduledEvents().contains(eventCode)){
+            if(c.getJoinedEvents().contains(eventCode)){
                 alreadyJoinedCallBack.onCallBack();
                 return;
             }
             events.get(eventCode).addParticipant();
-            ref.child("users").child(user.getUsername()).child("joinedEvents").child(String.valueOf(eventCode)).setValue(events.get(eventCode).getEventName());
-            ref.child("Events").child(String.valueOf(eventCode)).child("curParticipants").setValue(events.get(eventCode).getCurParticipants());
+            ref.child("users")
+                    .child(user.getUsername())
+                    .child("joinedEvents")
+                    .child(String.valueOf(c.getJoinedEvents().size()))
+                    .setValue(eventCode);
+            ref.child("Events")
+                    .child(String.valueOf(eventCode))
+                    .child("curParticipants")
+                    .setValue(events.get(eventCode).getCurParticipants());
             c.joinEvent(eventCode);
         } else limitReachedCallBack.onCallBack();
     }

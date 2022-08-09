@@ -91,21 +91,23 @@ public class UserHomeActivity extends AppCompatActivity
             eventsAdapter.SetEvents(filter.filterPass(db.constructEventsArray()));
         });
 
+        ShowToast(c.getJoinedEvents().toString());
+
         // initialise upcoming events switch
         upcomingEvents = findViewById(R.id.switch3);
         upcomingEvents.setOnClickListener(view -> {
             filter.setUpcomingEvents(upcomingEvents.isChecked());
-            eventsAdapter.SetEvents(filter.filterPass(db.constructEventsArray()));
+            eventsAdapter.SetEvents(filter.filterPass(getEvents()));
         });
 
         // initialise scheduled and joined events switches
         scheduledEvents = findViewById(R.id.switch1);
         joinedEvents = findViewById(R.id.switch2);
         scheduledEvents.setOnClickListener( view -> {
-            eventsAdapter.SetEvents(filter.filterPass(getScheduledEventsAndJoinedEvents()));
+            eventsAdapter.SetEvents(filter.filterPass(getEvents()));
         });
         joinedEvents.setOnClickListener( view -> {
-            eventsAdapter.SetEvents(filter.filterPass(getScheduledEventsAndJoinedEvents()));
+            eventsAdapter.SetEvents(filter.filterPass(getEvents()));
         });
 
         btn.setOnClickListener(view -> {
@@ -116,6 +118,7 @@ public class UserHomeActivity extends AppCompatActivity
                 db.joinEvent(selectedEvent,
                         () -> {ShowToast("Already Joined Event");},
                         () -> {ShowToast("Max Participants reached");});
+                eventsAdapter.notifyDataSetChanged();
 
                 // Starting the activity to create a new event
                 // To do so, we need to pass the venue object that is selected, which is
@@ -129,11 +132,15 @@ public class UserHomeActivity extends AppCompatActivity
         });
     }
 
-    private ArrayList<Integer> getScheduledEventsAndJoinedEvents() {
+    private ArrayList<Integer> getEvents() {
         ArrayList<Integer> displayEvents;
-        if(scheduledEvents.isChecked()) displayEvents = new ArrayList<>(c.getScheduledEvents());
-        else displayEvents = new ArrayList<>();
-        if(joinedEvents.isChecked()) displayEvents.addAll(c.getJoinedEvents());
+        if(!scheduledEvents.isChecked() && !joinedEvents.isChecked()) displayEvents = new ArrayList<>(db.constructEventsArray());
+        else {
+            if (scheduledEvents.isChecked())
+                displayEvents = new ArrayList<>(c.getScheduledEvents());
+            else displayEvents = new ArrayList<>();
+            if (joinedEvents.isChecked()) displayEvents.addAll(c.getJoinedEvents());
+        }
         return displayEvents;
     }
 

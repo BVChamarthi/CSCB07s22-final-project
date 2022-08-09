@@ -36,15 +36,14 @@ public class NewEventActivity extends AppCompatActivity {
                 findViewById(R.id.spinner3),
                 false,
                 selectedVenue-> {
-                    v = selectedVenue;
                     Spinner spinner = findViewById(R.id.spinner);
-                    ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(
-                            this,
+                    ArrayAdapter<String> activitiesAdapter = new ArrayAdapter<>(
+                            NewEventActivity.this,
                             android.R.layout.simple_spinner_item,
-                            v.getActivities()
+                            selectedVenue.getActivities()
                     );
-                    spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                    spinner.setAdapter(spinnerAdapter);
+                    activitiesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    spinner.setAdapter(activitiesAdapter);
                     spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                         @Override
                         public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
