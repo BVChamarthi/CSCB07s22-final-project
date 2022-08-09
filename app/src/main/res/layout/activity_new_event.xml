@@ -12,11 +12,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
-
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
         tools:context=".NewEventActivity">
 
 
@@ -29,7 +29,7 @@
             android:hint="Event Name"
             android:inputType="textPersonName"
             android:textColor="@color/white"
-            android:textColorHint="@color/material_dynamic_neutral70"
+            android:textColorHint="#757575"
             app:layout_constraintEnd_toEndOf="@+id/editTextNumber5"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/editTextNumber5"
@@ -46,7 +46,7 @@
             android:inputType="number"
             android:minHeight="48dp"
             android:textColor="@color/white"
-            android:textColorHint="@color/material_dynamic_neutral70"
+            android:textColorHint="#757575"
 
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.502"
@@ -59,11 +59,12 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:ems="10"
-            android:hint="Start Time"
+            android:hint="Start HH:MM"
             android:inputType="text"
             android:minHeight="48dp"
             android:textColor="@color/white"
-            android:textColorHint="@color/material_dynamic_neutral70"
+            android:textColorHint="#757575"
+            android:textSize="16sp"
             app:layout_constraintStart_toStartOf="@+id/editTextTextPersonName2"
             app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName2" />
 
@@ -72,11 +73,12 @@
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:hint="End Time"
+            android:hint="End HH:MM"
             android:inputType="text"
             android:minHeight="48dp"
             android:textColor="@color/white"
-            android:textColorHint="@color/material_dynamic_neutral70"
+            android:textColorHint="#757575"
+            android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="@+id/editTextTextPersonName2"
             app:layout_constraintTop_toTopOf="@+id/editTextNumber2" />
 
@@ -112,6 +114,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="26dp"
             android:layout_marginRight="26dp"
+            android:background="@android:drawable/spinner_dropdown_background"
             app:layout_constraintBottom_toBottomOf="@+id/textView6"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/spinner"
@@ -125,6 +128,7 @@
             android:layout_marginLeft="26dp"
             android:layout_marginEnd="26dp"
             android:layout_marginRight="26dp"
+            android:background="@android:drawable/spinner_dropdown_background"
             app:layout_constraintBottom_toBottomOf="@+id/textView7"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/textView7"
@@ -167,11 +171,33 @@
             android:hint="Date: YYYY-MM-DD"
             android:inputType="textPersonName"
             android:textColor="@color/white"
-            android:textColorHint="@color/material_dynamic_neutral70"
+            android:textColorHint="#757575"
             app:layout_constraintEnd_toEndOf="@+id/editTextNumber5"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/editTextNumber5"
             app:layout_constraintTop_toBottomOf="@+id/editTextNumber5" />
+
+        <ImageView
+            android:id="@+id/imageView6"
+            android:layout_width="147dp"
+            android:layout_height="159dp"
+            android:layout_marginStart="36dp"
+            android:layout_marginLeft="36dp"
+            android:layout_marginBottom="24dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:srcCompat="@drawable/volley" />
+
+        <ImageView
+            android:id="@+id/imageView7"
+            android:layout_width="141dp"
+            android:layout_height="124dp"
+            android:layout_marginTop="200dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/soccer" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
