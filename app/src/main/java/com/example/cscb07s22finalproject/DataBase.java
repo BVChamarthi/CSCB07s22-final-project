@@ -491,6 +491,9 @@ public final class DataBase {
         ref.child("Events").get().addOnCompleteListener(eventsFetch -> {
             if(!eventsFetch.isSuccessful()) return; // if fetch failed, return
 
+            events = new ArrayList<>();
+            venues = new ArrayList<>();
+
             for( DataSnapshot eventRef : eventsFetch.getResult().getChildren()) {
                 String eventName = eventRef.child("eventName").getValue(String.class);
                 String activity = eventRef.child("activity").getValue(String.class);

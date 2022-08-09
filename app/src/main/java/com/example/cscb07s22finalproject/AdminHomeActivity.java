@@ -63,6 +63,7 @@ public class AdminHomeActivity extends AppCompatActivity {
 
         // By setting the adapter to the recycleView, it is able to display all events after updating the event list of the adapter
         eventsAdapter = new SingleAdapter(this, db.constructEventsArray());
+        eventsAdapter.setCheckMark(false);
         recyclerView.setAdapter(eventsAdapter);
 
     }

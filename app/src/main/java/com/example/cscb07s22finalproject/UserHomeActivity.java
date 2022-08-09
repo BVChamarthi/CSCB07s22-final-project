@@ -35,20 +35,12 @@ import java.util.ArrayList;
 
 public class UserHomeActivity extends AppCompatActivity
 {
-    /*
-    Important methods:
-        CreateList(): fill Event items with info
-        line 52: what happens after join button is clicked
-     */
     DataBase db = DataBase.getInstance();
     Customer c;
 
     private SingleAdapter eventsAdapter;
     private Button btn;
 
-/*    private String selectedFilter = "all";
-    private String currentSearchText = "";
-    private SearchView searchView;*/
     @SuppressLint("UseSwitchCompatOrMaterialCode")
     private Switch upcomingEvents;
     @SuppressLint("UseSwitchCompatOrMaterialCode")
@@ -69,15 +61,7 @@ public class UserHomeActivity extends AppCompatActivity
 
         btn = findViewById(R.id.buttonGetSelect);
 
-//        initSearchWidget();
         initRecyclerView();
-
-        //db.fetchUserScheduledEvents();
-
-//        TextView usernameText = findViewById(R.id.textView4);
-//        usernameText.setText(db.getUser().toString());
-
-        //eventsAdapter.printEvents();
 
         // initialise filter
         Filter filter = new Filter(false);
@@ -90,8 +74,6 @@ public class UserHomeActivity extends AppCompatActivity
             filter.setCompareVenue(selectedVenue);
             eventsAdapter.SetEvents(filter.filterPass(db.constructEventsArray()));
         });
-
-        ShowToast(c.getJoinedEvents().toString());
 
         // initialise upcoming events switch
         upcomingEvents = findViewById(R.id.switch3);
@@ -158,22 +140,7 @@ public class UserHomeActivity extends AppCompatActivity
         eventsAdapter = new SingleAdapter(this, db.constructEventsArray());
         recyclerView.setAdapter(eventsAdapter);
 
-        //this updates the event list so that all events are in the array, ready to be displayed by adapter
-//        updateEventsList();
-
     }
-
-/*    // Gets snapshot of events at current time and gives it to adapter for displaying
-    public void updateEventsList()
-    {
-//        Toast.makeText(this, String.valueOf(db.getDataFetched()), Toast.LENGTH_LONG).show();
-
-        db.readVenuesAndEvents(
-                events -> {
-                    eventsAdapter.SetEvents(new ArrayList<>(events));
-                },
-                venues -> {}, str -> {});
-    }*/
 
 
     private void ShowToast(String msg){
@@ -190,11 +157,4 @@ public class UserHomeActivity extends AppCompatActivity
         Intent intent = new Intent(this, NewEventActivity.class);
         startActivity(intent);
     }
-/*
-    public void newMyEventActivity(View view) {
-        Intent intent = new Intent(this, MyEventsActivity.class);
-        startActivity(intent);
-    }
-
- */
 }

@@ -23,12 +23,18 @@ public class SingleAdapter extends RecyclerView.Adapter<SingleAdapter.SingleView
 
     private Context context;
     private ArrayList<Integer> events;
+    private boolean checkMark;
     private int checkedPosition; //-1: no default selection, 0: 1st item selected
 
     public SingleAdapter(Context context, ArrayList<Integer> events) {    // pass in copy of events array when getting from db
         this.context = context;
         this.events = events;
         checkedPosition = -1;
+        checkMark = true;
+    }
+
+    public void setCheckMark(boolean checkMark) {
+        this.checkMark = checkMark;
     }
 
     //initializes array of events
@@ -61,7 +67,9 @@ public class SingleAdapter extends RecyclerView.Adapter<SingleAdapter.SingleView
             itemView.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View v){
-                    imageView.setVisibility(View.VISIBLE);
+                    if(checkMark){
+                        imageView.setVisibility(View.VISIBLE);
+                    }
                     if(checkedPosition != getAdapterPosition()){
                         notifyItemChanged(checkedPosition);
                         checkedPosition = getAdapterPosition();
@@ -77,7 +85,10 @@ public class SingleAdapter extends RecyclerView.Adapter<SingleAdapter.SingleView
 
     // Returns the event object that is selected by the user (indicated by the checkmark)
     public int getSelected(){
-        return checkedPosition;
+        if(checkedPosition == -1){
+            return -1;
+        }
+        return events.get(checkedPosition);
     }
 
     public void printEvents()
