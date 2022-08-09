@@ -513,7 +513,24 @@ public final class DataBase {
 
                 for( DataSnapshot venueRef : venuesFetch.getResult().getChildren()) {
                     String venueName = venueRef.child("venueName").getValue(String.class);
-                    ArrayList<String> activities = (ArrayList<String>) venueRef.child("activities").getValue();
+                    ArrayList<String> activities = new ArrayList<>();
+
+                    ref.child("Venues").child(venueName).child("sports").addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            if(snapshot.exists()){
+                                for(DataSnapshot snapshot1 : snapshot.getChildren())
+                                    activities.add(snapshot1.getValue(String.class));
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
+
+
                     Venue venue = new Venue(venueName, activities);
                     venues.add(venue);
 

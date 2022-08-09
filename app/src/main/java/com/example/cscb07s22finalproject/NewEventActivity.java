@@ -36,11 +36,13 @@ public class NewEventActivity extends AppCompatActivity {
                 findViewById(R.id.spinner3),
                 false,
                 selectedVenue-> {
+                    Toast.makeText(NewEventActivity.this, selectedVenue.getVenueAsString(), Toast.LENGTH_LONG).show();
+                    v = selectedVenue;
                     Spinner spinner = findViewById(R.id.spinner);
                     ArrayAdapter<String> activitiesAdapter = new ArrayAdapter<>(
                             NewEventActivity.this,
                             android.R.layout.simple_spinner_item,
-                            selectedVenue.getActivities()
+                            v.getActivities()
                     );
                     activitiesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     spinner.setAdapter(activitiesAdapter);
