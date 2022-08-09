@@ -1,8 +1,10 @@
 package com.example.cscb07s22finalproject;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -64,6 +66,8 @@ public class NewEventActivity extends AppCompatActivity {
 //        initSpinner();
     }
 
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public void eventActivity(View view)
     {
         //gets all values from text boxes and stores as needed
@@ -106,6 +110,11 @@ public class NewEventActivity extends AppCompatActivity {
                 () -> {     // incorrect max players name format
                     Toast.makeText(NewEventActivity.this, "Invalid: max players must be a number greater than 0", Toast.LENGTH_LONG).show();
                 },
+                () -> {     // Creating an event in the past
+                    System.out.println("Invalid: Cannot create an event in the past");
+                    Toast.makeText(NewEventActivity.this, "Invalid: Cannot create an event in the past", Toast.LENGTH_LONG).show();
+                }
+                ,
                 () -> {     // incorrect time period - the end time is before the start time
                     Toast.makeText(NewEventActivity.this, "Invalid: end time must be after the start time", Toast.LENGTH_LONG).show();
                 },

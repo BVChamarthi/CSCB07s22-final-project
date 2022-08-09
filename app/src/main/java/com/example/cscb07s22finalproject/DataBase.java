@@ -1,8 +1,10 @@
 package com.example.cscb07s22finalproject;
 
+import android.os.Build;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -187,6 +189,17 @@ public final class DataBase {
         });
     }
 
+    // Copied from filter code
+    int[] extractDate(String date) {
+        String[] yyyymmddIntermadiate = date.split("-");
+        int[] yyyymmdd = {0, 0, 0};
+        for(int i =0; i < 3; i++) {
+            yyyymmdd[i] = Integer.parseInt(yyyymmddIntermadiate[i]);
+        }
+        return yyyymmdd;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public void eventCreateActions(String eventName,
                                    Venue parentVenue,
                                    String activity, String players,
@@ -198,6 +211,7 @@ public final class DataBase {
                                    callBack incorrectDateFormat,
                                    callBack incorrectNameFormat,
                                    callBack incorrectPlayersFormat,
+                                   callBack incorrectDatePeriod,
                                    callBack incorrectTimePeriod,
                                    callBack eventsOverlap,
                                    callBack eventCreate
@@ -239,6 +253,22 @@ public final class DataBase {
             return;
         }
 
+        // if date is in the past
+        int[] eventDate = extractDate(date);
+        int[] currentDate = extractDate(String.valueOf(java.time.LocalDate.now()));
+
+        // If event is in a past year
+        if((eventDate[0] < currentDate[0]) ||
+                // If event is in a past month
+            (eventDate[0] == currentDate[0] && eventDate[1] < currentDate[1]) ||
+                    // If event is in a past day
+                ((eventDate[0] == currentDate[0] && eventDate[1] == currentDate[1]) && eventDate[2] < currentDate[2])
+        )
+        {
+            incorrectDatePeriod.onCallBack();
+            return;
+        }
+
         // if event name doesn't match regex
         if(!matcher_eventName.matches()){
             incorrectNameFormat.onCallBack();
@@ -268,10 +298,12 @@ public final class DataBase {
                     if(eventOverlaps)
                     {
                         eventsOverlap.onCallBack();
+                        return;
                     }
-                   else
+                    else
                     {
                         eventCreate.onCallBack();
+                        return;
                     }
                 });
 
@@ -570,9 +602,10 @@ public final class DataBase {
 
     public void checkEventTimesAction(Venue parentVenue, String activity, String date, String startTime, String endTime, checkEventTimesCallback callback)
     {
-        // Using a valueEventListener so we can loop through DataSnapshot
-        ref.child("Events").addValueEventListener(new ValueEventListener()
-        {
+        // get events
+        ref.child("Events").get().addOnCompleteListener(eventsFetch -> {
+            if (!eventsFetch.isSuccessful()) return; // if fetch failed, return
+
             boolean eventTimeOverlaps = false;
 
             String startLoopedEventStr;
@@ -585,36 +618,26 @@ public final class DataBase {
             int startPassedEvent = Integer.parseInt(startTime.substring(0,2))*100 + Integer.parseInt(startTime.substring(3));
             int endPassedEvent = Integer.parseInt(endTime.substring(0,2))*100 + Integer.parseInt(endTime.substring(3));
 
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot)
+            for (DataSnapshot dSnap : eventsFetch.getResult().getChildren())
             {
-                for(DataSnapshot dSnap : snapshot.getChildren())
+                if(dSnap.child("parentVenue").child("venueName").getValue().toString().equals(parentVenue.getVenueName()) &&
+                        dSnap.child("activity").getValue().toString().equals(activity) &&
+                        dSnap.child("date").getValue().toString().equals(date))
                 {
-                    if(dSnap.child("parentVenue").child("venueName").getValue().toString().equals(parentVenue.getVenueName()) &&
-                            dSnap.child("activity").getValue().toString().equals(activity) &&
-                            dSnap.child("date").getValue().toString().equals(date))
+                    startLoopedEventStr = dSnap.child("startTime").getValue().toString();
+                    startLoopedEvent = Integer.parseInt(startLoopedEventStr.substring(0,2))*100 + Integer.parseInt(startLoopedEventStr.substring(3));
+
+                    endLoopedEventStr = dSnap.child("endTime").getValue().toString();
+                    endLoopedEvent = Integer.parseInt(endLoopedEventStr.substring(0,2))*100 + Integer.parseInt(endLoopedEventStr.substring(3));
+
+                    if((startPassedEvent < endLoopedEvent) && (startLoopedEvent < endPassedEvent))
                     {
-                        startLoopedEventStr = dSnap.child("startTime").getValue().toString();
-                        startLoopedEvent = Integer.parseInt(startLoopedEventStr.substring(0,2))*100 + Integer.parseInt(startLoopedEventStr.substring(3));
-
-                        endLoopedEventStr = dSnap.child("endTime").getValue().toString();
-                        endLoopedEvent = Integer.parseInt(endLoopedEventStr.substring(0,2))*100 + Integer.parseInt(endLoopedEventStr.substring(3));
-
-                        if((startPassedEvent < endLoopedEvent) && (startLoopedEvent < endPassedEvent))
-                        {
-                            eventTimeOverlaps = true;
-                        }
+                        eventTimeOverlaps = true;
                     }
                 }
-
-                // Using callback to send back check
-                callback.onCallBack(eventTimeOverlaps);
             }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
+            callback.onCallBack(eventTimeOverlaps);
         });
     }
 
