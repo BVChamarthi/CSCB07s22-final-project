@@ -29,7 +29,6 @@ August 3rd:
 - Sorted out upcoming roles
 
 August 4th:
-<<<<<<< HEAD
 - Billy added a search bar to filter events and venues by name - also worked on front-end layout for user story 2
 - Keerthiha and Ashtian began working on User Story 2 together, attempted to retrieve data from database
 
@@ -48,11 +47,9 @@ August 7th:
 - Bharath refactored the code in each user story branch done so far
 - Bharath finished user story 7
 - Laksh and Aidan worked on user story 3
-=======
-- Billy added a search bar to filter events and venues by name
->>>>>>> story-3
 
 August 8th:
 - The group met in person for a meeting to discuss plans for the next two days
 - Laksh finished user story 2
 - Bharath refactored the code, finishing up the coding portion of the project
+- Billy tested the code and fixed creating event
