@@ -105,7 +105,7 @@ public class NewEventActivity extends AppCompatActivity {
                     Toast.makeText(NewEventActivity.this, "Invalid: format of date is incorrect", Toast.LENGTH_LONG).show();
                 },
                 () -> {     // incorrect event name format
-                    Toast.makeText(NewEventActivity.this, "Invalid: event name must be more than 1 character", Toast.LENGTH_LONG).show();
+                    Toast.makeText(NewEventActivity.this, "Invalid: event name must be one or more words", Toast.LENGTH_LONG).show();
                     },
                 () -> {     // incorrect max players name format
                     Toast.makeText(NewEventActivity.this, "Invalid: max players must be a number greater than 0", Toast.LENGTH_LONG).show();

@@ -162,7 +162,7 @@ public final class DataBase {
                             callBack venueExists
     ) {
 
-        Pattern pattern = Pattern.compile("(\\w+\\s?)+");
+        Pattern pattern = Pattern.compile("\\w+(\\s\\w+)*");
         Matcher matcher_venueName = pattern.matcher(venueName);
 
         // check formatting,
@@ -228,7 +228,7 @@ public final class DataBase {
         Matcher matcher_date = pattern2.matcher(date);
 
         //event name regex
-        Pattern pattern3 = Pattern.compile(".+");
+        Pattern pattern3 = Pattern.compile("\\w+(\\s\\w+)*");
         Matcher matcher_eventName = pattern3.matcher(eventName);
 
         //max players regex
