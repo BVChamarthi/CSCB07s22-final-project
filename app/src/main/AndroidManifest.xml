@@ -20,7 +20,7 @@
             <!-- The meta-data tag is required if you support API level 15 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".UserHomeActivity" />
+                android:value=".AdminHomeActivity" />
         </activity>
         <activity
             android:name=".NewVenueActivity"
@@ -37,15 +37,6 @@
         <activity
             android:name=".UserHomeActivity"
             android:exported="false" />
-        <activity
-            android:name=".SignUpActivity"
-            android:parentActivityName=".MainActivity">
-
-            <!-- The meta-data tag is required if you support API level 15 and lower -->
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
-        </activity>
         <activity
             android:name=".MainActivity"
             android:exported="true">
