@@ -8,6 +8,7 @@ public class Venue implements Serializable {
 
     String venueName;
     ArrayList<String> activities;
+//    ArrayList<Event> events;
     ArrayList<Integer> events;
 
 

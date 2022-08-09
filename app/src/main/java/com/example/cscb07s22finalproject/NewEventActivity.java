@@ -26,6 +26,7 @@ public class NewEventActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_event);
 
+
         VenuesSpinner.connectSpinner(this,
                 findViewById(R.id.spinner3),
                 false,
@@ -54,6 +55,7 @@ public class NewEventActivity extends AppCompatActivity {
                         }
                     });
                 });
+
     }
 
     public void eventActivity(View view)
@@ -65,7 +67,7 @@ public class NewEventActivity extends AppCompatActivity {
         editText = findViewById(R.id.editTextNumber5);
         String players = editText.getText().toString();
 
-        editText = findViewById(R.id.editTextNumber);
+        editText = findViewById(R.id.editTextTextPersonName2);
         String date = editText.getText().toString();
 
         editText = findViewById(R.id.editTextNumber2);
@@ -73,6 +75,7 @@ public class NewEventActivity extends AppCompatActivity {
 
         editText = findViewById(R.id.editTextNumber3);
         String endTime = editText.getText().toString();
+
 
         //gives message based on which error occurred from incorrect regex format, etc. - if everything is correct, it creates an event
         db.eventCreateActions(eventName, v, activity, players, date, startTime, endTime,

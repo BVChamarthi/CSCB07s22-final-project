@@ -102,6 +102,10 @@ public class UserHomeActivity extends AppCompatActivity
                         () -> {ShowToast("Max Participants reached");});
                 eventsAdapter.notifyDataSetChanged();
 
+                // Starting the activity to create a new event
+                // To do so, we need to pass the venue object that is selected, which is
+                // retrieved from the adapter
+                //startNewEventActivity(adapter.getSelected());
             }else{
                 ShowToast("No Selection");
                 //Update list but with sports from venue selected
@@ -135,6 +139,7 @@ public class UserHomeActivity extends AppCompatActivity
         // By setting the adapter to the recycleView, it is able to display all events after updating the event list of the adapter
         eventsAdapter = new SingleAdapter(this, db.constructEventsArray());
         recyclerView.setAdapter(eventsAdapter);
+
     }
 
 
@@ -152,11 +157,4 @@ public class UserHomeActivity extends AppCompatActivity
         Intent intent = new Intent(this, NewEventActivity.class);
         startActivity(intent);
     }
-/*
-    public void newMyEventActivity(View view) {
-        Intent intent = new Intent(this, MyEventsActivity.class);
-        startActivity(intent);
-    }
-
- */
 }

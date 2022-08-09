@@ -14,6 +14,11 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class SingleAdapter extends RecyclerView.Adapter<SingleAdapter.SingleViewHolder>{
+    /*
+    Important methods:
+        line 59: Change which part of Event is shown is each box
+     */
+
     DataBase db = DataBase.getInstance();
 
     private Context context;
@@ -25,17 +30,18 @@ public class SingleAdapter extends RecyclerView.Adapter<SingleAdapter.SingleView
         this.context = context;
         this.events = events;
         checkedPosition = -1;
-        checkMark=true;
+        checkMark = true;
     }
 
+    public void setCheckMark(boolean checkMark) {
+        this.checkMark = checkMark;
+    }
 
     //initializes array of events
     public void SetEvents(ArrayList<Integer> events){
         this.events = events;
         notifyDataSetChanged();
     }
-
-    public void setCheckMark(boolean tf){ checkMark = tf;}
 
     // Billy's work - for adapter till end
     class SingleViewHolder extends RecyclerView.ViewHolder{
@@ -48,9 +54,6 @@ public class SingleAdapter extends RecyclerView.Adapter<SingleAdapter.SingleView
             textView = itemView.findViewById(R.id.event_name);
             imageView = itemView.findViewById(R.id.imageview);
         }
-
-
-
 
         void bind(final int eventCode){
             if(checkedPosition == getAdapterPosition()){
