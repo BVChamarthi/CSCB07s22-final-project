@@ -487,6 +487,12 @@ public final class DataBase {
             return;
         }
 
+        // There was a bug where events and venues don't reset after the user logs out, and
+        // another user logs in (ie, duplicates exist). Sometimes it crashes.
+        // This way, venues and events won't have duplicates. Currently doesn't crash
+        events.clear();
+        venues.clear();
+
         // get events
         ref.child("Events").get().addOnCompleteListener(eventsFetch -> {
             if(!eventsFetch.isSuccessful()) return; // if fetch failed, return

@@ -119,7 +119,6 @@ public class NewEventActivity extends AppCompatActivity {
                     startActivity(intent);
 
                 });
-
     }
 
     //front end code
