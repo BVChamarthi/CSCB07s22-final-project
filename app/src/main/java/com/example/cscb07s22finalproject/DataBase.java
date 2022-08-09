@@ -253,7 +253,6 @@ public final class DataBase {
 
         //changes the start and end time to numbers
         int start = Integer.parseInt(startTime.substring(0,2))*100 + Integer.parseInt(startTime.substring(3));
-
         int end = Integer.parseInt(endTime.substring(0,2))*100 + Integer.parseInt(endTime.substring(3));
 
         //if the end time is less than start time, then the time is not valid
@@ -269,10 +268,11 @@ public final class DataBase {
                     if(eventOverlaps)
                     {
                         eventsOverlap.onCallBack();
-                        return;
                     }
-                    eventCreate.onCallBack();
-                    return;
+                   else
+                    {
+                        eventCreate.onCallBack();
+                    }
                 });
 
     }
