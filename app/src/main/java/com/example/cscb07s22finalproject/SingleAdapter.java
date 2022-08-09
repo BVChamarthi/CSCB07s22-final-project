@@ -1,6 +1,8 @@
 package com.example.cscb07s22finalproject;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,6 +48,9 @@ public class SingleAdapter extends RecyclerView.Adapter<SingleAdapter.SingleView
         public SingleViewHolder(@NonNull View itemView){
             super(itemView);
             textView = itemView.findViewById(R.id.event_name);
+            textView.setTextColor(Color.parseColor("#ffffff"));
+            //textView.setTypeface(Typeface.createFromAsset(itemView.getContext().getAssets(),
+             //       "amaranth.xml"));
             imageView = itemView.findViewById(R.id.imageview);
         }
 

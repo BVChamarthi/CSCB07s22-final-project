@@ -65,6 +65,8 @@ public class AdminHomeActivity extends AppCompatActivity {
         eventsAdapter = new SingleAdapter(this, db.constructEventsArray());
         recyclerView.setAdapter(eventsAdapter);
 
+
+
     }
 
     public void logout(View view) {
