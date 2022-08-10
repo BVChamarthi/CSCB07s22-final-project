@@ -76,4 +76,8 @@ public class AdminHomeActivity extends AppCompatActivity {
         Intent intent = new Intent(this, NewVenueActivity.class);
         startActivity(intent);
     }
+
+    public void refreshButton(View view) {
+
+    }
 }
