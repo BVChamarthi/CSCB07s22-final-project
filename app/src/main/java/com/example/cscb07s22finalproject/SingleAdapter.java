@@ -87,8 +87,12 @@ public class SingleAdapter extends RecyclerView.Adapter<SingleAdapter.SingleView
     }
 
     // Returns the event object that is selected by the user (indicated by the checkmark)
-    public int getSelected(){
-        return checkedPosition;
+    public int getSelected()
+    {
+        if(checkedPosition == -1){
+            return -1;
+        }
+        return events.get(checkedPosition);
     }
 
     public void printEvents()
