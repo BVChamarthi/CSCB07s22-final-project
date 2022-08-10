@@ -49,8 +49,6 @@ public class SingleAdapter extends RecyclerView.Adapter<SingleAdapter.SingleView
             super(itemView);
             textView = itemView.findViewById(R.id.event_name);
             textView.setTextColor(Color.parseColor("#ffffff"));
-            //textView.setTypeface(Typeface.createFromAsset(itemView.getContext().getAssets(),
-             //       "amaranth.xml"));
             imageView = itemView.findViewById(R.id.imageview);
         }
 
@@ -63,17 +61,6 @@ public class SingleAdapter extends RecyclerView.Adapter<SingleAdapter.SingleView
 
             //Change which part of Event is shown is each box. In this case, the toString()
             textView.setText(db.getEvents().get(eventCode).toString());
-            itemView.setOnClickListener(new View.OnClickListener(){
-                @Override
-                public void onClick(View v){
-                    imageView.setVisibility(View.VISIBLE);
-                    if(checkedPosition != getAdapterPosition()){
-                        notifyItemChanged(checkedPosition);
-                        checkedPosition = getAdapterPosition();
-                    } else {
-                        int i = checkedPosition;
-                        checkedPosition = -1;
-                        notifyItemChanged(i);
 
             // Only shows checkmark if a customer
             if(db.getUser() instanceof Customer) {

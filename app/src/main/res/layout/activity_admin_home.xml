@@ -45,7 +45,7 @@
             android:layout_height="0dp"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="26dp"
-            android:background="@android:drawable/divider_horizontal_dark"
+            android:background="@color/material_on_surface_emphasis_medium"
             android:fadingEdge="horizontal|vertical"
             app:layout_constraintBottom_toTopOf="@+id/button6"
             app:layout_constraintEnd_toEndOf="parent"
