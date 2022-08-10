@@ -50,7 +50,7 @@ August 7th:
 
 August 8th:
 - The group met in person for a meeting to discuss plans for the next two days
-- Laksh finished user story 2
+- Laksh finished user story 3
 - Bharath refactored the code, finishing up the coding portion of the project
 - Billy tested the code and fixed creating event
 
