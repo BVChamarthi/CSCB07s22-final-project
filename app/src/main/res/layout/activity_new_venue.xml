@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/bg"
     tools:context=".NewVenueActivity">
 
     <TextView
@@ -11,7 +12,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="52dp"
+        android:fontFamily="@font/amaranth"
         android:text="New Venue"
+        android:textColor="@color/white"
         android:textSize="34sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
@@ -25,10 +28,13 @@
         android:layout_marginTop="76dp"
         android:layout_marginEnd="96dp"
         android:layout_marginRight="96dp"
+        android:background="@android:drawable/divider_horizontal_dim_dark"
         android:ems="10"
+        android:fontFamily="@font/amaranth"
         android:hint="Venue name"
         android:inputType="textPersonName"
         android:minHeight="48dp"
+        android:textColor="@color/white"
         android:textColorHint="#757575"
         app:layout_constraintEnd_toEndOf="@+id/textView3"
         app:layout_constraintHorizontal_bias="0.147"
@@ -48,14 +54,47 @@
 
     <EditText
         android:id="@+id/activities"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="207dp"
+        android:layout_height="39dp"
         android:layout_marginTop="60dp"
+        android:layout_marginEnd="100dp"
+        android:layout_marginRight="100dp"
+        android:background="@android:drawable/divider_horizontal_dark"
         android:ems="10"
+        android:fontFamily="@font/amaranth"
         android:gravity="start|top"
         android:hint="1 Activity per line"
+        android:textColorHint="#757575"
         android:inputType="textMultiLine"
-        app:layout_constraintEnd_toEndOf="@+id/venueName"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/venueName"
         app:layout_constraintTop_toBottomOf="@+id/venueName" />
+
+    <ImageView
+        android:id="@+id/imageView12"
+        android:layout_width="265dp"
+        android:layout_height="303dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="6dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.955"
+        app:srcCompat="@drawable/tennis" />
+
+    <ImageView
+        android:id="@+id/imageView14"
+        android:layout_width="137dp"
+        android:layout_height="165dp"
+        android:layout_marginStart="57dp"
+        android:layout_marginLeft="57dp"
+        android:layout_marginBottom="50dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.746"
+        app:srcCompat="@drawable/volley" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -6,48 +6,120 @@
     android:layout_height="match_parent"
     tools:context=".AdminHomeActivity">
 
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@drawable/bg"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         tools:context=".UserHomeActivity">
-
-        <Button
-            android:id="@+id/buttonGetSelect"
-            android:layout_width="264dp"
-            android:layout_height="61dp"
-            android:layout_marginTop="432dp"
-            android:text="Edit Venue"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.503"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
 
         <Button
             android:id="@+id/button6"
             android:layout_width="264dp"
-            android:layout_height="61dp"
-            android:layout_marginTop="20dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="26dp"
             android:onClick="newVenueActivity"
             android:text="New Venue"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.503"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <Button
+            android:id="@+id/button4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            android:onClick="logout"
+            android:text="Log Out"
+            app:layout_constraintEnd_toEndOf="@+id/switch4"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="26dp"
+            android:background="@android:drawable/divider_horizontal_dark"
+            android:fadingEdge="horizontal|vertical"
+            app:layout_constraintBottom_toTopOf="@+id/button6"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/buttonGetSelect"
-            app:layout_constraintVertical_bias="0.026" />
+            app:layout_constraintTop_toBottomOf="@+id/switch4" />
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/amaranth"
+            android:text="Filter by Venue"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="@+id/spinner2"
+            app:layout_constraintStart_toStartOf="@+id/switch4"
+            app:layout_constraintTop_toTopOf="@+id/spinner2" />
+
+        <Spinner
+            android:id="@+id/spinner2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="26dp"
+            android:layout_marginLeft="26dp"
+            android:layout_marginTop="10dp"
+            android:background="@android:drawable/spinner_dropdown_background"
+            app:layout_constraintEnd_toEndOf="@+id/switch4"
+            app:layout_constraintStart_toEndOf="@+id/textView4"
+            app:layout_constraintTop_toBottomOf="@+id/button4" />
+
+        <Switch
+            android:id="@+id/switch4"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="26dp"
+            android:layout_marginLeft="26dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="26dp"
+            android:layout_marginRight="26dp"
+            android:fontFamily="@font/amaranth"
+            android:text="Upcoming Events"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/spinner2" />
+
+        <TextView
+            android:id="@+id/textView5"
+            android:layout_width="165dp"
+            android:layout_height="31dp"
+            android:layout_marginStart="36dp"
+            android:layout_marginLeft="36dp"
+            android:background="@android:drawable/divider_horizontal_bright"
+            android:fontFamily="@font/amaranth"
+            android:text="TextView"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="@+id/button4"
+            app:layout_constraintStart_toStartOf="@+id/switch4"
+            app:layout_constraintTop_toTopOf="@+id/button4"
+            app:layout_constraintVertical_bias="0.315" />
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="39dp"
+            android:layout_height="33dp"
+            android:layout_marginTop="28dp"
+            app:layout_constraintEnd_toStartOf="@+id/textView5"
+            app:layout_constraintHorizontal_bias="0.742"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/profile" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <Button
-        android:id="@+id/button4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="16dp"
-        android:onClick="logout"
-        android:text="Log Out"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

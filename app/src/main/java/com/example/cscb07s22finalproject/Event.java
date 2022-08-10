@@ -3,17 +3,47 @@ package com.example.cscb07s22finalproject;
 import java.io.Serializable;
 
 public class Event implements Serializable {
+    /*
+    Important methods:
+        toString(): How info from Event is formatted
+
+    Q: Why Event has venueName field despite there being ArrayList<Event> where I can get venueName from?
+        A: Idk how make the scroll view work with a nested ArrayList
+     */
+
     private String eventName;
     private String activity;
+    private String date;
     private String startTime;
     private String endTime;
+    private Venue parentVenue;
     private int curParticipants, maxParticipants;
     private boolean isChecked = false;
 
-    public Event(String eventName, String activity,String startTime,String endTime,int curParticipants, int maxParticipants)
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj == this) return true;
+        if(!(obj instanceof Event)) return false;   // also checks for null
+        Event objEvent = (Event)obj;
+        return (
+                objEvent.getEventName() == eventName &&
+                        objEvent.getActivity() == activity &&
+                        objEvent.getDate() == date &&
+                        objEvent.getStartTime() == startTime &&
+                        objEvent.getEndTime() == endTime &&
+                        objEvent.getMaxParticipants() == maxParticipants &&
+                        objEvent.getParentVenue() == parentVenue
+                );
+    }
+
+    public Event(String eventName, Venue parentVenue, String activity, String date,String startTime,String endTime,int curParticipants, int maxParticipants)
+
     {
         this.eventName = eventName;
+        this.parentVenue = parentVenue;
         this.activity = activity;
+        this.date = date;
         this.startTime = startTime;
         this.endTime = endTime;
         this.maxParticipants = maxParticipants;
@@ -25,11 +55,14 @@ public class Event implements Serializable {
     {
         return eventName;
     }
-
     public void setEventName(String eventName)
     {
         this.eventName = eventName;
     }
+
+
+    public Venue getParentVenue() { return parentVenue; }
+    public void setParentVenue(Venue parentVenue) { this.parentVenue = parentVenue; }
 
     public String getActivity()
     {
@@ -41,11 +74,17 @@ public class Event implements Serializable {
         this.activity = activity;
     }
 
+    public String getDate() {
+        return date;
+    }
+    public void setDate(String date) {
+        this.date = date;
+    }
+
     public String getStartTime()
     {
         return startTime;
     }
-
     public void setStartTime(String startTime)
     {
         this.startTime = startTime;
@@ -55,7 +94,6 @@ public class Event implements Serializable {
     {
         return endTime;
     }
-
     public void setEndTime(String endTime)
     {
         this.endTime = endTime;
@@ -64,7 +102,6 @@ public class Event implements Serializable {
     public int getCurParticipants() {
         return curParticipants;
     }
-
     public void setCurParticipants(int curParticipants) {
         this.curParticipants = curParticipants;
     }
@@ -72,7 +109,6 @@ public class Event implements Serializable {
     public int getMaxParticipants() {
         return maxParticipants;
     }
-
     public void setMaxParticipants(int maxParticipants) {
         this.maxParticipants = maxParticipants;
     }
@@ -80,18 +116,18 @@ public class Event implements Serializable {
     public boolean isChecked() {
         return isChecked;
     }
-
     public void setChecked(boolean checked) {
         isChecked = checked;
     }
 
+    public void addParticipant() {curParticipants++;}
+
     @Override
     public String toString() {
-        return  eventName +
+        return  "\t" + eventName +
+                "\n\t" + parentVenue.getVenueName() +
                 "\n\t" + activity +
-                "\n\t" + startTime +
-                ": " + endTime +
-                "\n\tPlayers: " + curParticipants +
-                "/" + maxParticipants;
+                "\n\t" + date + ", " + startTime + " - " + endTime +
+                "\n\tPlayers: " + curParticipants + "/" + maxParticipants;
     }
 }

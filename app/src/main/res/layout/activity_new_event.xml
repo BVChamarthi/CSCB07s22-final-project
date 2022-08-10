@@ -4,111 +4,201 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/bg"
     tools:context=".NewEventActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".NewVenueActivity">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        tools:context=".NewEventActivity">
+
 
         <EditText
-            android:id="@+id/venueName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="48dp"
-            android:layout_marginEnd="108dp"
-            android:layout_marginRight="108dp"
-            android:ems="10"
-            android:hint="Venue"
-            android:inputType="textPersonName"
-            android:minHeight="48dp"
-            android:textColorHint="#757575"
-            app:layout_constraintEnd_toEndOf="@+id/textView"
-            app:layout_constraintHorizontal_bias="0.163"
-            app:layout_constraintStart_toStartOf="@+id/textView"
-            app:layout_constraintTop_toBottomOf="@+id/textView" />
-
-        <EditText
-            android:id="@+id/editTextTextPersonName4"
-            android:layout_width="wrap_content"
+            android:id="@+id/editTextTextPersonName3"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="40dp"
-            android:layout_marginEnd="96dp"
-            android:layout_marginRight="96dp"
             android:ems="10"
-            android:hint="Sport(Need to be changed)"
+            android:hint="Event Name"
             android:inputType="textPersonName"
-            android:minHeight="48dp"
+            android:textColor="@color/white"
             android:textColorHint="#757575"
-            app:layout_constraintEnd_toEndOf="@+id/venueName"
+            app:layout_constraintEnd_toEndOf="@+id/editTextNumber5"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/venueName"
-            app:layout_constraintTop_toBottomOf="@+id/venueName" />
+            app:layout_constraintStart_toStartOf="@+id/editTextNumber5"
+            app:layout_constraintTop_toBottomOf="@+id/textView7" />
 
         <EditText
-            android:id="@+id/editTextNumber"
+            android:id="@+id/editTextNumber5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
+
+            android:layout_marginTop="10dp"
             android:ems="10"
             android:hint="Max Players"
             android:inputType="number"
             android:minHeight="48dp"
-            app:layout_constraintEnd_toEndOf="@+id/editTextTextPersonName4"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="@+id/editTextTextPersonName4"
-            app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName4" />
+            android:textColor="@color/white"
+            android:textColorHint="#757575"
+
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.502"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName3" />
 
         <EditText
             android:id="@+id/editTextNumber2"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="10dp"
             android:ems="10"
-            android:hint="Start Time"
-            android:inputType="number"
+            android:hint="Start HH:MM"
+            android:inputType="text"
             android:minHeight="48dp"
-            app:layout_constraintEnd_toEndOf="@+id/editTextNumber"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/editTextNumber"
-            app:layout_constraintTop_toBottomOf="@+id/editTextNumber" />
+            android:textColor="@color/white"
+            android:textColorHint="#757575"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="@+id/editTextTextPersonName2"
+            app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName2" />
 
         <EditText
             android:id="@+id/editTextNumber3"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
             android:ems="10"
-            android:hint="End Time"
-            android:inputType="number"
+            android:hint="End HH:MM"
+            android:inputType="text"
             android:minHeight="48dp"
-            app:layout_constraintEnd_toEndOf="@+id/editTextNumber"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="@+id/editTextNumber"
-            app:layout_constraintTop_toBottomOf="@+id/editTextNumber" />
+            android:textColor="@color/white"
+            android:textColorHint="#757575"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="@+id/editTextTextPersonName2"
+            app:layout_constraintTop_toTopOf="@+id/editTextNumber2" />
 
         <Button
             android:id="@+id/button8"
             android:layout_width="214dp"
             android:layout_height="57dp"
-            android:layout_marginTop="40dp"
+            android:onClick="eventActivity"
             android:text="Create Event"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/editTextNumber3"
-            app:layout_constraintHorizontal_bias="0.476"
+            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="@+id/editTextNumber2"
-            app:layout_constraintTop_toBottomOf="@+id/editTextNumber3" />
+            app:layout_constraintTop_toBottomOf="@+id/editTextNumber2"
+            app:layout_constraintVertical_bias="0.26" />
 
         <TextView
             android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="56dp"
+            android:fontFamily="@font/amaranth"
             android:text="New Event"
+            android:textColor="@color/white"
             android:textSize="34sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <Spinner
+            android:id="@+id/spinner3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="26dp"
+            android:layout_marginRight="26dp"
+            android:background="@android:drawable/spinner_dropdown_background"
+            app:layout_constraintBottom_toBottomOf="@+id/textView6"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/spinner"
+            app:layout_constraintTop_toTopOf="@+id/textView6" />
+
+        <Spinner
+            android:id="@+id/spinner"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="26dp"
+            android:layout_marginLeft="26dp"
+            android:layout_marginEnd="26dp"
+            android:layout_marginRight="26dp"
+            android:background="@android:drawable/spinner_dropdown_background"
+            app:layout_constraintBottom_toBottomOf="@+id/textView7"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/textView7"
+            app:layout_constraintTop_toTopOf="@+id/textView7" />
+
+        <TextView
+            android:id="@+id/textView6"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="52dp"
+            android:fontFamily="@font/amaranth"
+            android:text="Choose Venue"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toEndOf="@+id/textView7"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/textView7"
+            app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+        <TextView
+            android:id="@+id/textView7"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="26dp"
+            android:layout_marginLeft="26dp"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/amaranth"
+            android:text="Choose Activity"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="@color/white"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView6" />
+
+        <EditText
+            android:id="@+id/editTextTextPersonName2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:ems="10"
+            android:hint="Date: YYYY-MM-DD"
+            android:inputType="textPersonName"
+            android:textColor="@color/white"
+            android:textColorHint="#757575"
+            app:layout_constraintEnd_toEndOf="@+id/editTextNumber5"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/editTextNumber5"
+            app:layout_constraintTop_toBottomOf="@+id/editTextNumber5" />
+
+        <ImageView
+            android:id="@+id/imageView6"
+            android:layout_width="147dp"
+            android:layout_height="159dp"
+            android:layout_marginStart="36dp"
+            android:layout_marginLeft="36dp"
+            android:layout_marginBottom="24dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:srcCompat="@drawable/volley" />
+
+        <ImageView
+            android:id="@+id/imageView7"
+            android:layout_width="141dp"
+            android:layout_height="124dp"
+            android:layout_marginTop="200dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/soccer" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
