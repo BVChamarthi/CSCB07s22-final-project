@@ -32,25 +32,7 @@ public class AdminHomeActivity extends AppCompatActivity {
         TextView usernameDisplay = findViewById(R.id.textView5);
         usernameDisplay.setText(db.getUser().getUsername());
 
-        initRecyclerView();
-
-        Filter filter = new Filter(false);
-
-        // initialise spinner
-        VenuesSpinner.connectSpinner(this,                          // connect the spinner
-                findViewById(R.id.spinner2),
-                true,                                       // if you don't want "All venues" option, set this to false
-                selectedVenue -> {                                          // callback with the selected venue whenever it changes
-                    filter.setCompareVenue(selectedVenue);
-                    eventsAdapter.SetEvents(filter.filterPass(db.constructEventsArray()));
-                });
-
-        // initialise upcoming events switch
-        upcomingEvents = findViewById(R.id.switch4);
-        upcomingEvents.setOnClickListener(view -> {
-            filter.setUpcomingEvents(upcomingEvents.isChecked());
-            eventsAdapter.SetEvents(filter.filterPass(db.constructEventsArray()));
-        });
+        refreshButton(null);
     }
 
     private void initRecyclerView(){
@@ -64,7 +46,6 @@ public class AdminHomeActivity extends AppCompatActivity {
         // By setting the adapter to the recycleView, it is able to display all events after updating the event list of the adapter
         eventsAdapter = new SingleAdapter(this, db.constructEventsArray());
         recyclerView.setAdapter(eventsAdapter);
-
     }
 
     public void logout(View view) {
@@ -77,8 +58,28 @@ public class AdminHomeActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public void refreshButton(View view)
     {
+        db.readVenuesAndEvents(a-> {
+            Filter filter = new Filter(false);
 
+            // initialise spinner
+            VenuesSpinner.connectSpinner(this,                          // connect the spinner
+                    findViewById(R.id.spinner2),
+                    true,                                       // if you don't want "All venues" option, set this to false
+                    selectedVenue -> {                                          // callback with the selected venue whenever it changes
+                        filter.setCompareVenue(selectedVenue);
+                        eventsAdapter.SetEvents(filter.filterPass(db.constructEventsArray()));
+                    });
+
+            // initialise upcoming events switch
+            upcomingEvents = findViewById(R.id.switch4);
+            upcomingEvents.setOnClickListener(view1 -> {
+                filter.setUpcomingEvents(upcomingEvents.isChecked());
+                eventsAdapter.SetEvents(filter.filterPass(db.constructEventsArray()));
+            });
+            initRecyclerView();
+        }, b->{}, str->{});
     }
 }

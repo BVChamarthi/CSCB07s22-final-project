@@ -55,6 +55,7 @@ public class UserHomeActivity extends AppCompatActivity
     private Switch joinedEvents;
     @SuppressLint("UseSwitchCompatOrMaterialCode")
     private Switch scheduledEvents;
+    private Spinner spinner;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -70,7 +71,7 @@ public class UserHomeActivity extends AppCompatActivity
         btn = findViewById(R.id.buttonGetSelect);
 
 //        initSearchWidget();
-        initRecyclerView();
+
 
         //db.fetchUserScheduledEvents();
 
@@ -80,72 +81,18 @@ public class UserHomeActivity extends AppCompatActivity
         //eventsAdapter.printEvents();
 
         // initialise filter
-        Filter filter = new Filter(false);
-
-        ShowToast(c.getJoinedEvents().toString());
 
         // initialise upcoming events switch
         upcomingEvents = findViewById(R.id.switch3);
-        upcomingEvents.setOnClickListener(view -> {
-            filter.setUpcomingEvents(upcomingEvents.isChecked());
-            eventsAdapter.SetEvents(filter.filterPass(getEvents()));
-        });
 
         // initialise scheduled and joined events switches
         scheduledEvents = findViewById(R.id.switch1);
         joinedEvents = findViewById(R.id.switch2);
-        scheduledEvents.setOnClickListener( view -> {
-            eventsAdapter.SetEvents(filter.filterPass(getEvents()));
-        });
-        joinedEvents.setOnClickListener( view -> {
-            eventsAdapter.SetEvents(filter.filterPass(getEvents()));
-        });
 
         // initialise spinner
-        VenuesSpinner.connectSpinner(this,                          // connect the spinner
-                findViewById(R.id.venue_spinner),
-                true,                                       // if you don't want "All venues" option, set this to false
-                selectedVenue -> {                                          // callback with the selected venue whenever it changes
-                    filter.setCompareVenue(selectedVenue);
-                    eventsAdapter.SetEvents(filter.filterPass(db.constructEventsArray()));
+        spinner = findViewById(R.id.venue_spinner);
 
-                    if(upcomingEvents.isChecked())
-                    {
-                        filter.setUpcomingEvents(upcomingEvents.isChecked());
-                        eventsAdapter.SetEvents(filter.filterPass(getEvents()));
-                    }
-
-                    if(scheduledEvents.isChecked())
-                    {
-                        eventsAdapter.SetEvents(filter.filterPass(c.getScheduledEvents()));
-                    }
-
-                    if(joinedEvents.isChecked())
-                    {
-                        eventsAdapter.SetEvents(filter.filterPass(c.getJoinedEvents()));
-                    }
-                });
-
-        btn.setOnClickListener(view -> {
-            if(eventsAdapter.getSelected() != -1){
-                //Change the following line to change what happens when join button is clicked
-                int selectedEvent = eventsAdapter.getSelected();
-
-                db.joinEvent(selectedEvent,
-                        () -> {ShowToast("Already Joined Event");},
-                        () -> {ShowToast("Max Participants reached");});
-                eventsAdapter.notifyDataSetChanged();
-
-                // Starting the activity to create a new event
-                // To do so, we need to pass the venue object that is selected, which is
-                // retrieved from the adapter
-                //startNewEventActivity(adapter.getSelected());
-            }else{
-                ShowToast("No Selection");
-                //Update list but with sports from venue selected
-
-            }
-        });
+        refreshButton(null);
     }
 
     private ArrayList<Integer> getEvents() {
@@ -214,9 +161,66 @@ public class UserHomeActivity extends AppCompatActivity
 
  */
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public void refreshButton(View view)
     {
-        db.readVenuesAndEvents(a->{}, b->{}, str->{});
+        db.readVenuesAndEvents(a->{
+            Filter filter = new Filter(false);
+            upcomingEvents.setOnClickListener(view1 -> {
+                filter.setUpcomingEvents(upcomingEvents.isChecked());
+                eventsAdapter.SetEvents(filter.filterPass(getEvents()));
+            });
+            scheduledEvents.setOnClickListener( view1 -> {
+                eventsAdapter.SetEvents(filter.filterPass(getEvents()));
+            });
+            joinedEvents.setOnClickListener( view1 -> {
+                eventsAdapter.SetEvents(filter.filterPass(getEvents()));
+            });
+            VenuesSpinner.connectSpinner(this,                          // connect the spinner
+                    spinner,
+                    true,                                       // if you don't want "All venues" option, set this to false
+                    selectedVenue -> {                                          // callback with the selected venue whenever it changes
+                        filter.setCompareVenue(selectedVenue);
+                        eventsAdapter.SetEvents(filter.filterPass(db.constructEventsArray()));
+
+                        if(upcomingEvents.isChecked())
+                        {
+                            filter.setUpcomingEvents(upcomingEvents.isChecked());
+                            eventsAdapter.SetEvents(filter.filterPass(getEvents()));
+                        }
+
+                        if(scheduledEvents.isChecked())
+                        {
+                            eventsAdapter.SetEvents(filter.filterPass(c.getScheduledEvents()));
+                        }
+
+                        if(joinedEvents.isChecked())
+                        {
+                            eventsAdapter.SetEvents(filter.filterPass(c.getJoinedEvents()));
+                        }
+            });
+            btn.setOnClickListener(view1 -> {
+                if(eventsAdapter.getSelected() != -1){
+                    //Change the following line to change what happens when join button is clicked
+                    int selectedEvent = eventsAdapter.getSelected();
+
+                    db.joinEvent(selectedEvent,
+                            () -> {ShowToast("Already Joined Event");},
+                            () -> {ShowToast("Max Participants reached");});
+                    eventsAdapter.notifyDataSetChanged();
+
+                    // Starting the activity to create a new event
+                    // To do so, we need to pass the venue object that is selected, which is
+                    // retrieved from the adapter
+                    //startNewEventActivity(adapter.getSelected());
+                }else{
+                    ShowToast("No Selection");
+                    //Update list but with sports from venue selected
+
+                }
+            });
+            initRecyclerView();
+        }, b->{}, str->{});
 
         // May need to add functionality with filters
     }

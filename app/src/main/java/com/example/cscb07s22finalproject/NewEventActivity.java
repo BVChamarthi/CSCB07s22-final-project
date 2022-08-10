@@ -38,7 +38,7 @@ public class NewEventActivity extends AppCompatActivity {
                 findViewById(R.id.spinner3),
                 false,
                 selectedVenue-> {
-                    Toast.makeText(NewEventActivity.this, selectedVenue.getVenueAsString(), Toast.LENGTH_LONG).show();
+//                    Toast.makeText(NewEventActivity.this, selectedVenue.getVenueAsString(), Toast.LENGTH_LONG).show();
                     v = selectedVenue;
                     Spinner spinner = findViewById(R.id.spinner);
                     ArrayAdapter<String> activitiesAdapter = new ArrayAdapter<>(
@@ -53,7 +53,7 @@ public class NewEventActivity extends AppCompatActivity {
                         public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                             String text = adapterView.getItemAtPosition(i).toString();
                             activity = text;
-                            Toast.makeText(adapterView.getContext(), text, Toast.LENGTH_SHORT).show();
+//                            Toast.makeText(adapterView.getContext(), text, Toast.LENGTH_SHORT).show();
                         }
 
                         @Override

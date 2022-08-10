@@ -1,7 +1,6 @@
 package com.example.cscb07s22finalproject;
 
 import android.os.Build;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -546,8 +545,11 @@ public final class DataBase {
         venues.clear();
 
         // get events
-        ref.child("Events").get().addOnCompleteListener(eventsFetch -> {
-            if(!eventsFetch.isSuccessful()) return; // if fetch failed, return
+ /*       ref.child("Events").get().addOnCompleteListener(eventsFetch -> {
+            if(!eventsFetch.isSuccessful()) {
+                msg.onCallBack("events failed");
+                return; // if fetch failed, return
+            }
 
             for( DataSnapshot eventRef : eventsFetch.getResult().getChildren()) {
                 String eventName = eventRef.child("eventName").getValue(String.class);
@@ -581,6 +583,8 @@ public final class DataBase {
                             if(snapshot.exists()){
                                 for(DataSnapshot snapshot1 : snapshot.getChildren())
                                     activities.add(snapshot1.getValue(String.class));
+
+                                msg.onCallBack(venueName + ", " + activities);
                             }
                         }
 
@@ -601,6 +605,10 @@ public final class DataBase {
                                 for(DataSnapshot dataSnapshot : snapshot.getChildren()) {
                                     int eventCode = dataSnapshot.getValue(Integer.class);
                                     venue.addEvent(eventCode);
+                                    ecc.checkAndCall(() -> {
+                                        venueCallback.onCallBack(venues);
+                                        eventCallback.onCallBack(events);
+                                    });
                                 }
                             }
                         }
@@ -613,6 +621,89 @@ public final class DataBase {
                 }
                 msg.onCallBack("Venues " + venues.size());
             });
+        });*/
+        ref.child("Events").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                msg.onCallBack("events");
+                if(!snapshot.exists()) return; // if fetch failed, return
+
+                for( DataSnapshot eventRef : snapshot.getChildren()) {
+                    String eventName = eventRef.child("eventName").getValue(String.class);
+                    String activity = eventRef.child("activity").getValue(String.class);
+                    String date = eventRef.child("date").getValue(String.class);
+                    String startTime = eventRef.child("startTime").getValue(String.class);
+                    String endTime = eventRef.child("endTime").getValue(String.class);
+                    int curParticipants = eventRef.child("curParticipants").getValue(Integer.class);
+                    int maxParticipants = eventRef.child("maxParticipants").getValue(Integer.class);
+
+                    events.add(new Event(eventName, null, activity, date, startTime,
+                            endTime, curParticipants, maxParticipants));
+                }
+
+                msg.onCallBack("Events " + events.size());
+
+                eventsConnectionCheck ecc = eventsConnectionCheck.getInstance();
+                ecc.reset();
+
+                // get venues, attach events
+                ref.child("Venues").get().addOnCompleteListener(venuesFetch -> {
+                    if(!venuesFetch.isSuccessful()) return; // if fetch failed, return
+
+                    for( DataSnapshot venueRef : venuesFetch.getResult().getChildren()) {
+                        String venueName = venueRef.child("venueName").getValue(String.class);
+                        ArrayList<String> activities = new ArrayList<>();
+
+                        ref.child("Venues").child(venueName).child("sports").addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                if(snapshot.exists()){
+                                    for(DataSnapshot snapshot1 : snapshot.getChildren())
+                                        activities.add(snapshot1.getValue(String.class));
+
+                                    msg.onCallBack(venueName + ", " + activities);
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+
+                            }
+                        });
+
+
+                        Venue venue = new Venue(venueName, activities);
+                        venues.add(venue);
+
+                        ref.child("Venues").child(venueName).child("Events").addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                if(snapshot.exists()) {
+                                    for(DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                                        int eventCode = dataSnapshot.getValue(Integer.class);
+                                        venue.addEvent(eventCode);
+                                        ecc.checkAndCall(() -> {
+                                            venueCallback.onCallBack(venues);
+                                            eventCallback.onCallBack(events);
+                                        });
+                                    }
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+
+                            }
+                        });
+                    }
+                    msg.onCallBack("Venues " + venues.size());
+                });
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                msg.onCallBack("err");
+            }
         });
     }
 
