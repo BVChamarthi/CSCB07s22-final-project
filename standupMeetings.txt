@@ -55,5 +55,5 @@ August 8th:
 - Billy tested the code and fixed creating event
 
 August 9th:
-- Ashtian tested and fixed bugs in the code
+- Ashtian and Billy tested and fixed bugs in the code
 - Keerthiha created a design for the app
