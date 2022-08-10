@@ -96,13 +96,23 @@ public class NewEventActivity extends AppCompatActivity {
         //gives message based on which error occurred from incorrect regex format, etc. - if everything is correct, it creates an event
         db.eventCreateActions(eventName, v, activity, players, date, startTime, endTime,
                 () -> {     // incorrect start time format
-                    Toast.makeText(NewEventActivity.this, "Invalid:format of start time is incorrect", Toast.LENGTH_LONG).show();
+                    System.out.println("Invalid: format of start time is incorrect");
+                    Toast.makeText(NewEventActivity.this, "Invalid:format of start time is incorrect. Please follow HH:MM.", Toast.LENGTH_LONG).show();
                     },
+                () -> {
+                    System.out.println("Invalid: format of start time is incorrect. Please add zero to the front of start time");
+                    Toast.makeText(NewEventActivity.this, "Invalid:format of start time is incorrect. Please follow add a zero to the front of the start time", Toast.LENGTH_LONG).show();
+                },
                 () -> {     // incorrect end time format
-                    Toast.makeText(NewEventActivity.this, "Invalid:format of end time is incorrect", Toast.LENGTH_LONG).show();
+                    System.out.println("Invalid: format of end time is incorrect");
+                    Toast.makeText(NewEventActivity.this, "Invalid:format of end time is incorrect. Please follow HH:MM.", Toast.LENGTH_LONG).show();
+                },
+                () -> {
+                    System.out.println("Invalid: format of start time is incorrect. Please add zero to the front of end time");
+                    Toast.makeText(NewEventActivity.this, "Invalid:format of start time is incorrect. Please follow add a zero to the front of the end time", Toast.LENGTH_LONG).show();
                 },
                 () -> {     // incorrect date format
-                    Toast.makeText(NewEventActivity.this, "Invalid: format of date is incorrect", Toast.LENGTH_LONG).show();
+                    Toast.makeText(NewEventActivity.this, "Invalid: format of date is incorrect. Please follow YYYY-MM-DD.", Toast.LENGTH_LONG).show();
                 },
                 () -> {     // incorrect event name format
                     Toast.makeText(NewEventActivity.this, "Invalid: event name must be one or more words", Toast.LENGTH_LONG).show();

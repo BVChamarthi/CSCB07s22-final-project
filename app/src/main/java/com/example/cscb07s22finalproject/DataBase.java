@@ -207,7 +207,9 @@ public final class DataBase {
                                    String startTime,
                                    String endTime,
                                    callBack incorrectStartTimeFormat,
+                                   callBack incorrectStartTimeFormat2,
                                    callBack incorrectEndTimeFormat,
+                                   callBack incorrectEndTimeFormat2,
                                    callBack incorrectDateFormat,
                                    callBack incorrectNameFormat,
                                    callBack incorrectPlayersFormat,
@@ -223,6 +225,10 @@ public final class DataBase {
         Matcher matcher_startTime = pattern.matcher(startTime);
         Matcher matcher_endTime = pattern.matcher(endTime);
 
+        Pattern pattern5 = Pattern.compile("[0-9]:([0-5][0-9])");
+        Matcher matcher_startTime2 = pattern5.matcher(startTime);
+        Matcher matcher_endTime2 = pattern5.matcher(endTime);
+
         //date regex
         Pattern pattern2 = Pattern.compile("(((202[2-9])||(20[3-9][0-9])||(2[1-9][0-9][0-9]))-((0[1-9])||(1[0-2]))-(([0-2][0-9])||(3[0-1])))");
         Matcher matcher_date = pattern2.matcher(date);
@@ -236,13 +242,27 @@ public final class DataBase {
         Matcher matcher_Players = pattern4.matcher(players);
 
         // if start time doesn't match regex
-        if(!matcher_startTime.matches()){
+        if(!matcher_startTime.matches())
+        {
+            if(matcher_startTime2.matches())
+            {
+                incorrectStartTimeFormat2.onCallBack();
+                return;
+            }
+
             incorrectStartTimeFormat.onCallBack();
             return;
         }
 
         // if end time doesn't match regex
-        if(!matcher_endTime.matches()){
+        if(!matcher_endTime.matches())
+        {
+            if(matcher_endTime2.matches())
+            {
+                incorrectEndTimeFormat2.onCallBack();
+                return;
+            }
+
             incorrectEndTimeFormat.onCallBack();
             return;
         }
