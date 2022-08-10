@@ -533,11 +533,11 @@ public final class DataBase {
                                     viewVenueCallback venueCallback,
                                     stringCallBack msg){                // only used for debugging
 
-        if(dataFetched) {
-            eventCallback.onCallBack(events);
-            venueCallback.onCallBack(venues);
-            return;
-        }
+//        if(dataFetched) {
+//            eventCallback.onCallBack(events);
+//            venueCallback.onCallBack(venues);
+//            return;
+//        }
 
         // There was a bug where events and venues don't reset after the user logs out, and
         // another user logs in (ie, duplicates exist). Sometimes it crashes.
@@ -557,6 +557,7 @@ public final class DataBase {
                 String endTime = eventRef.child("endTime").getValue(String.class);
                 int curParticipants = eventRef.child("curParticipants").getValue(Integer.class);
                 int maxParticipants = eventRef.child("maxParticipants").getValue(Integer.class);
+
                 events.add(new Event(eventName, null, activity, date, startTime,
                         endTime, curParticipants, maxParticipants));
             }

@@ -217,5 +217,7 @@ public class UserHomeActivity extends AppCompatActivity
     public void refreshButton(View view)
     {
         db.readVenuesAndEvents(a->{}, b->{}, str->{});
+
+        // May need to add functionality with filters
     }
 }
