@@ -1,4 +1,5 @@
 July 29th:
+- First Scrum Meeting
 - Setup accounts
 - Started and finished Figma design
 
