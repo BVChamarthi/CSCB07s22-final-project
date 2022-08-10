@@ -57,3 +57,5 @@ August 8th:
 August 9th:
 - Ashtian and Billy tested and fixed bugs in the code
 - Keerthiha created a design for the app
+- Ashtian made the refresh button
+- Bharath fixed bug in refresh button
