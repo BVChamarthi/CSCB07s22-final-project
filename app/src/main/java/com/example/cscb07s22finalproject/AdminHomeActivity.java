@@ -79,6 +79,6 @@ public class AdminHomeActivity extends AppCompatActivity {
 
     public void refreshButton(View view)
     {
-        db.readVenuesAndEvents(a->{}, b->{}, str->{});
+
     }
 }

@@ -566,6 +566,7 @@ public final class DataBase {
 
             eventsConnectionCheck ecc = eventsConnectionCheck.getInstance();
             ecc.reset();
+
             // get venues, attach events
             ref.child("Venues").get().addOnCompleteListener(venuesFetch -> {
                 if(!venuesFetch.isSuccessful()) return; // if fetch failed, return
