@@ -26,7 +26,7 @@ public class NewVenueActivity extends AppCompatActivity {
 
         db.venueActions(venueName, activities,
                 () -> {     // incorrect format
-                    Toast.makeText(NewVenueActivity.this, "Invalid: venueName & activities must be 1 or more word characters only", Toast.LENGTH_LONG).show();
+                    Toast.makeText(NewVenueActivity.this, "Invalid: Venue name & activities must be one or more words", Toast.LENGTH_LONG).show();
                 },
                 () -> {     // correct format, venue doesn't exist, create venue
                     db.createVenue(venueName, activities);

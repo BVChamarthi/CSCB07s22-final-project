@@ -1,8 +1,10 @@
 package com.example.cscb07s22finalproject;
 
+import android.os.Build;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -160,7 +162,7 @@ public final class DataBase {
                             callBack venueExists
     ) {
 
-        Pattern pattern = Pattern.compile("(\\w+\\s?)+");
+        Pattern pattern = Pattern.compile("\\w+(\\s\\w+)*");
         Matcher matcher_venueName = pattern.matcher(venueName);
 
         // check formatting,
@@ -187,6 +189,17 @@ public final class DataBase {
         });
     }
 
+    // Copied from filter code
+    int[] extractDate(String date) {
+        String[] yyyymmddIntermadiate = date.split("-");
+        int[] yyyymmdd = {0, 0, 0};
+        for(int i =0; i < 3; i++) {
+            yyyymmdd[i] = Integer.parseInt(yyyymmddIntermadiate[i]);
+        }
+        return yyyymmdd;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public void eventCreateActions(String eventName,
                                    Venue parentVenue,
                                    String activity, String players,
@@ -194,10 +207,13 @@ public final class DataBase {
                                    String startTime,
                                    String endTime,
                                    callBack incorrectStartTimeFormat,
+                                   callBack incorrectStartTimeFormat2,
                                    callBack incorrectEndTimeFormat,
+                                   callBack incorrectEndTimeFormat2,
                                    callBack incorrectDateFormat,
                                    callBack incorrectNameFormat,
                                    callBack incorrectPlayersFormat,
+                                   callBack incorrectDatePeriod,
                                    callBack incorrectTimePeriod,
                                    callBack eventsOverlap,
                                    callBack eventCreate
@@ -209,12 +225,16 @@ public final class DataBase {
         Matcher matcher_startTime = pattern.matcher(startTime);
         Matcher matcher_endTime = pattern.matcher(endTime);
 
+        Pattern pattern5 = Pattern.compile("[0-9]:([0-5][0-9])");
+        Matcher matcher_startTime2 = pattern5.matcher(startTime);
+        Matcher matcher_endTime2 = pattern5.matcher(endTime);
+
         //date regex
         Pattern pattern2 = Pattern.compile("(((202[2-9])||(20[3-9][0-9])||(2[1-9][0-9][0-9]))-((0[1-9])||(1[0-2]))-(([0-2][0-9])||(3[0-1])))");
         Matcher matcher_date = pattern2.matcher(date);
 
         //event name regex
-        Pattern pattern3 = Pattern.compile(".+");
+        Pattern pattern3 = Pattern.compile("\\w+(\\s\\w+)*");
         Matcher matcher_eventName = pattern3.matcher(eventName);
 
         //max players regex
@@ -222,13 +242,27 @@ public final class DataBase {
         Matcher matcher_Players = pattern4.matcher(players);
 
         // if start time doesn't match regex
-        if(!matcher_startTime.matches()){
+        if(!matcher_startTime.matches())
+        {
+            if(matcher_startTime2.matches())
+            {
+                incorrectStartTimeFormat2.onCallBack();
+                return;
+            }
+
             incorrectStartTimeFormat.onCallBack();
             return;
         }
 
         // if end time doesn't match regex
-        if(!matcher_endTime.matches()){
+        if(!matcher_endTime.matches())
+        {
+            if(matcher_endTime2.matches())
+            {
+                incorrectEndTimeFormat2.onCallBack();
+                return;
+            }
+
             incorrectEndTimeFormat.onCallBack();
             return;
         }
@@ -236,6 +270,22 @@ public final class DataBase {
         // if date doesn't match regex
         if(!matcher_date.matches()){
             incorrectDateFormat.onCallBack();
+            return;
+        }
+
+        // if date is in the past
+        int[] eventDate = extractDate(date);
+        int[] currentDate = extractDate(String.valueOf(java.time.LocalDate.now()));
+
+        // If event is in a past year
+        if((eventDate[0] < currentDate[0]) ||
+                // If event is in a past month
+            (eventDate[0] == currentDate[0] && eventDate[1] < currentDate[1]) ||
+                    // If event is in a past day
+                ((eventDate[0] == currentDate[0] && eventDate[1] == currentDate[1]) && eventDate[2] < currentDate[2])
+        )
+        {
+            incorrectDatePeriod.onCallBack();
             return;
         }
 
@@ -253,7 +303,6 @@ public final class DataBase {
 
         //changes the start and end time to numbers
         int start = Integer.parseInt(startTime.substring(0,2))*100 + Integer.parseInt(startTime.substring(3));
-
         int end = Integer.parseInt(endTime.substring(0,2))*100 + Integer.parseInt(endTime.substring(3));
 
         //if the end time is less than start time, then the time is not valid
@@ -271,8 +320,11 @@ public final class DataBase {
                         eventsOverlap.onCallBack();
                         return;
                     }
-                    eventCreate.onCallBack();
-                    return;
+                    else
+                    {
+                        eventCreate.onCallBack();
+                        return;
+                    }
                 });
 
     }
@@ -487,6 +539,12 @@ public final class DataBase {
             return;
         }
 
+        // There was a bug where events and venues don't reset after the user logs out, and
+        // another user logs in (ie, duplicates exist). Sometimes it crashes.
+        // This way, venues and events won't have duplicates. Currently doesn't crash
+        events.clear();
+        venues.clear();
+
         // get events
         ref.child("Events").get().addOnCompleteListener(eventsFetch -> {
             if(!eventsFetch.isSuccessful()) return; // if fetch failed, return
@@ -564,9 +622,10 @@ public final class DataBase {
 
     public void checkEventTimesAction(Venue parentVenue, String activity, String date, String startTime, String endTime, checkEventTimesCallback callback)
     {
-        // Using a valueEventListener so we can loop through DataSnapshot
-        ref.child("Events").addValueEventListener(new ValueEventListener()
-        {
+        // get events
+        ref.child("Events").get().addOnCompleteListener(eventsFetch -> {
+            if (!eventsFetch.isSuccessful()) return; // if fetch failed, return
+
             boolean eventTimeOverlaps = false;
 
             String startLoopedEventStr;
@@ -579,36 +638,26 @@ public final class DataBase {
             int startPassedEvent = Integer.parseInt(startTime.substring(0,2))*100 + Integer.parseInt(startTime.substring(3));
             int endPassedEvent = Integer.parseInt(endTime.substring(0,2))*100 + Integer.parseInt(endTime.substring(3));
 
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot)
+            for (DataSnapshot dSnap : eventsFetch.getResult().getChildren())
             {
-                for(DataSnapshot dSnap : snapshot.getChildren())
+                if(dSnap.child("parentVenue").child("venueName").getValue().toString().equals(parentVenue.getVenueName()) &&
+                        dSnap.child("activity").getValue().toString().equals(activity) &&
+                        dSnap.child("date").getValue().toString().equals(date))
                 {
-                    if(dSnap.child("parentVenue").child("venueName").getValue().toString().equals(parentVenue.getVenueName()) &&
-                            dSnap.child("activity").getValue().toString().equals(activity) &&
-                            dSnap.child("date").getValue().toString().equals(date))
+                    startLoopedEventStr = dSnap.child("startTime").getValue().toString();
+                    startLoopedEvent = Integer.parseInt(startLoopedEventStr.substring(0,2))*100 + Integer.parseInt(startLoopedEventStr.substring(3));
+
+                    endLoopedEventStr = dSnap.child("endTime").getValue().toString();
+                    endLoopedEvent = Integer.parseInt(endLoopedEventStr.substring(0,2))*100 + Integer.parseInt(endLoopedEventStr.substring(3));
+
+                    if((startPassedEvent < endLoopedEvent) && (startLoopedEvent < endPassedEvent))
                     {
-                        startLoopedEventStr = dSnap.child("startTime").getValue().toString();
-                        startLoopedEvent = Integer.parseInt(startLoopedEventStr.substring(0,2))*100 + Integer.parseInt(startLoopedEventStr.substring(3));
-
-                        endLoopedEventStr = dSnap.child("endTime").getValue().toString();
-                        endLoopedEvent = Integer.parseInt(endLoopedEventStr.substring(0,2))*100 + Integer.parseInt(endLoopedEventStr.substring(3));
-
-                        if((startPassedEvent < endLoopedEvent) && (startLoopedEvent < endPassedEvent))
-                        {
-                            eventTimeOverlaps = true;
-                        }
+                        eventTimeOverlaps = true;
                     }
                 }
-
-                // Using callback to send back check
-                callback.onCallBack(eventTimeOverlaps);
             }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
+            callback.onCallBack(eventTimeOverlaps);
         });
     }
 

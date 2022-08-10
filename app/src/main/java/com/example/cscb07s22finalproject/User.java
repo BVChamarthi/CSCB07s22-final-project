@@ -28,9 +28,10 @@ public class User
         return this.username;
     }
 
-    public String getPassword()
+    @Override
+    public String toString()
     {
-        return this.password;
+        return username;
     }
 
     @Override

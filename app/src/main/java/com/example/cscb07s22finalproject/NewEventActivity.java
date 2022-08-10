@@ -1,8 +1,10 @@
 package com.example.cscb07s22finalproject;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -64,6 +66,8 @@ public class NewEventActivity extends AppCompatActivity {
 //        initSpinner();
     }
 
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public void eventActivity(View view)
     {
         //gets all values from text boxes and stores as needed
@@ -92,20 +96,35 @@ public class NewEventActivity extends AppCompatActivity {
         //gives message based on which error occurred from incorrect regex format, etc. - if everything is correct, it creates an event
         db.eventCreateActions(eventName, v, activity, players, date, startTime, endTime,
                 () -> {     // incorrect start time format
-                    Toast.makeText(NewEventActivity.this, "Invalid:format of start time is incorrect", Toast.LENGTH_LONG).show();
+                    System.out.println("Invalid: format of start time is incorrect");
+                    Toast.makeText(NewEventActivity.this, "Invalid:format of start time is incorrect. Please follow HH:MM.", Toast.LENGTH_LONG).show();
                     },
+                () -> {
+                    System.out.println("Invalid: format of start time is incorrect. Please add zero to the front of start time");
+                    Toast.makeText(NewEventActivity.this, "Invalid:format of start time is incorrect. Please follow add a zero to the front of the start time", Toast.LENGTH_LONG).show();
+                },
                 () -> {     // incorrect end time format
-                    Toast.makeText(NewEventActivity.this, "Invalid:format of end time is incorrect", Toast.LENGTH_LONG).show();
+                    System.out.println("Invalid: format of end time is incorrect");
+                    Toast.makeText(NewEventActivity.this, "Invalid:format of end time is incorrect. Please follow HH:MM.", Toast.LENGTH_LONG).show();
+                },
+                () -> {
+                    System.out.println("Invalid: format of start time is incorrect. Please add zero to the front of end time");
+                    Toast.makeText(NewEventActivity.this, "Invalid:format of start time is incorrect. Please follow add a zero to the front of the end time", Toast.LENGTH_LONG).show();
                 },
                 () -> {     // incorrect date format
-                    Toast.makeText(NewEventActivity.this, "Invalid: format of date is incorrect", Toast.LENGTH_LONG).show();
+                    Toast.makeText(NewEventActivity.this, "Invalid: format of date is incorrect. Please follow YYYY-MM-DD.", Toast.LENGTH_LONG).show();
                 },
                 () -> {     // incorrect event name format
-                    Toast.makeText(NewEventActivity.this, "Invalid: event name must be more than 1 character", Toast.LENGTH_LONG).show();
+                    Toast.makeText(NewEventActivity.this, "Invalid: event name must be one or more words", Toast.LENGTH_LONG).show();
                     },
                 () -> {     // incorrect max players name format
                     Toast.makeText(NewEventActivity.this, "Invalid: max players must be a number greater than 0", Toast.LENGTH_LONG).show();
                 },
+                () -> {     // Creating an event in the past
+                    System.out.println("Invalid: Cannot create an event in the past");
+                    Toast.makeText(NewEventActivity.this, "Invalid: Cannot create an event in the past", Toast.LENGTH_LONG).show();
+                }
+                ,
                 () -> {     // incorrect time period - the end time is before the start time
                     Toast.makeText(NewEventActivity.this, "Invalid: end time must be after the start time", Toast.LENGTH_LONG).show();
                 },
@@ -119,7 +138,6 @@ public class NewEventActivity extends AppCompatActivity {
                     startActivity(intent);
 
                 });
-
     }
 
     //front end code

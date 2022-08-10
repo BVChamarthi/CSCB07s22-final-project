@@ -82,15 +82,6 @@ public class UserHomeActivity extends AppCompatActivity
         // initialise filter
         Filter filter = new Filter(false);
 
-        // initialise spinner
-        VenuesSpinner.connectSpinner(this,                          // connect the spinner
-                findViewById(R.id.venue_spinner),
-                true,                                       // if you don't want "All venues" option, set this to false
-                selectedVenue -> {                                          // callback with the selected venue whenever it changes
-            filter.setCompareVenue(selectedVenue);
-            eventsAdapter.SetEvents(filter.filterPass(db.constructEventsArray()));
-        });
-
         ShowToast(c.getJoinedEvents().toString());
 
         // initialise upcoming events switch
@@ -109,6 +100,31 @@ public class UserHomeActivity extends AppCompatActivity
         joinedEvents.setOnClickListener( view -> {
             eventsAdapter.SetEvents(filter.filterPass(getEvents()));
         });
+
+        // initialise spinner
+        VenuesSpinner.connectSpinner(this,                          // connect the spinner
+                findViewById(R.id.venue_spinner),
+                true,                                       // if you don't want "All venues" option, set this to false
+                selectedVenue -> {                                          // callback with the selected venue whenever it changes
+                    filter.setCompareVenue(selectedVenue);
+                    eventsAdapter.SetEvents(filter.filterPass(db.constructEventsArray()));
+
+                    if(upcomingEvents.isChecked())
+                    {
+                        filter.setUpcomingEvents(upcomingEvents.isChecked());
+                        eventsAdapter.SetEvents(filter.filterPass(getEvents()));
+                    }
+
+                    if(scheduledEvents.isChecked())
+                    {
+                        eventsAdapter.SetEvents(filter.filterPass(c.getScheduledEvents()));
+                    }
+
+                    if(joinedEvents.isChecked())
+                    {
+                        eventsAdapter.SetEvents(filter.filterPass(c.getJoinedEvents()));
+                    }
+                });
 
         btn.setOnClickListener(view -> {
             if(eventsAdapter.getSelected() != -1){
